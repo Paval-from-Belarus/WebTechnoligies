@@ -1,4 +1,4 @@
-package bsuir.poit.webtechnologies;
+package by.bsuir.poit;
 
 import java.io.InputStream;
 import java.util.Scanner;
