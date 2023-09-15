@@ -1,4 +1,4 @@
-package bsuir.poit.webtechnologies.calculation;
+package by.bsuir.poit.calculation;
 
 import lombok.Getter;
 

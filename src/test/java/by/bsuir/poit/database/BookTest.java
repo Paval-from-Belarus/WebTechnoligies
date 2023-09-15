@@ -1,4 +1,4 @@
-package bsuir.poit.webtechnologies.database;
+package by.bsuir.poit.database;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

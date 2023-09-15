@@ -1,4 +1,4 @@
-package bsuir.poit.webtechnologies.geometry;
+package by.bsuir.poit.geometry;
 
 import lombok.*;
 import lombok.experimental.Accessors;

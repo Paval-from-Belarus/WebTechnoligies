@@ -1,4 +1,4 @@
-package bsuir.poit.webtechnologies.database;
+package by.bsuir.poit.database;
 
 import lombok.*;
 import lombok.experimental.Accessors;

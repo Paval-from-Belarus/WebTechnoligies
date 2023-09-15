@@ -1,4 +1,4 @@
-package bsuir.poit.webtechnologies.geometry;
+package by.bsuir.poit.geometry;
 
 import org.junit.jupiter.api.Test;
 

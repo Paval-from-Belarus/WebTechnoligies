@@ -5,7 +5,7 @@
 module bsuir.poit.webtechnologies {
       requires static lombok;
       requires static org.jetbrains.annotations;
-      opens bsuir.poit.webtechnologies.geometry;
-      opens bsuir.poit.webtechnologies.calculation;
-      opens bsuir.poit.webtechnologies.database;
+      opens by.bsuir.poit.geometry;
+      opens by.bsuir.poit.calculation;
+      opens by.bsuir.poit.database;
 }

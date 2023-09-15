@@ -1,11 +1,10 @@
-package bsuir.poit.webtechnologies;
+package by.bsuir.poit;
 
-import bsuir.poit.webtechnologies.calculation.CalculationUtils;
-import bsuir.poit.webtechnologies.geometry.*;
+import by.bsuir.poit.calculation.CalculationUtils;
+import by.bsuir.poit.geometry.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.CacheRequest;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;

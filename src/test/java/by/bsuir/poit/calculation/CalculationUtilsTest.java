@@ -1,15 +1,11 @@
-package bsuir.poit.webtechnologies.calculation;
+package by.bsuir.poit.calculation;
 
-import bsuir.poit.webtechnologies.geometry.Color;
-import bsuir.poit.webtechnologies.geometry.Point;
+import by.bsuir.poit.geometry.Point;
 import org.junit.jupiter.api.Test;
 
-import java.net.CacheRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
