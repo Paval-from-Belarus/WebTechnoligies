@@ -1,10 +1,8 @@
-package by.bsuir.poit.dao;
+package by.bsuir.poit.connections;
 
-import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
@@ -13,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Paval Shlyk
@@ -33,14 +30,14 @@ public static class ConnectionPoolException extends DataAccessException {
 }
 
 public ConnectionPool(ConnectionConfig config) throws ConnectionPoolException {
-      List<Connection> connections = new ArrayList<>(config.getConnectionCount());
+      List<Connection> connections = new ArrayList<>(config.getMaxPoolSize());
       try {
 	    Class.forName(config.getDriverClassName());
       } catch (ClassNotFoundException e) {
 	    throw new ConnectionPoolException("Driver is not found " + config.getDriverClassName());
       }
       try {
-	    for (int i = 0; i < config.getConnectionCount(); i++) {
+	    for (int i = 0; i < config.getMaxPoolSize(); i++) {
 		  Connection connection = DriverManager.getConnection(config.getJdbcUrl(), config.getUser(), config.getPassword());
 		  Proxy.newProxyInstance(Connection.class.getClassLoader(), Connection.class.getInterfaces(), this::connectionProxyInvocationHandler);
 		  connections.add(connection);

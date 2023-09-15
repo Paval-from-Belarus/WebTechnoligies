@@ -9,6 +9,6 @@ import org.jetbrains.annotations.NotNull;
  * @since 15/09/2023
  */
 @RequiredArgsConstructor
-public class PostDao {
+public class GroupDao {
 private final @NotNull ConnectionPool pool;
 }

@@ -1,8 +1,9 @@
 package by.bsuir.poit.dao;
 
+import by.bsuir.poit.connections.ConnectionPool;
+import by.bsuir.poit.connections.DataAccessException;
 import by.bsuir.poit.dao.entities.Comment;
 import by.bsuir.poit.dao.mappers.CommentJdbcMapper;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
