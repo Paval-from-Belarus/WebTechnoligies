@@ -6,7 +6,7 @@ import by.bsuir.poit.dao.CommentDao;
 import by.bsuir.poit.dao.GroupDao;
 import by.bsuir.poit.dao.PostDao;
 import by.bsuir.poit.dao.PublisherDao;
-import by.bsuir.poit.dao.mappers.CommentJdbcMapperImpl;
+import by.bsuir.poit.dao.mappers.CommentJdbcMapper;
 import jakarta.servlet.ServletContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +24,7 @@ public class BeanFactory {
 public BeanFactory() {
       this.pool = new ConnectionPool(defaultConfig());
       this.beanMap = new HashMap<>(Map.of(
-	  CommentDao.class, new CommentDao(pool, new CommentJdbcMapperImpl()),
+	  CommentDao.class, new CommentDao(pool, CommentJdbcMapper.INSTANCE),
 	  PublisherDao.class, new PublisherDao(pool),
 	  GroupDao.class, new GroupDao(pool),
 	  PostDao.class, new PostDao(pool)

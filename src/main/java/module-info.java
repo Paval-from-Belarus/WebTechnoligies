@@ -16,4 +16,5 @@ module bsuir.poit.webtechnologies {
       opens by.bsuir.poit.servlets;
       opens by.bsuir.poit.dao;
       opens by.bsuir.poit.connections;
+      exports by.bsuir.poit.dao.mappers;
 }
