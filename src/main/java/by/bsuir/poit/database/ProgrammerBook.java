@@ -1,21 +1,14 @@
 package by.bsuir.poit.database;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-
-/**
- * @author Paval Shlyk
- * @since 01/09/2023
- */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
-public class ProgrammerBook {
+public class ProgrammerBook extends Book{
 private String language;
 private int level;
 
 @Override
 public boolean equals(Object obj) {
+      if (obj == this) {
+            return true;
+      }
       boolean equals = false;
       if (obj instanceof ProgrammerBook other) {
 	    equals = this.language.equals(other.language) && this.level == other.level;
@@ -24,7 +17,11 @@ public boolean equals(Object obj) {
 }
 @Override
 public int hashCode() {
-      return this.language.hashCode() * level;
+      int result = super.hashCode();
+      if (language != null) {
+            result += language.hashCode() * level;
+      }
+      return result;
 }
 
 @Override

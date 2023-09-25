@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull;
  * @author Paval Shlyk
  * @since 01/09/2023
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Setter
 @Getter
@@ -21,8 +22,11 @@ private int isbn;
 private static int edition;
 @Override
 public boolean equals(Object object) {
+      if (object == this) {
+            return true;
+      }
       boolean equals = false;
-      if (object instanceof Book other) {
+      if (object instanceof Book other) { //instanceof return false for null values
 	    equals = this.title.equals(other.title) && this.author.equals(other.author) && this.price == other.price;
       }
       return equals;
