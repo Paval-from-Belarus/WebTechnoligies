@@ -11,6 +11,7 @@ import jakarta.servlet.ServletContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.security.PublicKey;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,6 +48,9 @@ private ConnectionConfig defaultConfig() {
 				    .driverClassName("org.hsqldb.jdbc.JDBCDriver")
 				    .build();
       return config;
+}
+public Path getResourcesPath() {
+	return null;
 }
 
 public static final int DEFAULT_POOL_SIZE = 10;

@@ -10,8 +10,6 @@ module bsuir.poit.webtechnologies {
       requires java.sql;
       requires jakarta.servlet;
       requires org.apache.logging.log4j;
-      requires undertow.servlet;
-      requires undertow.core;
       opens by.bsuir.poit;
       opens by.bsuir.poit.servlets;
       opens by.bsuir.poit.dao;
