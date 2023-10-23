@@ -1,4 +1,4 @@
-package by.bsuir.poit.logic;
+package by.bsuir.poit.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -9,5 +9,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ControllerUtils {
+public static final String START_PAGE = "index.jsp";
+public static final String ERROR_PAGE = "error.jsp";
 
 }

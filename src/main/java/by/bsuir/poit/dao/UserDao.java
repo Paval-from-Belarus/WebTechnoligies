@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 public interface UserDao {
 Optional<User> findById(long id);
-
+Optional<User> findByUserName(String name);
 User save(User user);
 
 User update(User user);

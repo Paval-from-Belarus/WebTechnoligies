@@ -40,6 +40,11 @@ public Optional<User> findById(@NotNull long id) throws DataAccessException {
 }
 
 @Override
+public Optional<User> findByUserName(String name) {
+      	return Optional.empty();
+}
+
+@Override
 public User save(User user) {
       return null;
 }
