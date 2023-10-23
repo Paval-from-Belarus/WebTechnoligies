@@ -2,6 +2,7 @@ package by.bsuir.poit.dao;
 
 import by.bsuir.poit.connections.ConnectionPool;
 import by.bsuir.poit.connections.DataAccessException;
+import by.bsuir.poit.dao.entities.Client;
 import by.bsuir.poit.dao.entities.User;
 import by.bsuir.poit.dao.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;

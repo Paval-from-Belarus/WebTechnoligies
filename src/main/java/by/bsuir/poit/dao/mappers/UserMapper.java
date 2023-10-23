@@ -1,7 +1,10 @@
 package by.bsuir.poit.dao.mappers;
 
+import by.bsuir.poit.dao.entities.Client;
 import by.bsuir.poit.dao.entities.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import java.sql.ResultSet;
@@ -11,10 +14,9 @@ import java.sql.SQLException;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
-@Mapper
+@Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR)
 public interface UserMapper {
 UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
 default User fromResultSet(ResultSet set) throws SQLException {
       return User.builder()
 		 .id(set.getLong("user_id"))

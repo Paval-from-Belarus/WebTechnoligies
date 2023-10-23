@@ -1,21 +1,14 @@
 package by.bsuir.poit.dao.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-/**
- * Lot on english auction.
- * That is each lot published on english auction required to be in english_lot relationship
- * @author Paval Shlyk
- * @since 23/10/2023
- */
+
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnglishLot {
-private long lotId;
+@EqualsAndHashCode(callSuper = true)
+public class EnglishLot extends Lot {
 private double redemptionPrice;
 }

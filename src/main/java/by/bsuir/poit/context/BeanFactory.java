@@ -4,7 +4,7 @@ import by.bsuir.poit.connections.ConnectionConfig;
 import by.bsuir.poit.connections.ConnectionPool;
 import by.bsuir.poit.dao.AuctionDao;
 import by.bsuir.poit.dao.UserDao;
-import by.bsuir.poit.dao.mappers.CommentJdbcMapper;
+import by.bsuir.poit.dao.mappers.AuctionMapper;
 import by.bsuir.poit.dao.mappers.UserMapper;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -29,8 +29,6 @@ public static final String JDBC_DRIVER_NAME = "driver-class-name";
 public static final String CONNECTION_POOL_SIZE = "pool-size";
 public static final String DAO_BEANS_PACKAGE = "dao-beans-package";
 public static final int DEFAULT_POOL_SIZE = 10;
-
-
 @Override
 public void contextInitialized(ServletContextEvent contextEvent) {
       ServletContext context = contextEvent.getServletContext();
@@ -57,11 +55,20 @@ public void contextInitialized(ServletContextEvent contextEvent) {
       initDaoBeans(context, pool);
 }
 
-private void initDaoBeans(ServletContext context, ConnectionPool pool) {
-	new UserDao(pool, UserMapper.INSTANCE);
-}
 
 @Override
 public void contextDestroyed(ServletContextEvent contextEvent) {
+      ServletContext context = contextEvent.getServletContext();
+      ConnectionPool pool = (ConnectionPool) context.getAttribute(ConnectionPool.class.getName());
+      if (pool != null) {
+	    pool.close();
+      }
+      //it's not obligatory to remove dao beans because they will be removed during the next context update
+}
+private void initDaoBeans(ServletContext context, ConnectionPool pool) {
+      UserDao userDao = new UserDao(pool, UserMapper.INSTANCE);
+      AuctionDao auctionDao = new AuctionDao(pool, AuctionMapper.INSTANCE);
+
+      context.setAttribute(UserDao.class.getName(), userDao);
 }
 }

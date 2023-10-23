@@ -1,9 +1,7 @@
 package by.bsuir.poit.dao.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.sql.Timestamp;
 
@@ -11,12 +9,13 @@ import java.sql.Timestamp;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
+
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BlindAuction {
-private long auctionId;
+@EqualsAndHashCode(callSuper = true)
+public class BlindAuction extends Auction {
 private int betLimit;
 private Timestamp timeout;
 }

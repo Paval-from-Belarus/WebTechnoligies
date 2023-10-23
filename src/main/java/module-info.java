@@ -6,7 +6,6 @@ module bsuir.poit.webtechnologies {
       requires static lombok;
       requires static org.jetbrains.annotations;
       requires static org.mapstruct;
-      requires static jakarta.inject;
       requires java.sql;
       requires jakarta.servlet;
       requires org.apache.logging.log4j;

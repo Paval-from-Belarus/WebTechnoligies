@@ -1,23 +1,18 @@
 package by.bsuir.poit.dao.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Timestamp;
 
-/**
- * @author Paval Shlyk
- * @since 23/10/2023
- */
+
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BlitzAuction {
-private long auctionId;
+@EqualsAndHashCode(callSuper = true)
+public class BlitzAuction extends Auction{
 private Timestamp iterationLimit;
 @Nullable
 private Integer memberExcludeLimit;
