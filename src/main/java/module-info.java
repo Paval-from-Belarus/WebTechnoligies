@@ -10,9 +10,12 @@ module bsuir.poit.webtechnologies {
       requires java.sql;
       requires jakarta.servlet;
       requires org.apache.logging.log4j;
-      opens by.bsuir.poit;
       opens by.bsuir.poit.servlets;
       opens by.bsuir.poit.dao;
       opens by.bsuir.poit.connections;
+      opens by.bsuir.poit.context;
+      opens by.bsuir.poit.dao.entities;
+      exports by.bsuir.poit.dao.entities;
       exports by.bsuir.poit.dao.mappers;
+      exports by.bsuir.poit.dao;
 }

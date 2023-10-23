@@ -5,15 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 /**
  * @author Paval Shlyk
- * @since 15/09/2023
+ * @since 23/10/2023
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Group {
-private Integer id;
-private String name;
+public class BlindAuction {
+private long auctionId;
+private int betLimit;
+private Timestamp timeout;
 }

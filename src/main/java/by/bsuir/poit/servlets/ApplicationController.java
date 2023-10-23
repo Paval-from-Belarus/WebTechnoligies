@@ -1,16 +1,11 @@
-package by.bsuir.poit;
+package by.bsuir.poit.servlets;
 
-import by.bsuir.poit.servlets.BeanFactory;
+import by.bsuir.poit.context.BeanFactory;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
 
-/**
- * @author Paval Shlyk
- * @since 01/09/2023
- */
-@WebServlet("app")
+
 public class ApplicationController extends HttpServlet {
 public static final int SERVER_PORT = 8888;
 

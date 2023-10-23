@@ -3,9 +3,33 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <context-param>
+        <param-name>jdbc-url</param-name>
+        <param-value>jdbc:hsqldb:hsql://localhost/dummy-server</param-value>
+    </context-param>
+    <context-param>
+        <param-name>database-user</param-name>
+        <param-value>SA</param-value>
+    </context-param>
+    <context-param>
+        <param-name>database-password</param-name>
+        <param-value></param-value>
+    </context-param>
+    <context-param>
+        <param-name>driver-class-name</param-name>
+        <param-value>org.hsqldb.jdbc.JDBCDriver</param-value>
+    </context-param>
+    <context-param>
+        <param-name>pool-size</param-name>
+        <param-value>10</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dao-beans-package</param-name>
+        <param-value>by.bsuir.poit.dao</param-value>
+    </context-param>
     <servlet>
         <servlet-name>EntryPoint</servlet-name>
-        <servlet-class>by.bsuir.poit.ApplicationController</servlet-class>
+        <servlet-class>by.bsuir.poit.servlets.ApplicationController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EntryPoint</servlet-name>
