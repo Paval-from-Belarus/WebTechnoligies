@@ -80,7 +80,7 @@
                 <version>3.3.0</version>
                 <configuration>
                     <failOnMissingWebXml>true</failOnMissingWebXml>
-                    <webXml>web.xml</webXml>
+                    <warSourceDirectory>${basedir}/src/main/web-app</warSourceDirectory>
                 </configuration>
             </plugin>
             <!--                    the server should be specified via params-->

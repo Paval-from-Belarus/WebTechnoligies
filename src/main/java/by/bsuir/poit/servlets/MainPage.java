@@ -1,6 +1,6 @@
 package by.bsuir.poit.servlets;
 
-import by.bsuir.poit.dao.UserDao;
+import by.bsuir.poit.dao.impl.UserDaoImpl;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -15,7 +15,7 @@ import java.io.IOException;
  * @since 15/09/2023
  */
 public class MainPage extends HttpServlet {
-private UserDao userDao;
+private UserDaoImpl userDao;
 
 @Override
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,7 +28,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 @Override
 public void init(ServletConfig config) throws ServletException {
       ServletContext context = config.getServletContext();
-      this.userDao = (UserDao) context.getAttribute(UserDao.class.getName());
+      this.userDao = (UserDaoImpl) context.getAttribute(UserDaoImpl.class.getName());
       super.init(config);
 }
 }

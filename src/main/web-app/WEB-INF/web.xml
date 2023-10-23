@@ -5,7 +5,7 @@
          version="3.1">
     <context-param>
         <param-name>jdbc-url</param-name>
-        <param-value>jdbc:hsqldb:hsql://localhost/dummy-server</param-value>
+        <param-value>jdbc:hsqldb:hsql://localhost/dummy-url</param-value>
     </context-param>
     <context-param>
         <param-name>database-user</param-name>
@@ -23,16 +23,16 @@
         <param-name>pool-size</param-name>
         <param-value>10</param-value>
     </context-param>
-    <context-param>
-        <param-name>dao-beans-package</param-name>
-        <param-value>by.bsuir.poit.dao</param-value>
-    </context-param>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
     <servlet>
         <servlet-name>EntryPoint</servlet-name>
-        <servlet-class>by.bsuir.poit.servlets.ApplicationController</servlet-class>
+        <servlet-class>by.bsuir.poit.servlets.GateController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EntryPoint</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/auth</url-pattern>
     </servlet-mapping>
 </web-app>

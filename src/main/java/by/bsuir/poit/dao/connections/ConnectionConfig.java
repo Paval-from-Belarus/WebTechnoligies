@@ -1,4 +1,4 @@
-package by.bsuir.poit.connections;
+package by.bsuir.poit.dao.connections;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

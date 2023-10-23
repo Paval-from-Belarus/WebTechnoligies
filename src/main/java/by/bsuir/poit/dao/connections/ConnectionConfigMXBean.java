@@ -1,4 +1,4 @@
-package by.bsuir.poit.connections;
+package by.bsuir.poit.dao.connections;
 
 /**
  * This method can be used via JConsole

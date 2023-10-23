@@ -4,6 +4,7 @@ import by.bsuir.poit.dao.entities.Client;
 import by.bsuir.poit.dao.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
  */
 @Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR)
 public interface ClientMapper {
+ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 default Client clientFromUserSet(ResultSet set) throws SQLException {
       return Client.builder()
 		 .id(set.getLong("user_id"))

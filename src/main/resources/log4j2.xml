@@ -16,7 +16,7 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="org.iuwteam.httpserver.Server" level="warn" additivity="false">
+        <Logger name="by.bsuir.poit.servlets.GateController" level="warn" additivity="false">
             <AppenderRef ref="FileOut"/>
         </Logger>
         <Logger name="org.iuwteam.httpserver.Server" level="error" additivity="true">

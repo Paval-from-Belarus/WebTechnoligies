@@ -1,4 +1,4 @@
-package by.bsuir.poit.connections;
+package by.bsuir.poit.dao.impl;
 
 /**
  * @author Paval Shlyk
