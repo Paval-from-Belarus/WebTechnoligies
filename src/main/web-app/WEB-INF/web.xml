@@ -28,9 +28,29 @@
         <welcome-file>index.jsp</welcome-file>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+    <servlet>
+        <servlet-name>AdminController</servlet-name>
+        <jsp-file>/roles/admin.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>ClientController</servlet-name>
+        <jsp-file>/roles/client.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClientController</servlet-name>
+        <url-pattern>/client</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminController</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
     <error-page>
         <exception-type>by.bsuir.poit.services.exception.resources.ResourceException</exception-type>
-        <location>/error/resources</location>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>by.bsuir.poit.services.exception.authorization.AuthorizationException</exception-type>
+        <location>/error.jsp</location>
     </error-page>
     <error-page>
         <!--        default exception page for all -->

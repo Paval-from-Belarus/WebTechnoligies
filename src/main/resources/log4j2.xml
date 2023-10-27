@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration name="Configurations" status="INFO" monitorInterval="5">
     <Properties>
-        <Property name="log-path">logs</Property>
+        <Property name="log-path">$${env:CATALINA_BASE}/logs/jdbc-servlets</Property>
         <Property name="archive">${log-path}/archive</Property>
     </Properties>
     <Appenders>
         <Console name="ErrorOut" target="SYSTEM_OUT">
             <PatternLayout pattern="%d %-5p [%t]: %m%n"/>
         </Console>
-        <Console name="Default" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d %-5p%n"/>
-        </Console>
-        <File name="FileOut" fileName="${log-path}/server.logs">
+        <File name="Default" fileName="${log-path}/server.logs">
             <PatternLayout pattern="%d{hh:mms yyyy:mm:ss} %-5p [%t] %m%n"/>
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="by.bsuir.poit.servlets.GateController" level="warn" additivity="false">
+        <Logger name="by.bsuir.poit.servlets.GateController" level="info" additivity="false">
             <AppenderRef ref="FileOut"/>
         </Logger>
-        <Logger name="org.iuwteam.httpserver.Server" level="error" additivity="true">
+        <Logger name="by.bsuir.poit.servlets.GateController" level="error" additivity="true">
             <AppenderRef ref="ErrorOut"/>
         </Logger>
         <Root level="error">

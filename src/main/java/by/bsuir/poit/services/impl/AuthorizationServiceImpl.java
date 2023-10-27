@@ -1,6 +1,7 @@
 package by.bsuir.poit.services.impl;
 
 import by.bsuir.poit.bean.User;
+import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
@@ -10,28 +11,26 @@ import by.bsuir.poit.services.exception.authorization.UserAccessViolationExcepti
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
-import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
 import by.bsuir.poit.utils.AuthorizationUtils;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Optional;
 
 /**
  * @author Paval Shlyk
  * @since 27/10/2023
  */
+@Service
 @RequiredArgsConstructor
 public class AuthorizationServiceImpl implements AuthorizationService {
 private static final Logger LOGGER = LogManager.getLogger(AuthorizationServiceImpl.class);
 private final UserDao userDao;
 
 @Override
-public void signIn(String login, String password) {
+public User signIn(String login, String password) {
+      User user;
       try {
-	    User user = userDao.findByUserName(login).orElseThrow(() -> newUserNotFoundException(login));
+	    user = userDao.findByUserName(login).orElseThrow(() -> newUserNotFoundException(login));
 	    String salt = user.getSecuritySalt();
 	    String passwordHash = AuthorizationUtils.encodeToken(password, salt);
 	    if (!user.getPasswordHash().equals(passwordHash)) {
@@ -51,6 +50,7 @@ public void signIn(String login, String password) {
 	    LOGGER.error(e);
 	    throw new ResourceBusyException(e);
       }
+      return user;
 }
 
 @Override

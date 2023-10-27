@@ -15,7 +15,7 @@ import java.util.Base64;
 public final class AuthorizationUtils {
 public static final String PASSWORD = "password";
 public static final String NAME = "user_name";
-
+public static final String USER_ATTRIBUTE = "user_attribute";
 @SneakyThrows
 public static String encodeToken(String token, String salt) {
       MessageDigest md = MessageDigest.getInstance("SHA-256");
