@@ -1,8 +1,8 @@
-package by.bsuir.poit.dao.mappers;
+package by.bsuir.poit.bean.mappers;
 
-import by.bsuir.poit.dao.entities.Auction;
-import by.bsuir.poit.dao.entities.BlindAuction;
-import by.bsuir.poit.dao.entities.BlitzAuction;
+import by.bsuir.poit.bean.Auction;
+import by.bsuir.poit.bean.BlindAuction;
+import by.bsuir.poit.bean.BlitzAuction;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;

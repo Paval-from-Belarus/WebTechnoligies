@@ -2,12 +2,12 @@ package by.bsuir.poit.dao.impl;
 
 import by.bsuir.poit.dao.AuctionDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dao.entities.Auction;
-import by.bsuir.poit.dao.entities.BlindAuction;
-import by.bsuir.poit.dao.entities.BlitzAuction;
-import by.bsuir.poit.dao.mappers.AuctionMapper;
+import by.bsuir.poit.bean.Auction;
+import by.bsuir.poit.bean.BlindAuction;
+import by.bsuir.poit.bean.BlitzAuction;
+import by.bsuir.poit.bean.mappers.AuctionMapper;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.List;

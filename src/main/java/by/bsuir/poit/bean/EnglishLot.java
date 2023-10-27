@@ -1,4 +1,4 @@
-package by.bsuir.poit.dao.entities;
+package by.bsuir.poit.bean;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

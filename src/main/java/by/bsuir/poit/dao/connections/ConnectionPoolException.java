@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao.connections;
 
-import by.bsuir.poit.dao.impl.DataAccessException;
+import by.bsuir.poit.dao.exception.DataAccessException;
 
 /**
  * @author Paval Shlyk

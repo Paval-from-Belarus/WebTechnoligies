@@ -1,9 +1,9 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.dao.entities.Auction;
-import by.bsuir.poit.dao.entities.BlindAuction;
-import by.bsuir.poit.dao.entities.BlitzAuction;
-import org.jetbrains.annotations.NotNull;
+import by.bsuir.poit.bean.Auction;
+import by.bsuir.poit.bean.BlindAuction;
+import by.bsuir.poit.bean.BlitzAuction;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 import java.util.List;

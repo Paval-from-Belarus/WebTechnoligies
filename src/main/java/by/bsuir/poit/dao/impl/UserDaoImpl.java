@@ -2,10 +2,11 @@ package by.bsuir.poit.dao.impl;
 
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dao.entities.User;
-import by.bsuir.poit.dao.mappers.UserMapper;
+import by.bsuir.poit.bean.User;
+import by.bsuir.poit.bean.mappers.UserMapper;
+import by.bsuir.poit.dao.exception.DataAccessException;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,6 +43,16 @@ public Optional<User> findById(@NotNull long id) throws DataAccessException {
 @Override
 public Optional<User> findByUserName(String name) {
       	return Optional.empty();
+}
+
+@Override
+public boolean exists(String name) {
+      return false;
+}
+
+@Override
+public void setUserStatus(long userId, int status) {
+
 }
 
 @Override

@@ -1,8 +1,8 @@
-package by.bsuir.poit.dao.entities;
+package by.bsuir.poit.bean;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.jetbrains.annotations.Nullable;
 
 import java.sql.Timestamp;
 
@@ -12,8 +12,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BlitzAuction extends Auction{
+public class BlitzAuction extends Auction {
+@NotNull
 private Timestamp iterationLimit;
-@Nullable
 private Integer memberExcludeLimit;
 }

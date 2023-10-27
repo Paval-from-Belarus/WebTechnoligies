@@ -2,8 +2,8 @@ package by.bsuir.poit.dao.impl;
 
 import by.bsuir.poit.dao.ClientFeedbackDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dao.entities.ClientFeedback;
-import by.bsuir.poit.dao.mappers.ClientFeedbackMapper;
+import by.bsuir.poit.bean.ClientFeedback;
+import by.bsuir.poit.bean.mappers.ClientFeedbackMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

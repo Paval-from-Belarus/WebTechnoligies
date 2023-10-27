@@ -2,9 +2,9 @@ package by.bsuir.poit.dao.impl;
 
 import by.bsuir.poit.dao.LotDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dao.entities.EnglishLot;
-import by.bsuir.poit.dao.entities.Lot;
-import by.bsuir.poit.dao.mappers.LotMapper;
+import by.bsuir.poit.bean.EnglishLot;
+import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.bean.mappers.LotMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

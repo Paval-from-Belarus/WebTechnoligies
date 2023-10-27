@@ -1,4 +1,4 @@
-package by.bsuir.poit.dao.impl;
+package by.bsuir.poit.dao.exception;
 
 /**
  * @author Paval Shlyk

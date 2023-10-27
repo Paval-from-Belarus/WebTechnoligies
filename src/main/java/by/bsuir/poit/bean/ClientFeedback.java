@@ -1,10 +1,9 @@
-package by.bsuir.poit.dao.entities;
+package by.bsuir.poit.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Paval Shlyk
@@ -14,10 +13,11 @@ import org.jetbrains.annotations.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuctionType {
+public class ClientFeedback {
 private long id;
-@NotNull
-private String name;
-@NotNull
-private String description;
+private double ranking;
+private String text;
+private long lotId;
+private long authorId;
+private long targetId;
 }

@@ -1,12 +1,10 @@
-package by.bsuir.poit.dao.entities;
+package by.bsuir.poit.bean;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Paval Shlyk
@@ -35,10 +33,8 @@ private Double actualPrice;
 private Long auctionTypeId;
 @NotNull
 private Long sellerId;
-@Nullable
 private Long customerId;
 @NotNull
 private Long deliveryPointId;
-@Nullable
 private Long auctionId;
 }

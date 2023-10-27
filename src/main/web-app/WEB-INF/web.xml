@@ -28,5 +28,13 @@
         <welcome-file>index.jsp</welcome-file>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-
+    <error-page>
+        <exception-type>by.bsuir.poit.services.exception.resources.ResourceException</exception-type>
+        <location>/error/resources</location>
+    </error-page>
+    <error-page>
+        <!--        default exception page for all -->
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
 </web-app>

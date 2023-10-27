@@ -2,8 +2,8 @@ package by.bsuir.poit.dao.impl;
 
 import by.bsuir.poit.dao.DeliveryPointDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dao.entities.DeliveryPoint;
-import by.bsuir.poit.dao.mappers.DeliveryPointMapper;
+import by.bsuir.poit.bean.DeliveryPoint;
+import by.bsuir.poit.bean.mappers.DeliveryPointMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;

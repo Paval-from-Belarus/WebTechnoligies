@@ -1,5 +1,6 @@
-package by.bsuir.poit.dao.entities;
+package by.bsuir.poit.bean;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeliveryPoint {
+public class AuctionType {
 private long id;
-private String cityCode;
-private String streetName;
-private String houseNumber;
+@NotNull
 private String name;
+@NotNull
+private String description;
 }

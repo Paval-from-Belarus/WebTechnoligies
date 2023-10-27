@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.dao.entities.ClientFeedback;
+import by.bsuir.poit.bean.ClientFeedback;
 
 import java.util.List;
 

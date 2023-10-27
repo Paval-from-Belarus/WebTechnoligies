@@ -2,8 +2,8 @@ package by.bsuir.poit.dao.impl;
 
 import by.bsuir.poit.dao.AuctionBetDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dao.entities.AuctionBet;
-import by.bsuir.poit.dao.mappers.AuctionBetMapper;
+import by.bsuir.poit.bean.AuctionBet;
+import by.bsuir.poit.bean.mappers.AuctionBetMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

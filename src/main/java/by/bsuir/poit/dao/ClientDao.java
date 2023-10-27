@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.dao.entities.Client;
+import by.bsuir.poit.bean.Client;
 
 import java.util.List;
 import java.util.Optional;

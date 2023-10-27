@@ -1,7 +1,7 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.dao.entities.EnglishLot;
-import by.bsuir.poit.dao.entities.Lot;
+import by.bsuir.poit.bean.EnglishLot;
+import by.bsuir.poit.bean.Lot;
 
 import java.util.List;
 import java.util.Optional;

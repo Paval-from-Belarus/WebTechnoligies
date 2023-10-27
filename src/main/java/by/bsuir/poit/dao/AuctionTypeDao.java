@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.dao.entities.AuctionType;
+import by.bsuir.poit.bean.AuctionType;
 
 import java.util.List;
 import java.util.Optional;

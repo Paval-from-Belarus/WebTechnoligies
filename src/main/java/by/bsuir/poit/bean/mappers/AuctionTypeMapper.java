@@ -1,6 +1,6 @@
-package by.bsuir.poit.dao.mappers;
+package by.bsuir.poit.bean.mappers;
 
-import by.bsuir.poit.dao.entities.AuctionType;
+import by.bsuir.poit.bean.AuctionType;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

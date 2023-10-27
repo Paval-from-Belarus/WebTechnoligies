@@ -2,8 +2,8 @@ package by.bsuir.poit.dao.impl;
 
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dao.entities.Client;
-import by.bsuir.poit.dao.mappers.ClientMapper;
+import by.bsuir.poit.bean.Client;
+import by.bsuir.poit.bean.mappers.ClientMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

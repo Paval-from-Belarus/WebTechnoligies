@@ -1,9 +1,7 @@
-package by.bsuir.poit.dao.mappers;
+package by.bsuir.poit.bean.mappers;
 
-import by.bsuir.poit.dao.entities.Client;
-import by.bsuir.poit.dao.entities.User;
+import by.bsuir.poit.bean.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 

@@ -4,7 +4,7 @@ import by.bsuir.poit.dao.*;
 import by.bsuir.poit.dao.connections.ConnectionConfig;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.dao.impl.*;
-import by.bsuir.poit.dao.mappers.*;
+import by.bsuir.poit.bean.mappers.*;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
