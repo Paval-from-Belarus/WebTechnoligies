@@ -1,5 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
+import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.ClientFeedbackDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.ClientFeedback;
@@ -13,6 +14,7 @@ import java.util.List;
  * @since 23/10/2023
  */
 @RequiredArgsConstructor
+@Repository
 public class ClientFeedbackDaoImpl implements ClientFeedbackDao {
 private final ConnectionPool pool;
 private final ClientFeedbackMapper mapper;

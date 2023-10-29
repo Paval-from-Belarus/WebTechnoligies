@@ -1,28 +1,24 @@
 package by.bsuir.poit.context;
 
 import by.bsuir.poit.context.exception.BeanFactoryException;
-import by.bsuir.poit.dao.*;
 import by.bsuir.poit.dao.connections.ConnectionConfig;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dao.impl.*;
-import by.bsuir.poit.bean.mappers.*;
-import by.bsuir.poit.services.AuthorizationService;
-import by.bsuir.poit.services.impl.AuthorizationServiceImpl;
-import by.bsuir.poit.servlets.command.RequestHandlerProvider;
-import by.bsuir.poit.servlets.command.impl.RequestHandlerProviderImpl;
+import jakarta.inject.Named;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.reflections.Reflections;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author Paval Shlyk
@@ -37,6 +33,7 @@ public static final String DATABASE_USER = "database-user";
 public static final String DATABASE_PASSWORD = "database-password";
 public static final String JDBC_DRIVER_NAME = "driver-class-name";
 public static final String CONNECTION_POOL_SIZE = "pool-size";
+public static final String MAPPER_BEANS_PACKAGE = "mappers-beans-package";
 public static final String DAO_BEANS_PACKAGE = "dao-beans-package";
 public static final String SERVICE_BEANS_PACKAGE = "service-beans-package";
 public static final int DEFAULT_POOL_SIZE = 10;
@@ -45,26 +42,26 @@ public static final int DEFAULT_POOL_SIZE = 10;
 public void contextInitialized(ServletContextEvent contextEvent) {
       instanceMap.clear();
       ServletContext context = contextEvent.getServletContext();
-      String jdbcUrl = context.getInitParameter(JDBC_URL);
-      String user = context.getInitParameter(DATABASE_USER);
-      String password = context.getInitParameter(DATABASE_PASSWORD);
-      String driverClassName = context.getInitParameter(JDBC_DRIVER_NAME);
-      String poolSizeLiteral = context.getInitParameter(CONNECTION_POOL_SIZE);
-      if (jdbcUrl == null || user == null || password == null || driverClassName == null) {
+      List<String> requiredParams = List.of(JDBC_URL, DATABASE_PASSWORD, DATABASE_USER, DATABASE_PASSWORD, JDBC_DRIVER_NAME,
+	  CONNECTION_POOL_SIZE, MAPPER_BEANS_PACKAGE, DAO_BEANS_PACKAGE, SERVICE_BEANS_PACKAGE);
+      Map<String, String> params = requiredParams.stream()
+				       .map(parameter -> Map.entry(parameter, context.getInitParameter(parameter)))
+				       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+      int poolSize = params.get(CONNECTION_POOL_SIZE) == null ? DEFAULT_POOL_SIZE : Integer.parseInt(params.get(CONNECTION_POOL_SIZE));
+      if (params.values().stream().anyMatch(Objects::isNull)) {
 	    throw newBeanFactoryException("Impossible to create bean factory without required parameters. Check web.xml file context-params");
       }
-      int poolSize = poolSizeLiteral != null ? Integer.parseInt(poolSizeLiteral) : DEFAULT_POOL_SIZE;
       ConnectionConfig config = ConnectionConfig.builder()
 				    .maxPoolSize(poolSize)
-				    .driverClassName(driverClassName)
-				    .jdbcUrl(jdbcUrl)
-				    .user(user)
-				    .password(password)
+				    .driverClassName(params.get(JDBC_DRIVER_NAME))
+				    .jdbcUrl(params.get(JDBC_URL))
+				    .user(params.get(DATABASE_USER))
+				    .password(params.get(DATABASE_PASSWORD))
 				    .build();
       ConnectionPool pool = new ConnectionPool(config);
       context.setAttribute(ConnectionPool.class.getName(), pool);
-      initDaoBeans(pool);
-      initServiceBeans();
+      initDaoBeans(pool, params.get(DAO_BEANS_PACKAGE), params.get(MAPPER_BEANS_PACKAGE));
+      initServiceBeans(params.get(SERVICE_BEANS_PACKAGE));
       putBeansInContext(context);
 }
 
@@ -79,24 +76,30 @@ public void contextDestroyed(ServletContextEvent contextEvent) {
       //it's not obligatory to remove dao beans because they will be removed during the next context update
 }
 
-private void initDaoBeans(ConnectionPool pool) {
-      Map<Class<?>, Object> daoBeans = new HashMap<>();
-      daoBeans.put(AuctionBetDao.class, new AuctionBetDaoImpl(pool, AuctionBetMapper.INSTANCE));
-      daoBeans.put(AuctionDao.class, new AuctionDaoImpl(pool, AuctionMapper.INSTANCE));
-      daoBeans.put(UserDao.class, new UserDaoImpl(pool, UserMapper.INSTANCE));
-      daoBeans.put(ClientDao.class, new ClientDaoImpl(pool, ClientMapper.INSTANCE));
-      daoBeans.put(AuctionTypeDao.class, new AuctionTypeDaoImpl(pool, AuctionTypeMapper.INSTANCE));
-      daoBeans.put(LotDao.class, new LotDaoImpl(pool, LotMapper.INSTANCE));
-      daoBeans.put(DeliveryPointDao.class, new DeliveryPointDaoImpl(pool, DeliveryPointMapper.INSTANCE));
-      daoBeans.put(ClientFeedbackDao.class, new ClientFeedbackDaoImpl(pool, ClientFeedbackMapper.INSTANCE));
-      instanceMap.putAll(daoBeans);
+///Find classses with specific annotation and map them to <code>Map.entry<Interface, Class></code>
+///If class have more than one interface, then self-class will be chosen as target
+private Map<Class<?>, Class<?>> findTypesWithInterface(Reflections scanner, Class<? extends Annotation> annotation) {
+      return scanner.getTypesAnnotatedWith(annotation).stream()
+		 .map(clazz -> {
+		       Class<?>[] interfaces = clazz.getInterfaces();
+		       if (interfaces.length == 1) {
+			     return Map.entry(interfaces[0], clazz);
+		       }
+		       return Map.entry(clazz, clazz);
+		 })
+		 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 }
 
-private void initServiceBeans() {
-      Map<Class<?>, Object> serviceBeans = new HashMap<>();
-      serviceBeans.put(RequestHandlerProvider.class, new RequestHandlerProviderImpl());
-      serviceBeans.put(AuthorizationService.class, new AuthorizationServiceImpl(findBean(UserDao.class)));
-      instanceMap.putAll(serviceBeans);
+private void initDaoBeans(ConnectionPool pool, String daoBeansPackage, String mapperBeanPackage) {
+      Reflections scanner = new Reflections(daoBeansPackage, mapperBeanPackage);
+      instanceMap.put(ConnectionPool.class, pool);
+      putBeansInMap(findTypesWithInterface(scanner, Named.class));
+      putBeansInMap(findTypesWithInterface(scanner, Repository.class));
+}
+
+private void initServiceBeans(String serviceBeanPackage) {
+      Reflections scanner = new Reflections(serviceBeanPackage);
+      putBeansInMap(findTypesWithInterface(scanner, Service.class));
 }
 
 private void putBeansInContext(ServletContext context) {
@@ -105,8 +108,36 @@ private void putBeansInContext(ServletContext context) {
       }
 }
 
+@SneakyThrows
+private void putBeansInMap(Map<Class<?>, Class<?>> classSet) {
+      for (Map.Entry<Class<?>, Class<?>> entry : classSet.entrySet()) {
+	    Class<?> targetClass = entry.getKey();
+	    Class<?> implementationClass = entry.getValue();
+	    Constructor<?>[] constructors = implementationClass.getDeclaredConstructors();
+	    Constructor<?> chosen = constructors[0];//at least a single constructor is present in class
+	    if (constructors.length > 1) {
+		  constructors = Arrays.stream(constructors)
+				     .filter(constructor -> constructor.isAnnotationPresent(Autowired.class))
+				     .toArray(Constructor<?>[]::new);
+		  if (constructors.length > 1) {
+			chosen = null;
+		  }
+	    }
+	    if (chosen == null) {
+		  throw newBeanFactoryException("Too many constructor for bean={}", implementationClass.getName());
+	    }
+	    Object[] parameters = Arrays.stream(chosen.getParameters())
+				      .map(parameter -> findBeanInMap(parameter.getType()))
+				      .toArray();
+	    chosen.setAccessible(true);
+	    Object bean = chosen.newInstance(parameters);
+	    instanceMap.put(targetClass, bean);
+      }
+}
+
+
 @SuppressWarnings("unchecked")
-private <T> T findBean(Class<T> clazz) {
+private <T> T findBeanInMap(Class<T> clazz) {
       T bean;
       try {
 	    bean = (T) instanceMap.get(clazz);
@@ -123,8 +154,8 @@ private <T> T findBean(Class<T> clazz) {
 
 private final Map<Class<?>, Object> instanceMap = new ConcurrentHashMap<>();
 
-private static BeanFactoryException newBeanFactoryException(String cause) {
-      LOGGER.error(cause);
+private static BeanFactoryException newBeanFactoryException(String cause, Object... args) {
+      LOGGER.error(cause, args);
       return new BeanFactoryException(cause);
 }
 }

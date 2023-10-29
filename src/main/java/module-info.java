@@ -6,10 +6,12 @@ module bsuir.poit.webtechnologies {
       requires static lombok;
       requires static jakarta.validation;
       requires static org.mapstruct;
+      requires static jakarta.inject;
 
       requires java.sql;
       requires jakarta.servlet;
       requires org.apache.logging.log4j;
+      requires reflections;
 
       opens by.bsuir.poit.servlets;
       opens by.bsuir.poit.dao.connections;

@@ -1,5 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
+import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.DeliveryPointDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.DeliveryPoint;
@@ -13,6 +14,7 @@ import java.util.Optional;
  * @since 23/10/2023
  */
 @RequiredArgsConstructor
+@Repository
 public class DeliveryPointDaoImpl implements DeliveryPointDao {
 private final ConnectionPool pool;
 private final DeliveryPointMapper mapper;

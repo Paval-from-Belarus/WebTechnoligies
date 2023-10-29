@@ -1,5 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
+import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.User;
@@ -19,6 +20,7 @@ import java.util.Optional;
  * @since 15/09/2023
  */
 @RequiredArgsConstructor
+@Repository
 public class UserDaoImpl implements UserDao {
 private final @NotNull ConnectionPool pool;
 private final @NotNull UserMapper mapper;

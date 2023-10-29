@@ -1,5 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
+import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.Client;
@@ -14,6 +15,7 @@ import java.util.Optional;
  * @since 23/10/2023
  */
 @RequiredArgsConstructor
+@Repository
 public class ClientDaoImpl implements ClientDao {
 private final ConnectionPool pool;
 private final ClientMapper mapper;

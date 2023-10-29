@@ -1,5 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
+import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.LotDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.EnglishLot;
@@ -15,6 +16,7 @@ import java.util.Optional;
  * @since 23/10/2023
  */
 @RequiredArgsConstructor
+@Repository
 public class LotDaoImpl implements LotDao {
 private final ConnectionPool pool;
 private final LotMapper mapper;

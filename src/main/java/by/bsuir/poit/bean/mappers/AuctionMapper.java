@@ -4,6 +4,7 @@ import by.bsuir.poit.bean.Auction;
 import by.bsuir.poit.bean.BlindAuction;
 import by.bsuir.poit.bean.BlitzAuction;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -15,9 +16,8 @@ import java.sql.SQLException;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
-@Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR)
+@Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR, componentModel = MappingConstants.ComponentModel.JAKARTA)
 public interface AuctionMapper {
-AuctionMapper INSTANCE = Mappers.getMapper(AuctionMapper.class);
 
 BlindAuction updateBlindWithParent(@MappingTarget BlindAuction auction, Auction parent);
 

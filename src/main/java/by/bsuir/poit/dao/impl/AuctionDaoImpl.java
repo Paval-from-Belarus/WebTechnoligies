@@ -1,5 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
+import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.AuctionDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.Auction;
@@ -18,6 +19,7 @@ import java.util.Optional;
  * @since 23/10/2023
  */
 @RequiredArgsConstructor
+@Repository
 public class AuctionDaoImpl implements AuctionDao {
 private final ConnectionPool pool;
 private final AuctionMapper mapper;
