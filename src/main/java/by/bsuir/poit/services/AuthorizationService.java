@@ -11,7 +11,6 @@ import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
  * @author Paval Shlyk
  * @since 27/10/2023
  */
-@Service
 public interface AuthorizationService {
 
 /**
@@ -25,5 +24,5 @@ User signIn(String login, String password) throws UserNotFoundException, UserAcc
 
 void signOut(String login);
 
-void register(User user);
+void register(User user, String password);
 }

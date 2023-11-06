@@ -48,7 +48,7 @@ public Optional<User> findByUserName(String name) {
 }
 
 @Override
-public boolean exists(String name) {
+public boolean existsByName(String name) {
       return false;
 }
 

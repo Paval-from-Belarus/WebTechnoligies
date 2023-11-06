@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
+ * The context automatically search each bean annotated with <code>@RequestHandlerDefinition</code>
+ * and add to <code>Map</code>
  * @author Paval Shlyk
  * @since 27/10/2023
  */

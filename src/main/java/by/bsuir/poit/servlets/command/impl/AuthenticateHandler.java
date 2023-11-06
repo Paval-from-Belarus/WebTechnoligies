@@ -1,13 +1,16 @@
 package by.bsuir.poit.servlets.command.impl;
 
 import by.bsuir.poit.bean.User;
+import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.servlets.command.RequestHandler;
+import by.bsuir.poit.servlets.command.RequestMethod;
 import by.bsuir.poit.utils.AuthorizationUtils;
 import by.bsuir.poit.utils.RedirectUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.util.List;
@@ -16,6 +19,8 @@ import java.util.List;
  * @author Paval Shlyk
  * @since 27/10/2023
  */
+@RequestHandlerDefinition(urlPatterns = RedirectUtils.AUTHORIZATION_PAGE, method = RequestMethod.POST)
+@RequiredArgsConstructor
 public class AuthenticateHandler implements RequestHandler {
 public static final int MAX_INACTIVE_INTERVAL = 60 * 10;
 public static final String COOKIE_USER_ID = "user_id";

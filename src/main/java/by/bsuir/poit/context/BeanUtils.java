@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Paval Shlyk
@@ -19,18 +21,25 @@ import java.lang.reflect.Field;
 public class BeanUtils {
 private static final Logger LOGGER = LogManager.getLogger(BeanUtils.class);
 
+public static <T> void configureWithContext(T instance, ServletContext context) {
+      configureWithSupplier(instance, (clazz) -> context.getAttribute(clazz.getName()));
+}
+
+public static <T> void configureWithMap(T instance, Map<Class<?>, Object> beanMap) {
+      configureWithSupplier(instance, beanMap::get);
+}
+
 @SneakyThrows
-public static <T> void configure(T instance, ServletContext context) {
+private static <T> void configureWithSupplier(T instance, Function<Class<?>, Object> beanSupplier) {
       Field[] fields = instance.getClass().getDeclaredFields();
       for (Field field : fields) {
 	    Autowired annotation = field.getAnnotation(Autowired.class);
 	    if (annotation == null) {
 		  continue;
 	    }
-	    String fieldClassName = field.getType().getName();
-	    Object fieldValue = context.getAttribute(fieldClassName);
+	    Object fieldValue = beanSupplier.apply(field.getType());
 	    if (fieldValue == null) {
-		  final String msg = "Impossible to fetch bean with className=" + fieldClassName + " from servlet context";
+		  final String msg = "Impossible to fetch bean with className=" + field.getType().getName() + " from servlet context";
 		  LOGGER.error(msg);
 		  throw new IllegalStateException(msg);
 	    }
@@ -40,10 +49,10 @@ public static <T> void configure(T instance, ServletContext context) {
 }
 
 public static <T> void configureFilter(T instance, FilterConfig config) {
-      BeanUtils.configure(instance, config.getServletContext());
+      BeanUtils.configureWithContext(instance, config.getServletContext());
 }
 
 public static <T> void configureServlet(T instance, ServletConfig config) {
-      BeanUtils.configure(instance, config.getServletContext());
+      BeanUtils.configureWithContext(instance, config.getServletContext());
 }
 }

@@ -23,6 +23,18 @@
         <param-name>pool-size</param-name>
         <param-value>10</param-value>
     </context-param>
+    <context-param>
+        <param-name>mappers-beans-package</param-name>
+        <param-value>by.bsuir.poit.bean.mappers</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dao-beans-package</param-name>
+        <param-value>by.bsuir.poit.dao</param-value>
+    </context-param>
+    <context-param>
+        <param-name>service-beans-package</param-name>
+        <param-value>by.bsuir.poit</param-value>
+    </context-param>
     <display-name>JDBC Project</display-name>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

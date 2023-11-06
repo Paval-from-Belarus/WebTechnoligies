@@ -13,7 +13,7 @@ Optional<User> findById(long id);
 
 Optional<User> findByUserName(String name);
 
-boolean exists(String name);
+boolean existsByName(String name);
 
 void setUserStatus(long userId, int status);
 

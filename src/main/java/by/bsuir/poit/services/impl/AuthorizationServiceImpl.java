@@ -1,6 +1,7 @@
 package by.bsuir.poit.services.impl;
 
 import by.bsuir.poit.bean.User;
+import by.bsuir.poit.bean.mappers.UserMapper;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.exception.DataAccessException;
@@ -12,6 +13,7 @@ import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.utils.AuthorizationUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,10 +67,16 @@ public void signOut(String login) {
 }
 
 @Override
-public void register(User user) {
+public void register(@NotNull User user, @NotNull String password) throws ResourceModifyingException {
+      boolean isRegistered = false;
+      String salt = AuthorizationUtils.newSecuritySalt();
+      String passwordHash = AuthorizationUtils.encodeToken(password, salt);
+      user.setPasswordHash(passwordHash);
+      user.setSecuritySalt(salt);
       try {
-	    if (!userDao.exists(user.getName())) {
+	    if (!userDao.existsByName(user.getName())) {
 		  userDao.save(user);
+		  isRegistered = true;
 	    }
       } catch (DataModifyingException e) {
 	    LOGGER.warn(e);
@@ -76,6 +84,11 @@ public void register(User user) {
       } catch (DataAccessException e) {
 	    LOGGER.error(e);
 	    throw new ResourceBusyException(e);
+      }
+      if (!isRegistered) {
+	    String msg = String.format("User by name=%s is already exists", user.getName());
+	    LOGGER.info(msg);
+	    throw new UserAccessViolationException(msg);
       }
 }
 
