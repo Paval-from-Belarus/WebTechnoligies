@@ -8,6 +8,7 @@ import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.servlets.command.RequestMethod;
 import by.bsuir.poit.utils.AuthorizationUtils;
 import by.bsuir.poit.utils.RedirectUtils;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import org.apache.logging.log4j.Logger;
  * @author Paval Shlyk
  * @since 06/11/2023
  */
-@RequestHandlerDefinition(urlPatterns = RedirectUtils.REGISTRATION_PAGE, method = RequestMethod.POST)
+@RequestHandlerDefinition(urlPatterns = "/reg", method = RequestMethod.POST)
 @RequiredArgsConstructor
 public class RegistrationHandler implements RequestHandler {
 private static final Logger LOGGER = LogManager.getLogger(RegistrationHandler.class);

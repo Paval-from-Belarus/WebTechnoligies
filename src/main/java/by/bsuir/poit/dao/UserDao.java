@@ -15,9 +15,8 @@ Optional<User> findByUserName(String name);
 
 boolean existsByName(String name);
 
-void setUserStatus(long userId, int status);
+void setUserStatus(long userId, short status);
 
 User save(User user);
 
-User update(User user);
 }

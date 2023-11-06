@@ -28,6 +28,9 @@ private Map<RequestMethod, Map<String, RequestHandler>> requestHandlerMap;
 @Override
 public RequestHandler provide(String url, RequestMethod method) {
       Map<String, RequestHandler> map = requestHandlerMap.get(method);
+      if (map == null) {
+	    return null;
+      }
       RequestHandler requestHandler = map.get(url);
       if (requestHandler == null) {
 	    String[] pathVariables = url.split("/");

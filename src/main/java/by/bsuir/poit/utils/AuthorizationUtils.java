@@ -12,7 +12,6 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Paval Shlyk
@@ -24,18 +23,18 @@ public static final String PASSWORD = "password";
 public static final String NAME = "user_name";
 public static final String USER_ATTRIBUTE = "user_attribute";
 public static final int SALT_LENGTH = 32;
-
+public static final int PASSWORD_HASH_LENGTH = 32;
 @SneakyThrows
-public static String encodeToken(String token, String salt) {
+public static byte[] encodePassword(byte[] password, byte[] salt) {
       MessageDigest md = MessageDigest.getInstance("SHA-256");
-      md.update(salt.getBytes());
-      byte[] digest = md.digest(token.getBytes());
+      md.update(salt);
+      byte[] digest = md.digest(password);
       md.reset();//to use in future
-      return Base64.getEncoder().encodeToString(digest);
+      return digest;
 }
 
-public static String newSecuritySalt() {
-      return Base64.getEncoder().encodeToString(random.generateSeed(SALT_LENGTH));
+public static byte[] newSecuritySalt() {
+      return random.generateSeed(SALT_LENGTH);
 }
 
 private static final SecureRandom random = new SecureRandom();

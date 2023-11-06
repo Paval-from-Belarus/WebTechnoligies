@@ -1,7 +1,6 @@
 package by.bsuir.poit.services.impl;
 
 import by.bsuir.poit.bean.User;
-import by.bsuir.poit.bean.mappers.UserMapper;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.exception.DataAccessException;
@@ -18,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
+
 /**
  * @author Paval Shlyk
  * @since 27/10/2023
@@ -33,9 +34,9 @@ public User signIn(String login, String password) {
       User user;
       try {
 	    user = userDao.findByUserName(login).orElseThrow(() -> newUserNotFoundException(login));
-	    String salt = user.getSecuritySalt();
-	    String passwordHash = AuthorizationUtils.encodeToken(password, salt);
-	    if (!user.getPasswordHash().equals(passwordHash)) {
+	    byte[] salt = user.getSecuritySalt();
+	    byte[] passwordHash = AuthorizationUtils.encodePassword(password.getBytes(), salt);
+	    if (!Arrays.equals(user.getPasswordHash(), passwordHash)) {
 		  final String msg = String.format("Invalid password for user with login=%s", login);
 		  LOGGER.info(msg);
 		  throw new UserAccessViolationException(msg);
@@ -69,8 +70,8 @@ public void signOut(String login) {
 @Override
 public void register(@NotNull User user, @NotNull String password) throws ResourceModifyingException {
       boolean isRegistered = false;
-      String salt = AuthorizationUtils.newSecuritySalt();
-      String passwordHash = AuthorizationUtils.encodeToken(password, salt);
+      byte[] salt = AuthorizationUtils.newSecuritySalt();
+      byte[] passwordHash = AuthorizationUtils.encodePassword(password.getBytes(), salt);
       user.setPasswordHash(passwordHash);
       user.setSecuritySalt(salt);
       try {

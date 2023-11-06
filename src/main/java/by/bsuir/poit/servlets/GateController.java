@@ -6,6 +6,7 @@ import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.servlets.command.RequestHandlerProvider;
 import by.bsuir.poit.servlets.command.RequestMethod;
 import by.bsuir.poit.utils.RedirectUtils;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -18,8 +19,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-@WebServlet(name = "Gate", urlPatterns = {"/*"})
+@WebServlet(name = "Gate", urlPatterns = {"/api/*"})
 public class GateController extends HttpServlet {
 private static final Logger LOGGER = LogManager.getLogger(GateController.class);
 @Autowired
@@ -38,17 +42,33 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 @SneakyThrows
 private void processRequest(HttpServletRequest request, HttpServletResponse response, RequestMethod method) {
       try {
-	    RequestHandler handler = handlerProvider.provide(request.getRequestURI(), method);
+	    String requestUrl = parseRequestUrl(request);
+	    RequestHandler handler = handlerProvider.provide(requestUrl, method);
 	    if (handler != null) {
 		  LOGGER.info(String.format("Handler %s will process request", handler));
 		  handler.accept(request, response);
 	    } else {
-		  LOGGER.warn("No request handler for request mapping {}", request.getRequestURI());
+		  LOGGER.warn("No request handler for request mapping {}", requestUrl);
+		  RequestDispatcher dispatcher = request.getRequestDispatcher(RedirectUtils.ERROR_PAGE);
+		  dispatcher.forward(request, response);
 	    }
-      } catch (Exception e) {
-	    LOGGER.error(e);
-	    response.sendRedirect(RedirectUtils.ERROR_PAGE);
+      } catch (Throwable e) {
+	    LOGGER.error("Gate controller catch exception with message ={} \n {}", e.getMessage(), Arrays.toString(e.getStackTrace()));
+	    response.sendRedirect(RedirectUtils.buildResourcePath(RedirectUtils.ERROR_PAGE));
       }
+}
+
+private final Pattern REQUEST_PATTERN = Pattern.compile(".*/api/(.+)");
+
+private String parseRequestUrl(HttpServletRequest request) {
+      Matcher matcher = REQUEST_PATTERN.matcher(request.getRequestURI());
+      String requestUrl;
+      if (matcher.find()) {
+	    requestUrl = matcher.group(1);
+      } else {
+	    throw new IllegalStateException("Impossible to access page");
+      }
+      return requestUrl;
 }
 
 @Override

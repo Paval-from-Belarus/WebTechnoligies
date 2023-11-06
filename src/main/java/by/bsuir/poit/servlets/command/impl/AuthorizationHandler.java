@@ -19,15 +19,15 @@ import java.util.List;
  * @author Paval Shlyk
  * @since 27/10/2023
  */
-@RequestHandlerDefinition(urlPatterns = RedirectUtils.AUTHORIZATION_PAGE, method = RequestMethod.POST)
+@RequestHandlerDefinition(urlPatterns = "/auth", method = RequestMethod.POST)
 @RequiredArgsConstructor
-public class AuthenticateHandler implements RequestHandler {
+public class AuthorizationHandler implements RequestHandler {
 public static final int MAX_INACTIVE_INTERVAL = 60 * 10;
 public static final String COOKIE_USER_ID = "user_id";
 public static final String COOKIE_USER_ROLE = "user_role";
 
 @Override
-@SneakyThrows(Exception.class)
+@SneakyThrows
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       User user = (User) request.getAttribute(AuthorizationUtils.USER_ATTRIBUTE);
       assert user != null;

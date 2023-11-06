@@ -36,37 +36,37 @@
         <param-value>by.bsuir.poit</param-value>
     </context-param>
     <display-name>JDBC Project</display-name>
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
     <servlet>
-        <servlet-name>AdminController</servlet-name>
+        <servlet-name>MainPage</servlet-name>
+        <jsp-file>/index.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>ErrorPage</servlet-name>
+        <jsp-file>/error.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminPage</servlet-name>
         <jsp-file>/roles/admin.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>ClientController</servlet-name>
+        <servlet-name>ClientPage</servlet-name>
         <jsp-file>/roles/client.jsp</jsp-file>
     </servlet>
+    <!--    pages mapping-->
     <servlet-mapping>
-        <servlet-name>ClientController</servlet-name>
+        <servlet-name>MainPage</servlet-name>
+        <url-pattern>/lobby</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ErrorPage</servlet-name>
+        <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClientPage</servlet-name>
         <url-pattern>/client</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AdminController</servlet-name>
+        <servlet-name>AdminPage</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
-    <error-page>
-        <exception-type>by.bsuir.poit.services.exception.resources.ResourceException</exception-type>
-        <location>/error.jsp</location>
-    </error-page>
-    <error-page>
-        <exception-type>by.bsuir.poit.services.exception.authorization.AuthorizationException</exception-type>
-        <location>/error.jsp</location>
-    </error-page>
-    <error-page>
-        <!--        default exception page for all -->
-        <exception-type>java.lang.Throwable</exception-type>
-        <location>/error.jsp</location>
-    </error-page>
 </web-app>

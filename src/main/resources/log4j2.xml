@@ -13,11 +13,8 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="by.bsuir.poit.servlets.GateController" level="info" additivity="false">
+        <Logger name="by.bsuir.poit.servlets.GateController" level="trace" additivity="false">
             <AppenderRef ref="FileOut"/>
-        </Logger>
-        <Logger name="by.bsuir.poit.servlets.GateController" level="error" additivity="true">
-            <AppenderRef ref="ErrorOut"/>
         </Logger>
         <Logger name="by.bsuir.poit.context.BeanFactory" level="trace" additivity="false">
             <AppenderRef ref="FileOut"/>

@@ -23,7 +23,7 @@ default Lot fromResultSet(ResultSet set) throws SQLException {
       return Lot.builder()
 		 .id(set.getLong("lot_id"))
 		 .title(set.getString("title"))
-		 .status(set.getInt("status"))
+		 .status(set.getShort("status"))
 		 .startPrice(set.getDouble("start_price"))
 		 .actualPrice(set.getDouble("actual_price"))
 		 .auctionTypeId(set.getLong("auction_type_id"))

@@ -7,7 +7,6 @@ import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.servlets.command.RequestHandlerProvider;
 import by.bsuir.poit.servlets.command.RequestMethod;
-import by.bsuir.poit.servlets.command.impl.RequestHandlerProviderImpl;
 import jakarta.inject.Named;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -147,6 +146,8 @@ private void configureRequestHandlerProvider(RequestHandlerProvider provider) {
 	    field.setAccessible(true);
 	    try {
 		  field.set(provider, handlerMap);
+		  LOGGER.info("RequestProvider is configured");
+		  return;
 	    } catch (Exception e) {
 		  throw newBeanFactoryException("Failed to create RequestProvider bean by cause=%s", e.getCause());
 	    }

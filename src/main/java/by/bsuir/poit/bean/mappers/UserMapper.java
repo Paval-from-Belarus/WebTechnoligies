@@ -20,9 +20,10 @@ default User fromResultSet(ResultSet set) throws SQLException {
 		 .name(set.getString("name"))
 		 .phoneNumber(set.getString("phone_number"))
 		 .email(set.getString("email"))
-		 .role(set.getInt("role"))
-		 .passwordHash(set.getString("password_hash"))
-		 .securitySalt(set.getString("security_salt"))
+		 .role(set.getShort("role"))
+		 .status(set.getShort("status"))
+		 .passwordHash(set.getBytes("password_hash"))
+		 .securitySalt(set.getBytes("security_salt"))
 		 .build();
 }
 }

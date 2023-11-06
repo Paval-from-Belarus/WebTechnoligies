@@ -23,7 +23,7 @@ public static final int DELIVERIED_STATUS = 5;
 //relationship's data
 private long id;
 private String title;
-private int status;
+private short status;
 //foreign keys
 @NotNull
 private Double startPrice;
