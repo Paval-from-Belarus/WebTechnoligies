@@ -4,7 +4,6 @@ import by.bsuir.poit.bean.ClientFeedback;
 import by.bsuir.poit.bean.DeliveryPoint;
 import by.bsuir.poit.bean.EnglishLot;
 import by.bsuir.poit.bean.Lot;
-import by.bsuir.poit.context.Service;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
 
 import java.util.List;

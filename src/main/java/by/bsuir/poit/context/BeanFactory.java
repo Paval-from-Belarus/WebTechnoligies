@@ -88,16 +88,35 @@ public void contextDestroyed(ServletContextEvent contextEvent) {
 
 ///Find classses with specific annotation and map them to <code>Map.entry<Interface, Class></code>
 ///If class have more than one interface, then self-class will be chosen as target
+///if several classes will have same interface then both will be chosend as target
 private Map<Class<?>, Class<?>> findTypesWithInterface(Reflections scanner, Class<? extends Annotation> annotation) {
-      return scanner.getTypesAnnotatedWith(annotation).stream()
-		 .map(clazz -> {
-		       Class<?>[] interfaces = clazz.getInterfaces();
-		       if (interfaces.length == 1) {
-			     return Map.entry(interfaces[0], clazz);
-		       }
-		       return Map.entry(clazz, clazz);
-		 })
-		 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+      Map<Class<?>, Class<?>> interfaceTargetMap = new HashMap<>();
+      scanner.getTypesAnnotatedWith(annotation).stream()
+	  .map(clazz -> {
+		Class<?>[] interfaces = clazz.getInterfaces();
+		if (interfaces.length == 1) {
+		      return Map.entry(interfaces[0], clazz);
+		}
+		return Map.entry(clazz, clazz);
+	  })
+	  .forEach(classWithInterface -> {
+		if (!interfaceTargetMap.containsKey(classWithInterface.getKey())) {
+		      interfaceTargetMap.put(classWithInterface.getKey(), classWithInterface.getValue());
+		} else {
+		      Class<?> existingImpl = interfaceTargetMap.get(classWithInterface.getKey());
+		      interfaceTargetMap.put(classWithInterface.getKey(), null);
+		      assert existingImpl != null;
+		      interfaceTargetMap.put(existingImpl, existingImpl);
+		      interfaceTargetMap.put(classWithInterface.getValue(), classWithInterface.getValue());
+		}
+	  });
+      HashMap<Class<?>, Class<?>> outputMap = new HashMap<>();
+      for (Map.Entry<Class<?>, Class<?>> entry : interfaceTargetMap.entrySet()) {
+	    if (entry.getValue() != null) {
+		  outputMap.put(entry.getKey(), entry.getValue());
+	    }
+      }
+      return outputMap;
 }
 
 private void initDaoBeans(ConnectionPool pool, String daoBeansPackage, String mapperBeanPackage) {
@@ -141,8 +160,7 @@ private Map<RequestMethod, Map<String, RequestHandler>> newHandlerMap() {
 	  .forEach(handler -> {
 		RequestHandlerDefinition annotation = handler.getClass().getAnnotation(RequestHandlerDefinition.class);
 		RequestMethod method = annotation.method();
-		Map<String, RequestHandler> urlMap = handlerMap.putIfAbsent(method, new HashMap<>());
-		assert urlMap != null;
+		Map<String, RequestHandler> urlMap = handlerMap.getOrDefault(method, new HashMap<>());
 		for (String url : annotation.urlPatterns()) {
 		      if (!url.startsWith("/")) {
 			    url = "/" + url;
@@ -164,6 +182,9 @@ private void putBeansInMap(Map<Class<?>, Class<?>> classSet) {
       for (Map.Entry<Class<?>, Class<?>> entry : classSet.entrySet()) {
 	    Class<?> targetClass = entry.getKey();
 	    Class<?> implementationClass = entry.getValue();
+	    if (implementationClass.isInterface()) {
+		  continue;
+	    }
 	    Constructor<?>[] constructors = implementationClass.getDeclaredConstructors();
 	    Constructor<?> chosen = constructors[0];//at least a single constructor is present in class
 	    if (constructors.length > 1) {

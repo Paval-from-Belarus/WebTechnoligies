@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
  * @since 06/11/2023
  */
 @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-@Service
 public @interface RequestHandlerDefinition {
 /**
  * each url pattern should begin from right slash

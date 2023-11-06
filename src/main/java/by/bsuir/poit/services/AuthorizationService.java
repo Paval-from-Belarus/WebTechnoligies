@@ -1,10 +1,8 @@
 package by.bsuir.poit.services;
 
 import by.bsuir.poit.bean.User;
-import by.bsuir.poit.context.Service;
 import by.bsuir.poit.services.exception.authorization.UserAccessViolationException;
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
-import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
 
 /**

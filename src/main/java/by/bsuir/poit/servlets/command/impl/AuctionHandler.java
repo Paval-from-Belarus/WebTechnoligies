@@ -1,13 +1,11 @@
 package by.bsuir.poit.servlets.command.impl;
 
 import by.bsuir.poit.context.RequestHandlerDefinition;
-import by.bsuir.poit.context.Service;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.servlets.command.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
 
 /**
  * @author Paval Shlyk

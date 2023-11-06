@@ -9,7 +9,7 @@
             <PatternLayout pattern="%d %-5p [%t]: %m%n"/>
         </Console>
         <File name="FileOut" fileName="${log-path}/server.logs">
-            <PatternLayout pattern="%d{hh:mms yyyy:mm:ss} %-5p [%t] %m%n"/>
+            <PatternLayout pattern="%d{hh:mm:s yyyy:mm:ss} %-5p [%t] %m%n"/>
         </File>
     </Appenders>
     <Loggers>
