@@ -11,5 +11,6 @@ import java.util.Optional;
  */
 public interface ClientDao {
 Optional<Client> findById(long clientId);
-List<Client> findAllWithStatusAndSortedByRankingDesc(long status);
+
+void save(Client client);
 }

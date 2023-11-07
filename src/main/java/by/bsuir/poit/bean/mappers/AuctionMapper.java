@@ -17,12 +17,13 @@ import java.sql.SQLException;
  * @since 23/10/2023
  */
 @Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR, componentModel = MappingConstants.ComponentModel.JAKARTA)
-public interface AuctionMapper {
+public interface AuctionMapper extends ResultSetMapper<Auction> {
 
 BlindAuction updateBlindWithParent(@MappingTarget BlindAuction auction, Auction parent);
 
 BlitzAuction updateBlitzWithParent(@MappingTarget BlitzAuction auction, Auction parent);
 
+@Override
 default Auction fromResultSet(ResultSet set) throws SQLException {
       return Auction.builder()
 		 .id(set.getLong("auction_id"))

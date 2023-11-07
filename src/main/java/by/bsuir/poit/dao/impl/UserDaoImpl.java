@@ -1,12 +1,11 @@
 package by.bsuir.poit.dao.impl;
 
+import by.bsuir.poit.bean.mappers.ClientUserMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.User;
-import by.bsuir.poit.bean.mappers.UserMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
-import by.bsuir.poit.utils.AuthorizationUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -22,10 +21,10 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 private final @NotNull ConnectionPool pool;
-private final @NotNull UserMapper mapper;
+private final @NotNull ClientUserMapper mapper;
 
 @Override
 public Optional<User> findById(@NotNull long id) throws DataAccessException {
@@ -33,7 +32,7 @@ public Optional<User> findById(@NotNull long id) throws DataAccessException {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from USER where USER_ID= ?")) {
 	    statement.setLong(1, id);
-	    user = fetchUserAndClose(statement);
+	    user = fetchEntityAndClose(statement, mapper);
       } catch (SQLException e) {
 	    LOGGER.error(e);
 	    throw new DataAccessException(e);
@@ -47,7 +46,7 @@ public Optional<User> findByUserName(String name) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from USER where NAME= ?")) {
 	    statement.setString(1, name);
-	    user = fetchUserAndClose(statement);
+	    user = fetchEntityAndClose(statement, mapper);
       } catch (SQLException e) {
 	    LOGGER.error(e);
 	    throw new DataAccessException(e);
@@ -116,44 +115,5 @@ public User save(User user) {
 	    throw new DataAccessException(e);
       }
       return user;
-}
-
-/**
- * Fetch a user and close result set
- *
- * @param statement
- * @return fetched user
- */
-private Optional<User> fetchUserAndClose(PreparedStatement statement) throws SQLException {
-      Optional<User> optional = Optional.empty();
-      try (ResultSet set = statement.executeQuery()) {
-	    if (set.next()) {
-		  optional = Optional.of(mapper.fromResultSet(set));
-	    }
-      }
-      return optional;
-}
-
-/**
- * @param statement
- * @return true if a set is not empty. Otherwise, return false
- * @throws SQLException
- */
-private boolean checkEmptinessAndClose(PreparedStatement statement) throws SQLException {
-      boolean hasData;
-      try (ResultSet set = statement.executeQuery()) {
-	    hasData = set.next();
-      }
-      return hasData;
-}
-
-private Optional<Long> fetchLongKeyAndClose(Statement statement) throws SQLException {
-      Optional<Long> key = Optional.empty();
-      try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-	    if (generatedKeys.next()) {
-		  key = Optional.of(generatedKeys.getLong(1));
-	    }
-      }
-      return key;
 }
 }

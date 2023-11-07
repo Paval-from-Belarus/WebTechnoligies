@@ -5,8 +5,16 @@ import by.bsuir.poit.dao.ClientFeedbackDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.ClientFeedback;
 import by.bsuir.poit.bean.mappers.ClientFeedbackMapper;
+import by.bsuir.poit.dao.exception.DataAccessException;
+import by.bsuir.poit.dao.exception.DataModifyingException;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 /**
@@ -15,22 +23,106 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Repository
-public class ClientFeedbackDaoImpl implements ClientFeedbackDao {
+public class ClientFeedbackDaoImpl extends AbstractDao<ClientFeedback> implements ClientFeedbackDao {
+private static final Logger LOGGER = LogManager.getLogger(ClientFeedbackDaoImpl.class);
 private final ConnectionPool pool;
 private final ClientFeedbackMapper mapper;
 
 @Override
-public List<ClientFeedback> findAllByClientId(long clientId) {
-      return null;
+public List<ClientFeedback> findAllBySellerId(long clientId) {
+      List<ClientFeedback> list;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where CLIENT_TARGET_ID = ?")) {
+	    statement.setLong(1, clientId);
+	    list = fetchListAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return list;
+}
+
+@Override
+public List<ClientFeedback> findAllByCustomerId(long clientId) {
+      List<ClientFeedback> list;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where CLIENT_AUTHOR_ID = ?")) {
+	    statement.setLong(1, clientId);
+	    list = fetchListAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return list;
 }
 
 @Override
 public List<ClientFeedback> findAllByLotId(long lotId) {
-      return null;
+      List<ClientFeedback> list;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where LOT_ID = ?")) {
+	    statement.setLong(1, lotId);
+	    list = fetchListAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return list;
 }
 
 @Override
-public List<ClientFeedback> findAllByClientIdSortedByRankingDesc(long clientId) {
-      return null;
+public List<ClientFeedback> findAllBySellerIdSortedByRankingDesc(long clientId) {
+      List<ClientFeedback> list;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where CLIENT_TARGET_ID = ? ORDER BY RANKING DESC")) {
+	    statement.setLong(1, clientId);
+	    list = fetchListAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return list;
+}
+
+@Override
+public List<ClientFeedback> findAllByCustomerIdSortedByRankingDesc(long clientId) {
+      List<ClientFeedback> list;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where CLIENT_AUTHOR_ID = ? ORDER BY RANKING DESC")) {
+	    statement.setLong(1, clientId);
+	    list = fetchListAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return list;
+}
+
+@Override
+public ClientFeedback save(ClientFeedback entity) {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("insert into CLIENT_FEEDBACK " +
+									 "(RANKING, TEXT, CLIENT_AUTHOR_ID, CLIENT_TARGET_ID) " +
+									 "VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+	    statement.setDouble(1, entity.getRanking());
+	    statement.setString(2, entity.getText());
+	    statement.setLong(3, entity.getAuthorId());
+	    statement.setLong(4, entity.getTargetId());
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to insert Client feedback %s", entity);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+	    }
+	    long feedbackId = fetchLongKeyAndClose(statement).orElseThrow(() -> {
+		  final String msg = "Failed to fetched generated client feedback id";
+		  LOGGER.error(msg);
+		  return new DataAccessException(msg);
+	    });
+	    entity.setId(feedbackId);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataModifyingException(e);
+      }
+      return entity;
 }
 }

@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author Paval Shlyk
  * @since 23/10/2023
  */
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -21,7 +22,7 @@ public static final int OFFICER = 3;//the grant to all
 public static final short STATUS_NOT_ACTIVE = 1;
 public static final short STATUS_ACTIVE = 2;
 
-private Long id;
+private long id;
 private String name;
 private String phoneNumber;
 private String email;

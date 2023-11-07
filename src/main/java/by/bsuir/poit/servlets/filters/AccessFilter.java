@@ -1,6 +1,6 @@
 package by.bsuir.poit.servlets.filters;
 
-import by.bsuir.poit.utils.RedirectUtils;
+import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
@@ -32,7 +32,7 @@ protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterC
       }
       String requestURI = req.getRequestURI();
       if (isRequestToStartPage(requestURI)) {
-	    RedirectUtils.redirectTo(res, RedirectUtils.START_PAGE);
+	    PageUtils.redirectTo(res, PageUtils.START_PAGE);
 	    return;
       }
       if (UNAUTHORIZED_ACCESS_PAGES.stream().noneMatch(requestURI::contains)) {

@@ -9,9 +9,12 @@ import java.util.List;
  * @since 23/10/2023
  */
 public interface ClientFeedbackDao {
-List<ClientFeedback> findAllByClientId(long clientId);
+List<ClientFeedback> findAllBySellerId(long clientId);
+List<ClientFeedback> findAllByCustomerId(long clientId);
 
 List<ClientFeedback> findAllByLotId(long lotId);
 
-List<ClientFeedback> findAllByClientIdSortedByRankingDesc(long clientId);
+List<ClientFeedback> findAllBySellerIdSortedByRankingDesc(long clientId);
+List<ClientFeedback> findAllByCustomerIdSortedByRankingDesc(long clientId);
+ClientFeedback save(ClientFeedback entity);
 }

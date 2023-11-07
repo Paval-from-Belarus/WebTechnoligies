@@ -16,9 +16,10 @@ import java.sql.SQLException;
  * @since 23/10/2023
  */
 @Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR, componentModel = MappingConstants.ComponentModel.JAKARTA)
-public interface LotMapper {
+public interface LotMapper extends ResultSetMapper<Lot> {
 EnglishLot updateEnglishWithParent(@MappingTarget EnglishLot englishLot, Lot lot);
 
+@Override
 default Lot fromResultSet(ResultSet set) throws SQLException {
       return Lot.builder()
 		 .id(set.getLong("lot_id"))

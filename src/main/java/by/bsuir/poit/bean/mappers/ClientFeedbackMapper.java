@@ -13,8 +13,8 @@ import java.sql.SQLException;
  * @since 23/10/2023
  */
 @Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR, componentModel = MappingConstants.ComponentModel.JAKARTA)
-public interface ClientFeedbackMapper {
-
+public interface ClientFeedbackMapper extends ResultSetMapper<ClientFeedback> {
+@Override
 default ClientFeedback fromResultSet(ResultSet set) throws SQLException {
       return ClientFeedback.builder()
 		 .id(set.getLong("client_feedback_id"))

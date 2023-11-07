@@ -4,7 +4,8 @@ import by.bsuir.poit.bean.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.AuthorizationUtils;
-import by.bsuir.poit.utils.RedirectUtils;
+import by.bsuir.poit.utils.ControllerUtils;
+import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +27,6 @@ public class AuthorizationHandler implements RequestHandler {
 private static final Logger LOGGER = LogManager.getLogger(AuthorizationHandler.class);
 public static final int MAX_INACTIVE_INTERVAL = 60 * 10;
 
-
 @Override
 @SneakyThrows
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -38,16 +38,22 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
       }
       session = request.getSession(true);
       session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL);
-      session.setAttribute(AuthorizationUtils.COOKIE_USER_ID, String.valueOf(user.getId()));
-      session.setAttribute(AuthorizationUtils.COOKIE_USER_ROLE, String.valueOf(user.getRole()));
-      session.setAttribute("test_attr", (short) 12);
+      List<Cookie> cookies = List.of(
+	  new Cookie(AuthorizationUtils.COOKIE_USER_ID, String.valueOf(user.getId())),
+	  new Cookie(AuthorizationUtils.COOKIE_USER_ROLE, String.valueOf(user.getRole()))
+      );
+      for (Cookie cookie : cookies) {
+	    cookie.setPath(PageUtils.APPLICATION_NAME);
+	    response.addCookie(cookie);
+      }
+      cookies.forEach(response::addCookie);
       LOGGER.trace("User with id {} was authorized", user.getId());
       if (user.getRole() == User.ADMIN) {
-	    RedirectUtils.sendRedirectMessage(response, RedirectUtils.ADMIN_PAGE);
+	    ControllerUtils.sendRedirectMessage(response, ControllerUtils.ADMIN_ENDPOINT);
 	    return;
       }
       if (user.getRole() == User.CLIENT) {
-	    RedirectUtils.sendRedirectMessage(response, RedirectUtils.CLIENT_PAGE);
+	    ControllerUtils.sendRedirectMessage(response, ControllerUtils.CLIENT_ENDPOINT);
 	    return;
       }
       response.sendError(HttpServletResponse.SC_FORBIDDEN);

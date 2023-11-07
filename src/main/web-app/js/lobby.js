@@ -19,8 +19,7 @@ const onRegistrationBtnClicked = () => {
     });
 }
 const processServerResponse = (response) => {
-    console.log(response);
-    window.location.replace(response.url);
+    window.location.replace(response['redirect_page']);
 }
 $(function () {
     $("form").on('submit', function (e) {

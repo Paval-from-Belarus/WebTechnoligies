@@ -5,7 +5,7 @@ import by.bsuir.poit.context.BeanUtils;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.servlets.command.RequestHandlerProvider;
 import by.bsuir.poit.servlets.command.RequestMethod;
-import by.bsuir.poit.utils.RedirectUtils;
+import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
@@ -49,7 +49,7 @@ private void processRequest(HttpServletRequest request, HttpServletResponse resp
 		  handler.accept(request, response);
 	    } else {
 		  LOGGER.warn("No request handler for request mapping {}", requestUrl);
-		  RequestDispatcher dispatcher = request.getRequestDispatcher(RedirectUtils.ERROR_PAGE);
+		  RequestDispatcher dispatcher = request.getRequestDispatcher(PageUtils.ERROR_PAGE);
 		  dispatcher.forward(request, response);
 	    }
       } catch (Throwable e) {

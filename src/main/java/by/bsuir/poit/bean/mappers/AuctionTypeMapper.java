@@ -13,7 +13,8 @@ import java.sql.SQLException;
  * @since 23/10/2023
  */
 @Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR, componentModel = MappingConstants.ComponentModel.JAKARTA)
-public interface AuctionTypeMapper {
+public interface AuctionTypeMapper extends ResultSetMapper<AuctionType> {
+@Override
 default AuctionType fromResultSet(ResultSet set) throws SQLException {
       return AuctionType.builder()
 		 .id(set.getLong("auction_type_id"))

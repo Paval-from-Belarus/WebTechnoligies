@@ -14,7 +14,6 @@ import java.util.List;
  */
 public interface LotService {
 List<Lot> findAllByClient(long clientId) throws ResourceNotFoundException;
-
 List<Lot> findAllByAuction(long auctionId) throws ResourceNotFoundException;
 
 List<ClientFeedback> findAllByLot(long lotId) throws ResourceNotFoundException;

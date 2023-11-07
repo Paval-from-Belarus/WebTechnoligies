@@ -5,7 +5,6 @@ import by.bsuir.poit.context.Autowired;
 import by.bsuir.poit.context.BeanUtils;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.utils.AuthorizationUtils;
-import by.bsuir.poit.utils.RedirectUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;

@@ -5,10 +5,8 @@ import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.exception.authorization.AuthorizationException;
 import by.bsuir.poit.servlets.command.RequestHandler;
-import by.bsuir.poit.servlets.command.RequestMethod;
 import by.bsuir.poit.utils.AuthorizationUtils;
-import by.bsuir.poit.utils.RedirectUtils;
-import jakarta.servlet.RequestDispatcher;
+import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,21 +29,19 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 	    String password = request.getParameter(AuthorizationUtils.PASSWORD);
 	    User user = AuthorizationUtils.parseUser(request);
 	    authorizationService.register(user, password);
-	    response.sendRedirect(RedirectUtils.AUTHORIZATION_PAGE);
 	    LOGGER.trace("User {} registered successfully", user.getId());
 	    response.setStatus(HttpServletResponse.SC_ACCEPTED);
-      } catch (AuthorizationException e) {
+	          } catch (AuthorizationException e) {
 	    processRegistrationException(e, response);
       } catch (Exception e) {
 	    LOGGER.warn("Failed to register user from ip {}", request.getRemoteAddr());
-	    response.sendRedirect(RedirectUtils.ERROR_PAGE);
+	    PageUtils.redirectTo(response, PageUtils.ERROR_PAGE);
       }
 }
 
 private void processRegistrationException(AuthorizationException exception, HttpServletResponse response) {
       try {
 	    response.getWriter().write(exception.getMessage());
-
       } catch (Exception e) {
 	    LOGGER.error(e.getMessage());
 	    throw new IllegalStateException(e);

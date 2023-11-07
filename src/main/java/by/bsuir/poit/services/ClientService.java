@@ -1,6 +1,9 @@
 package by.bsuir.poit.services;
 
 import by.bsuir.poit.bean.Client;
+import by.bsuir.poit.bean.ClientFeedback;
+
+import java.util.List;
 
 /**
  * @author Paval Shlyk
@@ -8,5 +11,5 @@ import by.bsuir.poit.bean.Client;
  */
 public interface ClientService {
 Client findClientByUserId(long userId);
-
+List<ClientFeedback> findAllFeedbacksBySellerId(long sellerId);
 }

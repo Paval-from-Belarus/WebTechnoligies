@@ -13,7 +13,8 @@ import java.sql.SQLException;
  * @since 23/10/2023
  */
 @Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR, componentModel = MappingConstants.ComponentModel.JAKARTA)
-public interface DeliveryPointMapper {
+public interface DeliveryPointMapper extends ResultSetMapper<DeliveryPoint> {
+@Override
 default DeliveryPoint fromResultSet(ResultSet set) throws SQLException {
       return DeliveryPoint.builder()
 		 .id(set.getLong("delivery_point_id"))

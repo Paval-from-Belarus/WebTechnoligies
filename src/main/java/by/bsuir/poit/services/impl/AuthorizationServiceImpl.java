@@ -1,7 +1,10 @@
 package by.bsuir.poit.services.impl;
 
+import by.bsuir.poit.bean.Client;
 import by.bsuir.poit.bean.User;
+import by.bsuir.poit.bean.mappers.ClientUserMapper;
 import by.bsuir.poit.context.Service;
+import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
@@ -17,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
-
 /**
  * @author Paval Shlyk
  * @since 27/10/2023
@@ -28,7 +29,8 @@ import java.util.Arrays;
 public class AuthorizationServiceImpl implements AuthorizationService {
 private static final Logger LOGGER = LogManager.getLogger(AuthorizationServiceImpl.class);
 private final UserDao userDao;
-
+private final ClientDao clientDao;
+private final ClientUserMapper clientMapper;
 @Override
 public User signIn(String login, String password) {
       User user;
@@ -78,6 +80,10 @@ public void register(@NotNull User user, @NotNull String password) throws Resour
 	    if (!userDao.existsByName(user.getName())) {
 		  userDao.save(user);
 		  isRegistered = true;
+	    }
+	    if (isRegistered && user.getRole() == User.CLIENT) {
+		  Client client = clientMapper.fromUser(user);
+		  clientDao.save(client);
 	    }
       } catch (DataModifyingException e) {
 	    LOGGER.warn(e);

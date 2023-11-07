@@ -2,7 +2,9 @@ package by.bsuir.poit.utils;
 
 import by.bsuir.poit.bean.User;
 import com.google.gson.Gson;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -12,6 +14,7 @@ import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +32,7 @@ public static final String EMAIL = "email";
 public static final String USER_ATTRIBUTE = "user_attribute";
 public static final int SALT_LENGTH = 32;
 public static final int PASSWORD_HASH_LENGTH = 32;
+public static final int PRINCIPAL_COOKIE_COUNT = 2;
 
 @SneakyThrows
 public static String encodePassword(String password, String salt) {
@@ -61,5 +65,7 @@ public static String bytesToString(byte[] bytes) {
       }
       return String.valueOf(letters.array());
 }
-
+public static boolean isPrincipalCookie(@NotNull Cookie cookie) {
+      return cookie.getName().equals(COOKIE_USER_ID) || cookie.getName().equals(COOKIE_USER_ROLE);
+}
 }
