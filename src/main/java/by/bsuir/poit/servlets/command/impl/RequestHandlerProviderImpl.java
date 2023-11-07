@@ -23,22 +23,18 @@ import java.util.Map;
 public class RequestHandlerProviderImpl implements RequestHandlerProvider {
 private static final Logger LOGGER = LogManager.getLogger(RequestHandlerProviderImpl.class);
 @RequestHandlerMap
-private Map<RequestMethod, Map<String, RequestHandler>> requestHandlerMap;
+private Map<String, RequestHandler> requestHandlerMap;
 
 @Override
 public RequestHandler provide(String url, RequestMethod method) {
-      Map<String, RequestHandler> map = requestHandlerMap.get(method);
-      if (map == null) {
-	    return null;
-      }
-      RequestHandler requestHandler = map.get(url);
+      RequestHandler requestHandler = requestHandlerMap.get(url);
       if (requestHandler == null) {
 	    String[] pathVariables = url.split("/");
 	    int index = 0;
 	    String relativeUrl;
 	    while (index < pathVariables.length && requestHandler == null) {
 		  relativeUrl = String.join("/", pathVariables[index]);
-		  requestHandler = map.get(relativeUrl);
+		  requestHandler = requestHandlerMap.get(relativeUrl);
 		  index += 1;
 	    }
       }

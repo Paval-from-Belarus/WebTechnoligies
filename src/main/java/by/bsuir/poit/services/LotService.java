@@ -13,7 +13,6 @@ import java.util.List;
  * @since 27/10/2023
  */
 public interface LotService {
-
 List<Lot> findAllByClient(long clientId) throws ResourceNotFoundException;
 
 List<Lot> findAllByAuction(long auctionId) throws ResourceNotFoundException;

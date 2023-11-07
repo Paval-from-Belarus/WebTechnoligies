@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @author Paval Shlyk
  * @since 27/10/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/auth", method = RequestMethod.GET)
+@RequestHandlerDefinition(urlPatterns = "/auction")
 public class AuctionHandler implements RequestHandler {
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {

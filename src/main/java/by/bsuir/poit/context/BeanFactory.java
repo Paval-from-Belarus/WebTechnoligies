@@ -137,7 +137,7 @@ private void initServiceBeans(String serviceBeanPackage) {
 }
 
 private void configureRequestHandlerProvider(RequestHandlerProvider provider) {
-      Map<RequestMethod, Map<String, RequestHandler>> handlerMap = newHandlerMap();
+      Map<String, RequestHandler> handlerMap = newHandlerMap();
       Field[] fields = provider.getClass().getDeclaredFields();
       for (Field field : fields) {
 	    if (!field.isAnnotationPresent(RequestHandlerMap.class)) {
@@ -154,14 +154,12 @@ private void configureRequestHandlerProvider(RequestHandlerProvider provider) {
       }
 }
 
-private Map<RequestMethod, Map<String, RequestHandler>> newHandlerMap() {
-      Map<RequestMethod, Map<String, RequestHandler>> handlerMap = new HashMap<>();
+private Map<String, RequestHandler> newHandlerMap() {
+      Map<String, RequestHandler> urlMap = new HashMap<>();
       instanceMap.values().stream()
 	  .filter(object -> object instanceof RequestHandler)
 	  .forEach(handler -> {
 		RequestHandlerDefinition annotation = handler.getClass().getAnnotation(RequestHandlerDefinition.class);
-		RequestMethod method = annotation.method();
-		Map<String, RequestHandler> urlMap = handlerMap.getOrDefault(method, new HashMap<>());
 		for (String url : annotation.urlPatterns()) {
 		      if (!url.startsWith("/")) {
 			    url = "/" + url;
@@ -169,7 +167,7 @@ private Map<RequestMethod, Map<String, RequestHandler>> newHandlerMap() {
 		      urlMap.put(url, (RequestHandler) handler);
 		}
 	  });
-      return handlerMap;
+      return urlMap;
 }
 
 private void putBeansInContext(ServletContext context) {

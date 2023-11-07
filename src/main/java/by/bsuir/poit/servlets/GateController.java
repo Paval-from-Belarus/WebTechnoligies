@@ -45,7 +45,7 @@ private void processRequest(HttpServletRequest request, HttpServletResponse resp
 	    String requestUrl = parseRequestUrl(request);
 	    RequestHandler handler = handlerProvider.provide(requestUrl, method);
 	    if (handler != null) {
-		  LOGGER.info(String.format("Handler %s will process request", handler));
+		  LOGGER.trace(String.format("Handler %s will process request", handler));
 		  handler.accept(request, response);
 	    } else {
 		  LOGGER.warn("No request handler for request mapping {}", requestUrl);
@@ -54,7 +54,7 @@ private void processRequest(HttpServletRequest request, HttpServletResponse resp
 	    }
       } catch (Throwable e) {
 	    LOGGER.error("Gate controller catch exception with message ={} \n {}", e.getMessage(), Arrays.toString(e.getStackTrace()));
-	    response.sendRedirect(RedirectUtils.buildResourcePath(RedirectUtils.ERROR_PAGE));
+	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
       }
 }
 
@@ -65,6 +65,9 @@ private String parseRequestUrl(HttpServletRequest request) {
       String requestUrl;
       if (matcher.find()) {
 	    requestUrl = matcher.group(1);
+	    if (!requestUrl.startsWith("/")) {
+		  requestUrl = "/" + requestUrl;
+	    }
       } else {
 	    throw new IllegalStateException("Impossible to access page");
       }

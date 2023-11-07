@@ -34,9 +34,9 @@ public User signIn(String login, String password) {
       User user;
       try {
 	    user = userDao.findByUserName(login).orElseThrow(() -> newUserNotFoundException(login));
-	    byte[] salt = user.getSecuritySalt();
-	    byte[] passwordHash = AuthorizationUtils.encodePassword(password.getBytes(), salt);
-	    if (!Arrays.equals(user.getPasswordHash(), passwordHash)) {
+	    String salt = user.getSecuritySalt();
+	    String passwordHash = AuthorizationUtils.encodePassword(password, salt);
+	    if (!user.getPasswordHash().equals(passwordHash)) {
 		  final String msg = String.format("Invalid password for user with login=%s", login);
 		  LOGGER.info(msg);
 		  throw new UserAccessViolationException(msg);
@@ -70,8 +70,8 @@ public void signOut(String login) {
 @Override
 public void register(@NotNull User user, @NotNull String password) throws ResourceModifyingException {
       boolean isRegistered = false;
-      byte[] salt = AuthorizationUtils.newSecuritySalt();
-      byte[] passwordHash = AuthorizationUtils.encodePassword(password.getBytes(), salt);
+      String salt = AuthorizationUtils.newSecuritySalt();
+      String passwordHash = AuthorizationUtils.encodePassword(password, salt);
       user.setPasswordHash(passwordHash);
       user.setSecuritySalt(salt);
       try {

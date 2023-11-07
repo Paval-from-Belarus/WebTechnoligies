@@ -18,14 +18,15 @@ public static final int CLIENT = 1;
 public static final int ADMIN = 2;
 public static final int OFFICER = 3;//the grant to all
 
-public static final short STATUS_ACTIVE = 1;
-public static final short STATUS_NOT_ACTIVE = 2;
+public static final short STATUS_NOT_ACTIVE = 1;
+public static final short STATUS_ACTIVE = 2;
+
 private Long id;
 private String name;
 private String phoneNumber;
 private String email;
 private short role;
-private byte[] passwordHash;
-private byte[] securitySalt;
+private String passwordHash;
+private String securitySalt;
 private short status;
 }

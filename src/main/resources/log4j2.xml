@@ -19,7 +19,7 @@
         <Logger name="by.bsuir.poit.context.BeanFactory" level="trace" additivity="false">
             <AppenderRef ref="FileOut"/>
         </Logger>
-        <Root level="error">
+        <Root level="trace">
             <AppenderRef ref="FileOut"/>
         </Root>
     </Loggers>

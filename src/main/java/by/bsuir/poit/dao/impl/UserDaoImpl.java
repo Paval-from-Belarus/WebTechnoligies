@@ -6,12 +6,14 @@ import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.bean.User;
 import by.bsuir.poit.bean.mappers.UserMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
+import by.bsuir.poit.utils.AuthorizationUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -95,8 +97,8 @@ public User save(User user) {
 	    statement.setString(2, user.getPhoneNumber());
 	    statement.setString(3, user.getEmail());
 	    statement.setShort(4, user.getRole());
-	    statement.setBytes(5, user.getPasswordHash());
-	    statement.setBytes(6, user.getSecuritySalt());
+	    statement.setString(5, user.getPasswordHash());
+	    statement.setString(6, user.getSecuritySalt());
 	    statement.setShort(7, user.getStatus());
 	    if (statement.executeUpdate() != 1) {
 		  final String msg = String.format("Failed to insert new user %s", user);
@@ -110,7 +112,7 @@ public User save(User user) {
 	    });
 	    user.setId(userId);
       } catch (SQLException e) {
-	    LOGGER.error(e);
+	    LOGGER.error("message {} and stack-trace {}", e.toString(), Arrays.toString(e.getStackTrace()));
 	    throw new DataAccessException(e);
       }
       return user;

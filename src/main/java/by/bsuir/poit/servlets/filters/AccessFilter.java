@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author Paval Shlyk
  * @since 07/11/2023
  */
-@WebFilter(filterName = "access", urlPatterns = "/*")
+@WebFilter(filterName = "access")
 public class AccessFilter extends HttpFilter {
 private final List<String> UNAUTHORIZED_ACCESS_PAGES = List.of(
     "/lobby", "/api/reg", "/api/auth", "/error"
@@ -32,11 +32,11 @@ protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterC
       }
       String requestURI = req.getRequestURI();
       if (isRequestToStartPage(requestURI)) {
-	    res.sendRedirect(RedirectUtils.buildResourcePath(RedirectUtils.START_PAGE));
+	    RedirectUtils.redirectTo(res, RedirectUtils.START_PAGE);
 	    return;
       }
       if (UNAUTHORIZED_ACCESS_PAGES.stream().noneMatch(requestURI::contains)) {
-	    res.sendRedirect(RedirectUtils.buildResourcePath(RedirectUtils.ERROR_PAGE));
+	    res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 	    return;
       }
       chain.doFilter(req, res);

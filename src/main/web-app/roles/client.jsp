@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>
-        Hello, Vasya!
+        Hello, Client!
     </h1>
 </body>
 </html>

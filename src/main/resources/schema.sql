@@ -79,10 +79,10 @@ CREATE TABLE user
     name          VARCHAR(30)                                            NULL,
     phone_number  VARCHAR(12)                                            NULL,
     email         VARCHAR(320)                                           NULL,
-    role          TINYINT                                                NULL,
+    role          SMALLINT                                                NULL,
     password_hash VARCHAR(32)                                            NULL,
     security_salt VARCHAR(32)                                            NULL,
-    status        TINYINT                                                NULL
+    status        SMALLINT  DEFAULT 1                                              NULL
 );
 CREATE TABLE client
 (
@@ -114,7 +114,7 @@ CREATE TABLE lot
     start_price        DECIMAL(10, 2)                                         NULL,
     actual_price       DECIMAL(10, 2)                                         NULL,
     auction_type_id    BIGINT                                                 NULL,
-    status             TINYINT                                                NULL,
+    status             SMALLINT                                                NULL,
     client_seller_id   BIGINT                                                 NULL,
     client_customer_id BIGINT                                                 NULL,
     delivery_point_id  BIGINT                                                 NULL,

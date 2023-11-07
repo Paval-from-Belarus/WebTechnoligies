@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
  * @author Paval Shlyk
  * @since 06/11/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/reg", method = RequestMethod.POST)
+@RequestHandlerDefinition(urlPatterns = "/reg")
 @RequiredArgsConstructor
 public class RegistrationHandler implements RequestHandler {
 private static final Logger LOGGER = LogManager.getLogger(RegistrationHandler.class);
@@ -28,10 +28,12 @@ private final AuthorizationService authorizationService;
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       try {
-	    String password = (String) request.getAttribute(AuthorizationUtils.PASSWORD);
+	    String password = request.getParameter(AuthorizationUtils.PASSWORD);
 	    User user = AuthorizationUtils.parseUser(request);
 	    authorizationService.register(user, password);
 	    response.sendRedirect(RedirectUtils.AUTHORIZATION_PAGE);
+	    LOGGER.trace("User {} registered successfully", user.getId());
+	    response.setStatus(HttpServletResponse.SC_ACCEPTED);
       } catch (AuthorizationException e) {
 	    processRegistrationException(e, response);
       } catch (Exception e) {
@@ -43,6 +45,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 private void processRegistrationException(AuthorizationException exception, HttpServletResponse response) {
       try {
 	    response.getWriter().write(exception.getMessage());
+
       } catch (Exception e) {
 	    LOGGER.error(e.getMessage());
 	    throw new IllegalStateException(e);

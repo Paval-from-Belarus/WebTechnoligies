@@ -36,6 +36,18 @@
         <param-value>by.bsuir.poit</param-value>
     </context-param>
     <display-name>JDBC Project</display-name>
+    <filter-mapping>
+        <filter-name>authenticator</filter-name>
+        <url-pattern>/api/auth</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>principal-builder</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>access</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>MainPage</servlet-name>
         <jsp-file>/index.jsp</jsp-file>
@@ -69,4 +81,8 @@
         <servlet-name>AdminPage</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error</location>
+    </error-page>
 </web-app>

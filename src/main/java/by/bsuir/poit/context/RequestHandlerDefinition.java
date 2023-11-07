@@ -14,5 +14,6 @@ public @interface RequestHandlerDefinition {
  */
 @NotNull String[] urlPatterns();
 
-@NotNull RequestMethod method();
+@Deprecated
+@NotNull RequestMethod method() default RequestMethod.GET;
 }
