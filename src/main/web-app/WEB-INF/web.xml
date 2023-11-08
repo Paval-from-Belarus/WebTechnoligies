@@ -67,6 +67,7 @@
     <!--    pages mapping-->
     <servlet-mapping>
         <servlet-name>MainPage</servlet-name>
+        <url-pattern>/</url-pattern>
         <url-pattern>/lobby</url-pattern>
     </servlet-mapping>
     <servlet-mapping>

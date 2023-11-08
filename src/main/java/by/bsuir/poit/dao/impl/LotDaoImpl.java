@@ -137,4 +137,75 @@ public Lot save(Lot lot) throws DataModifyingException {
       return lot;
 
 }
+
+@Override
+public void setAuctionId(long lotId, long auctionId) throws DataAccessException {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("update LOT set AUCTION_ID = ? where LOT_ID = ?")) {
+	    statement.setLong(1, auctionId);
+	    statement.setLong(2, lotId);
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to update lot with id=%d for given auction_id=%d", lotId, auctionId);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+}
+
+@Override
+public void setLotStatus(long lotId, short status) throws DataAccessException {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("update LOT set STATUS = ? where LOT_ID = ?")) {
+	    statement.setShort(1, status);
+	    statement.setLong(2, lotId);
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to update lot with id=%d for given status =%d", lotId, status);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+}
+
+@Override
+public void setCustomerId(long lotId, long customerId) throws DataAccessException {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("update LOT set CLIENT_CUSTOMER_ID = ? where LOT_ID = ?")) {
+	    statement.setLong(1, customerId);
+	    statement.setLong(2, lotId);
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to update lot with id=%d for given customer_id=%d", lotId, customerId);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+}
+
+@Override
+public void setDeliveryPointId(long lotId, long deliveryPointId) throws DataAccessException {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("update LOT SET DELIVERY_POINT_ID = ? where LOT_ID = ?")) {
+	    statement.setLong(1, deliveryPointId);
+	    statement.setLong(2, lotId);
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to update lot with id=%d for given delivery_point_id=%d", lotId, deliveryPointId);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+}
+
+
 }

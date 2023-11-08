@@ -3,6 +3,7 @@ package by.bsuir.poit.servlets.command.impl;
 import by.bsuir.poit.bean.Client;
 import by.bsuir.poit.bean.ClientFeedback;
 import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.bean.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.ClientFeedbackService;
 import by.bsuir.poit.services.ClientService;
@@ -13,6 +14,8 @@ import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.Map;
 @RequestHandlerDefinition(urlPatterns = "/client")
 @RequiredArgsConstructor
 public class ClientHandler implements RequestHandler {
+private static final Logger LOGGER = LogManager.getLogger(ClientHandler.class);
 public static final String CLIENT_ID = "clientId";
 public static final String PAGE_LOTS = "lots";
 public static final String LOTS_PER_PAGE = "lotsPerPage";
@@ -43,6 +47,10 @@ private final ClientFeedbackService clientFeedbackService;
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       UserDetails details = (UserDetails) request.getUserPrincipal();
+      if (details.role() != User.CLIENT) {
+	    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Sorry, but you cannot see client page");
+	    return;
+      }
       long clientId = details.id();
       if (request.getParameter(CLIENT_ID) != null) {
 	    clientId = Long.parseLong(request.getParameter(CLIENT_ID));
@@ -65,6 +73,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 	    feedbacks.put(lot, feedback);
       }
       Client client = clientService.findClientByUserId(clientId);
+      LOGGER.trace("Following client will be depicted: {}", client.toString());
       request.setAttribute(CURRENT_PAGE, currentPage);
       request.setAttribute(PAGE_LOTS, lots);
       request.setAttribute(PAGE_FEEDBACK, feedbacks);

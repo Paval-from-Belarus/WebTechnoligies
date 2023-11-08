@@ -48,7 +48,6 @@ public static String newSecuritySalt() {
 }
 
 private static final SecureRandom random = new SecureRandom();
-private static final Gson PARSER = new Gson();
 
 public static User parseUser(HttpServletRequest request) throws IOException {
       return User.builder()

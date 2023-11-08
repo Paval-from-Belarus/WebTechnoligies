@@ -1,6 +1,8 @@
 package by.bsuir.poit.utils;
 
+import by.bsuir.poit.bean.Lot;
 import com.google.gson.Gson;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,6 @@ public static final String ADMIN_ENDPOINT = CONTROLLER_URL + "/admin";
 public static final String AUCTION_ENDPOINT = CONTROLLER_URL + "/auction";
 private static final String REDIRECT_PAGE = "redirect_page";
 private static final Gson PARSER = new Gson();
-
 public static void sendRedirectMessage(HttpServletResponse response, String endpoint) throws IOException {
       PrintWriter writer = response.getWriter();
       Map<String, String> responseMap = Map.of(REDIRECT_PAGE, endpoint);

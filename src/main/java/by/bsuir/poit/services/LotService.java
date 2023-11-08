@@ -21,5 +21,8 @@ List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException;
 EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException;
 
 DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundException;
-void saveLot(Lot lot) throws ResourceModifyingException;
+
+void save(Lot lot) throws ResourceModifyingException;
+
+void update(Lot lot) throws ResourceModifyingException;
 }

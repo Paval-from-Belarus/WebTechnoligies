@@ -46,11 +46,12 @@ public Optional<Client> findById(long clientId) throws DataAccessException {
 public void save(Client client) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into CLIENT " +
-									 "(USER_ID, ACCOUNT, RANKING) " +
-									 "values (?, ?, ?)")) {
+									 "(USER_ID, NAME, ACCOUNT, RANKING) " +
+									 "values (?, ?, ?, ?)")) {
 	    statement.setLong(1, client.getId());
-	    statement.setDouble(2, client.getAccount());
-	    statement.setDouble(3, client.getRanking());
+	    statement.setString(2, client.getName());
+	    statement.setDouble(3, client.getAccount());
+	    statement.setDouble(4, client.getRanking());
 	    if (statement.executeUpdate() != 1) {
 		  final String msg = String.format("Failed to insert client with id=%d row into table", client.getId());
 		  LOGGER.error(msg);

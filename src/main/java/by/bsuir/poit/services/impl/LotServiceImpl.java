@@ -78,13 +78,18 @@ public DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundE
 }
 
 @Override
-public void saveLot(Lot lot) throws ResourceModifyingException {
+public void save(Lot lot) throws ResourceModifyingException {
       try {
 	    lotDao.save(lot);
       } catch (DataAccessException e) {
 	    LOGGER.error(e);
 	    throw new ResourceModifyingException(e);
       }
+}
+
+@Override
+public void update(Lot lot) throws ResourceModifyingException {
+	//todo
 }
 
 private ResourceNotFoundException newLotNotFoundException(long lotId) {

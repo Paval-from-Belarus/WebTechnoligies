@@ -12,5 +12,8 @@
         <li>You had input invalid credentials via registration</li>
         <li>You had been banned from bad behavior</li>
     </ul>
+    <span>
+        ${param}
+    </span>
 </body>
 </html>
