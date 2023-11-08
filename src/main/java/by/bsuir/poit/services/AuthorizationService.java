@@ -20,7 +20,7 @@ public interface AuthorizationService {
  */
 User signIn(String login, String password) throws UserNotFoundException, UserAccessViolationException;
 
-void signOut(String login);
+void signOut(long userId);
 
 void register(User user, String password);
 }

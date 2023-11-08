@@ -25,29 +25,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthorizationHandler implements RequestHandler {
 private static final Logger LOGGER = LogManager.getLogger(AuthorizationHandler.class);
-public static final int MAX_INACTIVE_INTERVAL = 60 * 10;
 
 @Override
 @SneakyThrows
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       User user = (User) request.getAttribute(AuthorizationUtils.USER_ATTRIBUTE);
       assert user != null;
-      HttpSession session = request.getSession(false);
-      if (session != null) {
-	    session.invalidate();
-      }
-      session = request.getSession(true);
-      session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL);
-      List<Cookie> cookies = List.of(
-	  new Cookie(AuthorizationUtils.COOKIE_USER_ID, String.valueOf(user.getId())),
-	  new Cookie(AuthorizationUtils.COOKIE_USER_ROLE, String.valueOf(user.getRole()))
-      );
-      for (Cookie cookie : cookies) {
-	    cookie.setPath(PageUtils.APPLICATION_NAME);
-	    response.addCookie(cookie);
-      }
-      cookies.forEach(response::addCookie);
-      LOGGER.trace("User with id {} was authorized", user.getId());
       if (user.getRole() == User.ADMIN) {
 	    ControllerUtils.sendRedirectMessage(response, ControllerUtils.ADMIN_ENDPOINT);
 	    return;

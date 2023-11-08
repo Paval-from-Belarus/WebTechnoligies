@@ -37,10 +37,8 @@ default Lot fromResultSet(ResultSet set) throws SQLException {
 
 //the request holds all information about english lot
 default EnglishLot fromResultSetEnglish(ResultSet set) throws SQLException {
-      Lot lot = fromResultSet(set);
-      EnglishLot englishLot = EnglishLot.builder()
-				  .redemptionPrice(set.getDouble("redemption_price"))
-				  .build();
-      return updateEnglishWithParent(englishLot, lot);
+      return EnglishLot.builder()
+		 .redemptionPrice(set.getDouble("redemption_price"))
+		 .build();
 }
 }

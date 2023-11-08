@@ -1,7 +1,7 @@
 package by.bsuir.poit.dao.impl;
 
-import by.bsuir.poit.bean.mappers.ClientUserMapper;
-import by.bsuir.poit.bean.mappers.ResultSetMapper;
+import by.bsuir.poit.bean.mappers.ClientMapper;
+import by.bsuir.poit.bean.mappers.UserMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -27,7 +26,7 @@ import java.util.Optional;
 public class ClientDaoImpl extends AbstractDao<Client> implements ClientDao {
 private static final Logger LOGGER = LogManager.getLogger(ClientDaoImpl.class);
 private final ConnectionPool pool;
-private final ClientUserMapper clientMapper;
+private final ClientMapper clientMapper;
 
 @Override
 public Optional<Client> findById(long clientId) throws DataAccessException {
@@ -35,7 +34,7 @@ public Optional<Client> findById(long clientId) throws DataAccessException {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT where USER_ID = ?")) {
 	    statement.setLong(1, clientId);
-	    client = fetchEntityAndClose(statement, clientMapper::fromResultSetClient);
+	    client = fetchEntityAndClose(statement, clientMapper);
       } catch (SQLException e) {
 	    LOGGER.error(e);
 	    throw new DataAccessException(e);

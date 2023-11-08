@@ -11,5 +11,4 @@ import java.util.List;
  */
 public interface ClientService {
 Client findClientByUserId(long userId);
-List<ClientFeedback> findAllFeedbacksBySellerId(long sellerId);
 }

@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Paval Shlyk
@@ -69,6 +70,38 @@ public List<ClientFeedback> findAllByLotId(long lotId) {
       }
       return list;
 }
+
+@Override
+public Optional<ClientFeedback> findByIdAndAuthorId(long lotId, long authorId) {
+      Optional<ClientFeedback> feedback;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where LOT_ID = ? and CLIENT_AUTHOR_ID = ?")) {
+	    statement.setLong(1, lotId);
+	    statement.setLong(2, authorId);
+	    feedback = fetchEntityAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return feedback;
+
+}
+
+@Override
+public Optional<ClientFeedback> findByIdAndTargetId(long lotId, long targetId) {
+      Optional<ClientFeedback> feedback;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where LOT_ID = ? and CLIENT_TARGET_ID = ?")) {
+	    statement.setLong(1, lotId);
+	    statement.setLong(2, targetId);
+	    feedback = fetchEntityAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return feedback;
+}
+
 
 @Override
 public List<ClientFeedback> findAllBySellerIdSortedByRankingDesc(long clientId) {

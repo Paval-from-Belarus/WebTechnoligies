@@ -1,6 +1,8 @@
 package by.bsuir.poit.dao;
 
 import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dao.exception.DataAccessException;
+import by.bsuir.poit.dao.exception.DataModifyingException;
 
 import java.util.Optional;
 
@@ -15,7 +17,7 @@ Optional<User> findByUserName(String name);
 
 boolean existsByName(String name);
 
-void setUserStatus(long userId, short status);
+void setUserStatus(long userId, short status) throws DataModifyingException;
 
 User save(User user);
 

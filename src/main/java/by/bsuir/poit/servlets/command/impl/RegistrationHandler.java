@@ -31,7 +31,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 	    authorizationService.register(user, password);
 	    LOGGER.trace("User {} registered successfully", user.getId());
 	    response.setStatus(HttpServletResponse.SC_ACCEPTED);
-	          } catch (AuthorizationException e) {
+      } catch (AuthorizationException e) {
 	    processRegistrationException(e, response);
       } catch (Exception e) {
 	    LOGGER.warn("Failed to register user from ip {}", request.getRemoteAddr());
@@ -42,6 +42,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 private void processRegistrationException(AuthorizationException exception, HttpServletResponse response) {
       try {
 	    response.getWriter().write(exception.getMessage());
+	    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
       } catch (Exception e) {
 	    LOGGER.error(e.getMessage());
 	    throw new IllegalStateException(e);

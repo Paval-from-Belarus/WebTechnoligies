@@ -15,11 +15,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Lot {
-public static final int BLOCKED_STATUS = 1;
-public static final int BEFORE_AUCTION_STATUS = 2;
-public static final int SELL_STATUS = 3;
-public static final int SENT_STATUS = 4;
-public static final int DELIVERIED_STATUS = 5;
+public static final short BLOCKED_STATUS = 1;
+public static final short BEFORE_AUCTION_STATUS = 2;
+public static final short SELL_STATUS = 3;
+public static final short SENT_STATUS = 4;
+public static final short DELIVERIED_STATUS = 5;
 //relationship's data
 private long id;
 private String title;
@@ -37,4 +37,5 @@ private Long customerId;
 @NotNull
 private Long deliveryPointId;
 private Long auctionId;
+
 }

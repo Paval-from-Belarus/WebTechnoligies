@@ -37,20 +37,16 @@ default Auction fromResultSet(ResultSet set) throws SQLException {
 }
 
 default BlindAuction blindFromResultSet(ResultSet set) throws SQLException {
-      Auction auction = fromResultSet(set);
-      BlindAuction blindAuction = BlindAuction.builder()
-				      .timeout(set.getTimestamp("timeout"))
-				      .betLimit(set.getInt("bet_limit"))
-				      .build();
-      return updateBlindWithParent(blindAuction, auction);
+      return BlindAuction.builder()
+		 .timeout(set.getTimestamp("timeout"))
+		 .betLimit(set.getInt("bet_limit"))
+		 .build();
 }
 
 default BlitzAuction blitzFromResultSet(ResultSet set) throws SQLException {
-      Auction auction = fromResultSet(set);
-      BlitzAuction blitzAuction = BlitzAuction.builder()
-				      .iterationLimit(set.getTimestamp("iteration_time"))
-				      .memberExcludeLimit(set.getInt("members_exclude_limit"))
-				      .build();
-      return updateBlitzWithParent(blitzAuction, auction);
+      return BlitzAuction.builder()
+		 .iterationLimit(set.getTimestamp("iteration_time"))
+		 .memberExcludeLimit(set.getInt("members_exclude_limit"))
+		 .build();
 }
 }

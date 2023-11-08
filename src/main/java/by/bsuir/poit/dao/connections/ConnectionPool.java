@@ -17,9 +17,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @since 15/09/2023
  */
 public class ConnectionPool implements AutoCloseable {
-public static final Logger logger = LogManager.getLogger(ConnectionPool.class);
+public static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 private static final String CLOSE_METHOD_NAME = "close";
 public ConnectionPool(ConnectionConfig config) throws ConnectionPoolException {
+      this.proxyConnections = new CopyOnWriteArrayList<>();
       List<Connection> proxyConnections = new ArrayList<>(config.getMaxPoolSize());
       List<Connection> originConnections = new ArrayList<>(config.getMaxPoolSize());
       try {
@@ -34,7 +35,8 @@ public ConnectionPool(ConnectionConfig config) throws ConnectionPoolException {
 		      new Class<?>[]{Connection.class},
 		      (proxy, method, args) -> {
 			    if (method.getName().equals(CLOSE_METHOD_NAME)) {
-				  proxyConnections.add((Connection) proxy);
+				  LOGGER.trace("Connection {} is returned", proxy.toString());
+				  this.proxyConnections.add((Connection) proxy);
 				  return null;
 			    }
 			    return method.invoke(originConnection, args);
@@ -45,7 +47,7 @@ public ConnectionPool(ConnectionConfig config) throws ConnectionPoolException {
       } catch (SQLException e) {
 	    throw new ConnectionPoolException(e);
       }
-      this.proxyConnections = new CopyOnWriteArrayList<>(proxyConnections);
+      this.proxyConnections.addAll(proxyConnections);
       this.originConnections = Collections.unmodifiableList(originConnections);
 }
 
@@ -53,7 +55,9 @@ public Connection getConnection() {
       if (proxyConnections.isEmpty()) { //no more available
 	    throw new ConnectionPoolException("The pool is exhausted");
       }
-      return proxyConnections.remove(proxyConnections.size() - 1);
+      Connection connection = proxyConnections.remove(proxyConnections.size() - 1);
+      LOGGER.trace("The connection {} is acquired", connection.toString());
+      return connection;
 }
 
 @Override
@@ -63,7 +67,7 @@ public void close() {
 	    try {
 		  connection.close();
 	    } catch (SQLException e) {
-		  logger.error("Connection pool closing exception: " + e.getMessage() + " SQLState: " + e.getSQLState());
+		  LOGGER.error("Connection pool closing exception: " + e.getMessage() + " SQLState: " + e.getSQLState());
 		  if (lastException == null) {
 			lastException = new ConnectionPoolException(e);
 		  }

@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
-import by.bsuir.poit.bean.mappers.ClientUserMapper;
+import by.bsuir.poit.bean.mappers.UserMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 private final @NotNull ConnectionPool pool;
-private final @NotNull ClientUserMapper mapper;
+private final @NotNull UserMapper mapper;
 
 @Override
 public Optional<User> findById(@NotNull long id) throws DataAccessException {

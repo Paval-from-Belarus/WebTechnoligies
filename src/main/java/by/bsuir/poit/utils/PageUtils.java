@@ -1,6 +1,5 @@
 package by.bsuir.poit.utils;
 
-import com.google.gson.Gson;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,8 +8,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
 
 /**
  * @author Paval Shlyk
@@ -32,10 +29,14 @@ public static void redirectTo(HttpServletResponse response, String servletPage) 
 }
 
 public static void forwardTo(HttpServletRequest request, HttpServletResponse response, String servletPage) throws IOException, ServletException {
-      RequestDispatcher dispatcher = request.getRequestDispatcher(APPLICATION_NAME + servletPage);
+      RequestDispatcher dispatcher = request.getRequestDispatcher(servletPage);
       dispatcher.forward(request, response);
 }
 
+public static void includeWith(HttpServletRequest request, HttpServletResponse response, String servletPage) throws ServletException, IOException {
+      RequestDispatcher dispatcher = request.getRequestDispatcher(servletPage);
+      dispatcher.include(request, response);
+}
 
 
 }

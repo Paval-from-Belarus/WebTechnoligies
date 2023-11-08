@@ -32,7 +32,7 @@ protected Optional<T> fetchEntityAndClose(PreparedStatement statement, ResultSet
 }
 protected List<T> fetchListAndClose(PreparedStatement statement, ResultSetMapper<T> mapper) throws SQLException {
       List<T> list = new ArrayList<>();
-      try (ResultSet set = statement.getResultSet()) {
+      try (ResultSet set = statement.executeQuery()) {
 	    while (set.next()) {
 		  list.add(mapper.fromResultSet(set));
 	    }

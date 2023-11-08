@@ -2,7 +2,8 @@ package by.bsuir.poit.services.impl;
 
 import by.bsuir.poit.bean.Client;
 import by.bsuir.poit.bean.User;
-import by.bsuir.poit.bean.mappers.ClientUserMapper;
+import by.bsuir.poit.bean.mappers.ClientMapper;
+import by.bsuir.poit.bean.mappers.UserMapper;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.UserDao;
@@ -30,7 +31,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 private static final Logger LOGGER = LogManager.getLogger(AuthorizationServiceImpl.class);
 private final UserDao userDao;
 private final ClientDao clientDao;
-private final ClientUserMapper clientMapper;
+private final ClientMapper clientMapper;
+
 @Override
 public User signIn(String login, String password) {
       User user;
@@ -59,12 +61,11 @@ public User signIn(String login, String password) {
 }
 
 @Override
-public void signOut(String login) {
+public void signOut(long userId) {
       try {
-	    User user = userDao.findByUserName(login).orElseThrow(() -> newUserNotFoundException(login));
-	    userDao.setUserStatus(user.getId(), User.STATUS_NOT_ACTIVE);
-      } catch (DataAccessException e) {
-	    LOGGER.error(e);
+	    userDao.setUserStatus(userId, User.STATUS_NOT_ACTIVE);
+      } catch (DataModifyingException e) {
+	    LOGGER.error("Failed to sign-out user {}", e.toString());
 	    throw new ResourceBusyException(e);
       }
 }

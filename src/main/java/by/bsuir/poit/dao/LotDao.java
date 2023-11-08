@@ -17,7 +17,8 @@ Optional<Lot> findById(long id);
 
 List<Lot> findAllByAuctionId(long auctionId);
 
-List<Lot> findAllByClientId(long lotId);
+List<Lot> findAllBySellerId(long sellerId);
 
-List<Lot> findAllByClientIdSortedByStartPriceDesc(long clientId);
+List<Lot> findAllByCustomerId(long customerId);
+Lot save(Lot lot);
 }

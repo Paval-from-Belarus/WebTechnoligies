@@ -22,16 +22,10 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
 private static final Logger LOGGER = LogManager.getLogger(ClientServiceImpl.class);
 private final ClientDao clientDao;
-private final ClientFeedbackDao clientFeedbackDao;
 
 @Override
 public Client findClientByUserId(long userId) {
       return clientDao.findById(userId).orElseThrow(() -> newClientNotFoundException(userId));
-}
-
-@Override
-public List<ClientFeedback> findAllFeedbacksBySellerId(long sellerId) {
-      return null;
 }
 
 private static UserNotFoundException newClientNotFoundException(long clientId) {

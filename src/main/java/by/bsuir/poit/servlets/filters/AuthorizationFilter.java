@@ -5,15 +5,15 @@ import by.bsuir.poit.context.Autowired;
 import by.bsuir.poit.context.BeanUtils;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.utils.AuthorizationUtils;
+import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Paval Shlyk
@@ -22,6 +22,7 @@ import java.io.IOException;
 @WebFilter(filterName = "authenticator")
 public class AuthorizationFilter extends HttpFilter {
 private static final Logger LOGGER = LogManager.getLogger(AuthorizationFilter.class);
+public static final int MAX_INACTIVE_INTERVAL = 60 * 10;
 @Autowired
 private AuthorizationService authorizationService;
 
@@ -37,6 +38,22 @@ public void doFilter(HttpServletRequest request, HttpServletResponse response, F
       try {
 	    User user = authorizationService.signIn(login, password);//if method raise exception
 	    request.setAttribute(AuthorizationUtils.USER_ATTRIBUTE, user);
+	    HttpSession session = request.getSession(false);
+	    if (session != null) {
+		  session.invalidate();
+	    }
+	    session = request.getSession(true);
+	    session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL);
+	    List<Cookie> cookies = List.of(
+		new Cookie(AuthorizationUtils.COOKIE_USER_ID, String.valueOf(user.getId())),
+		new Cookie(AuthorizationUtils.COOKIE_USER_ROLE, String.valueOf(user.getRole()))
+	    );
+	    for (Cookie cookie : cookies) {
+		  cookie.setPath(PageUtils.APPLICATION_NAME);
+		  response.addCookie(cookie);
+	    }
+	    cookies.forEach(response::addCookie);
+	    LOGGER.trace("User with id {} was authorized", user.getId());
       } catch (Exception e) {
 	    LOGGER.warn(e);
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
