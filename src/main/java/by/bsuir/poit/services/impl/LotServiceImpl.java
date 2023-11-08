@@ -54,22 +54,37 @@ public List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException {
 
 @Override
 public EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException {
-      return lotDao.findEnglishLotById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
+      try {
+	    return lotDao.findEnglishLotById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
+      } catch (DataAccessException e) {
+	    LOGGER.error(e);
+	    throw new ResourceNotFoundException(e);
+      }
 }
 
 @Override
 public DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundException {
-      Lot lot = lotDao.findById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
-      Long deliveryPointId = lot.getDeliveryPointId();
-      if (deliveryPointId == null) {
-	    throw newDeliveryPointNotFoundException(lotId, "lot holds null for delivery point");
+      try {
+	    Lot lot = lotDao.findById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
+	    Long deliveryPointId = lot.getDeliveryPointId();
+	    if (deliveryPointId == null) {
+		  throw newDeliveryPointNotFoundException(lotId, "lot holds null for delivery point");
+	    }
+	    return deliveryPointDao.findById(deliveryPointId).orElseThrow(() -> newDeliveryPointNotFoundException(lotId, "dao failed to find delivery point"));
+      } catch (DataModifyingException e) {
+	    LOGGER.error(e);
+	    throw new ResourceNotFoundException(e);
       }
-      return deliveryPointDao.findById(deliveryPointId).orElseThrow(() -> newDeliveryPointNotFoundException(lotId, "dao failed to find delivery point"));
 }
 
 @Override
 public void saveLot(Lot lot) throws ResourceModifyingException {
-
+      try {
+	    lotDao.save(lot);
+      } catch (DataAccessException e) {
+	    LOGGER.error(e);
+	    throw new ResourceModifyingException(e);
+      }
 }
 
 private ResourceNotFoundException newLotNotFoundException(long lotId) {
