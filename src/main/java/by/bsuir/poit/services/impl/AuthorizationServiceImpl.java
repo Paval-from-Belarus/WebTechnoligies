@@ -15,11 +15,15 @@ import by.bsuir.poit.services.exception.authorization.UserAccessViolationExcepti
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
+import by.bsuir.poit.servlets.UserDetails;
 import by.bsuir.poit.utils.AuthorizationUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.security.Principal;
+import java.util.function.LongFunction;
 
 /**
  * @author Paval Shlyk
@@ -96,6 +100,16 @@ public void register(@NotNull User user, @NotNull String password) throws Resour
       if (!isRegistered) {
 	    String msg = String.format("User by name=%s is already exists", user.getName());
 	    LOGGER.info(msg);
+	    throw new UserAccessViolationException(msg);
+      }
+}
+
+@Override
+public void verifyByUserAccess(Principal principal, long userId) throws UserAccessViolationException {
+      UserDetails details = (UserDetails) principal;
+      if (details.role() != User.ADMIN && details.id() != userId) {
+	    final String msg = String.format("User rights verification failed for principal %s", details);
+	    LOGGER.warn(msg);
 	    throw new UserAccessViolationException(msg);
       }
 }

@@ -4,45 +4,131 @@
     <title>Main page</title>
     <script src="https://code.jquery.com/jquery-1.10.2.js"
             type="text/javascript"></script>
-    <script src="js/lobby.js" type="text/javascript"></script>
+    <script src="js/navigation.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/common.css">
 </head>
 <body>
-</form>
-<form id="registration-form" action="${pageContext.request.contextPath}/api/reg" method="post">
-    <table>
-        <thead>
-        Registration form
-        </thead>
-        <tbody>
-        <tr>
-            <th>
-                User name
-            </th>
-            <td>
-                <input type="text" id="reg_user_name" value="">
-            </td>
-        </tr>
-        <tr>
-            <th>Password</th>
-            <td>
-                <input type="password" id="reg_password" value="">
-            </td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td>
-                <input type="email" id="user_email" value="">
-            </td>
-        </tr>
-        <tr>
-            <th>Admin role</th>
-            <td>
-                <input type="checkbox" id="admin_role">
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <input type="button" value="Registry" onclick="onRegistrationBtnClicked()">
-</form>
+    <header>
+        <nav class="navbar">
+            <div class="navbar__title" onclick="changePage('news')">
+                <div class="navbar__title-logo">
+                    <!-- <img src="img/nav-links/mascot.png" alt="Pet OS logo"> -->
+                </div>
+                <div class="navbar__title-text">
+                    <p>Applicatio name</p>
+                </div>
+            </div>
+            <div class="navbar__links-wrapper">
+                <menu class="navbar__links">
+                    <button class="navbar__link" onclick="changePage('lobby')">
+                        <!-- <img src="img/nav-links/megaphone.png" alt="megaphone" class="navbar__link-icon"> -->
+                        <div class="navbar__link-text">
+                            Main page
+                        </div>
+                    </button>
+                    <button class="navbar__link" onclick="changePage('user')">
+                        <div class="navbar__link-text">
+                            User Page
+                        </div>
+                    </button>
+                    <button class="navbar__link" onclick="changeLanguage('ru')">
+                        <div class="navbar__link-text">
+                            Change language
+                        </div>
+                    </button>
+                </menu>
+            </div>
+        </nav>
+    </header>
+    <div class="client-page__title common__title">
+        Main page
+    </div>
+    <div class="registration-form">
+        <form id="select-table" class="form__select-table" method="post">
+            <div class="select-table common-table">
+              <div class="select-table__title common-table__title">
+                Fill entries to complete registration
+              </div>      
+                <table class="select-table__body common-table__body">
+                <tbody>
+                    <tr>
+                        <th class="select-table__item common_plain">
+                            User name
+                        </th>
+                        <td>
+                            <input class="select-table__selector" name="user_name" type="text" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="select-table__item common_plain">
+                            Email
+                        </th>
+                        <td>
+                            <input class="select-table__selector" name="email" type="email" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="select-table__item common_plain">
+                            Password
+                        </th>
+                        <td>
+                            <input class="select-table__selector" name="password" type="password" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="select-table__item common__plain">
+                          You want to be Admin?
+                        </th>
+                        <td>
+                          <input id="options-button" type="checkbox" class="select-table__checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                          <input class="select-table__accept button-bordered" type="submit" value="Submit">
+                        </td>
+                    </tr>
+              </tbody>
+            </table>
+            </div>
+          </form>
+    </div>
+    <div class="authorization-form">
+        <form id="select-table" class="form__select-table" method="post">
+            <div class="select-table common-table">
+              <div class="select-table__title common-table__title">
+                Fill entries to complete authorization
+              </div>      
+                <table class="select-table__body common-table__body">
+                <tbody>
+                    <tr>
+                        <th class="select-table__item common_plain">
+                            User name
+                        </th>
+                        <td>
+                            <input class="select-table__selector" name="user_name" type="text" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="select-table__item common_plain">
+                            Password
+                        </th>
+                        <td>
+                            <input class="select-table__selector" name="password" type="password" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                          <input class="select-table__accept button-bordered" type="submit" value="Submit">
+                        </td>
+                    </tr>
+              </tbody>
+            </table>
+            </div>
+          </form>
+    </div>
+<footer>
+    © 2023 Paval-from-Belarus. PetOS Software Foundation.
+</footer>
 </body>
 </html>

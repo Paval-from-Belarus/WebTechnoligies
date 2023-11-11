@@ -1,33 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:include page="../templates/localization.jsp"/>
+<html lang="${param.lang}">
 <head>
     <title>Client page</title>
     <link rel="stylesheet" href="../css/roles.css">
 </head>
 <body>
-<h1> Hello, ${requestScope.username}</h1>
-<c:if test="${requestScope.currentPage != 1}">
-    <a href="${pageContext.request.contextPath}/api/client?currentPage=${requestScope.currentPage - 1}">Previous</a>
+<h1> Hello, ${param.username}</h1>
+<p>
+    <fmt:message key="label.changeLang"/>
+</p>
+<c:if test="${param.currentPage != 1}">
+    <a href="${pageContext.request.contextPath}/api/client?currentPage=${param.currentPage - 1}">Previous</a>
 </c:if>
-<span>Page = ${requestScope.currentPage}</span>
-<c:if test="${requestScope.currentPage < requestScope.pagesCount}">
-    <a href="${pageContext.request.contextPath}/api/client?currentPage=${requestScope.currentPage + 1}">Next</a>
+<span>Page = ${param.currentPage}</span>
+<c:if test="${param.currentPage < param.pagesCount}">
+    <a href="${pageContext.request.contextPath}/api/client?currentPage=${param.currentPage + 1}">Next</a>
 </c:if>
-<section class="client-next-lot">
-    <form method="post" action="/api/">
-
-    </form>
-</section>
 <section class="client-lots">
-    <c:forEach var="lot" items="${requestScope.lots}">
+    <c:forEach var="lot" items="${param.lots}">
         <div class="client-lot">
             <div class="lot-title">
                     ${lot.getTitle}
             </div>
             <div class="lot-status">
-                    ${requestScope.lotStatuses.get(lot.getStatus)}
+                    ${param.lotStatuses.get(lot.getStatus)}
             </div>
             <div class="lot-start-price">
                     ${lot.getStartPrice}
@@ -52,7 +51,7 @@
                 </div>
             </c:if>
             <div class="lot-ranking">
-                The ranking is ${requestScope.feedbacks.get(lot).getRanking}
+                The ranking is ${param.feedbacks.get(lot).getRanking}
             </div>
         </div>
     </c:forEach>

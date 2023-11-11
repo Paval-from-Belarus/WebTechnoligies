@@ -24,5 +24,11 @@ DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundExceptio
 
 void save(Lot lot) throws ResourceModifyingException;
 
-void update(Lot lot) throws ResourceModifyingException;
+void updateLotAuction(long lotId, long auctionId) throws ResourceNotFoundException;
+
+void updateLotStatus(long lotId, short lotStatus) throws ResourceNotFoundException;
+
+void updateLotCustomer(long lotId, long customerId) throws ResourceNotFoundException;
+
+void updateLotDeliveryPoint(long lotId, long deliveryPointId) throws ResourceNotFoundException;
 }

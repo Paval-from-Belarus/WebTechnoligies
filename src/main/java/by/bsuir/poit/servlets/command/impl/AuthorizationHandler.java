@@ -32,11 +32,11 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
       User user = (User) request.getAttribute(AuthorizationUtils.USER_ATTRIBUTE);
       assert user != null;
       if (user.getRole() == User.ADMIN) {
-	    ControllerUtils.sendRedirectMessage(response, ControllerUtils.ADMIN_ENDPOINT);
+	    PageUtils.redirectTo(response, ControllerUtils.ADMIN_ENDPOINT);
 	    return;
       }
       if (user.getRole() == User.CLIENT) {
-	    ControllerUtils.sendRedirectMessage(response, ControllerUtils.CLIENT_ENDPOINT);
+	    PageUtils.redirectTo(response, ControllerUtils.CLIENT_ENDPOINT);
 	    return;
       }
       response.sendError(HttpServletResponse.SC_FORBIDDEN);

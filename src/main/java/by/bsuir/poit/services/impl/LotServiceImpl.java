@@ -88,9 +88,46 @@ public void save(Lot lot) throws ResourceModifyingException {
 }
 
 @Override
-public void update(Lot lot) throws ResourceModifyingException {
-	//todo
+public void updateLotAuction(long lotId, long auctionId) throws ResourceNotFoundException {
+      try {
+	    lotDao.setAuctionId(lotId, auctionId);
+      } catch (DataAccessException e) {
+	    LOGGER.error(e);
+	    throw new ResourceNotFoundException(e);
+      }
 }
+
+@Override
+public void updateLotStatus(long lotId, short lotStatus) throws ResourceNotFoundException {
+      try {
+	    lotDao.setLotStatus(lotId, lotStatus);
+      } catch (DataAccessException e) {
+	    LOGGER.error(e);
+	    throw new ResourceNotFoundException(e);
+      }
+
+}
+
+@Override
+public void updateLotCustomer(long lotId, long customerId) throws ResourceNotFoundException {
+      try {
+	    lotDao.setCustomerId(lotId, customerId);
+      } catch (DataAccessException e) {
+	    LOGGER.error(e);
+	    throw new ResourceNotFoundException(e);
+      }
+}
+
+@Override
+public void updateLotDeliveryPoint(long lotId, long deliveryPointId) throws ResourceNotFoundException {
+      try {
+	    lotDao.setDeliveryPointId(lotId, deliveryPointId);
+      } catch (DataAccessException e) {
+	    LOGGER.error(e);
+	    throw new ResourceNotFoundException(e);
+      }
+}
+
 
 private ResourceNotFoundException newLotNotFoundException(long lotId) {
       final String msg = String.format("THe lot not found by id=%s", lotId);

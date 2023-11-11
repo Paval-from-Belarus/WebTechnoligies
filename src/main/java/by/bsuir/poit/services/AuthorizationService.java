@@ -5,6 +5,8 @@ import by.bsuir.poit.services.exception.authorization.UserAccessViolationExcepti
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
 
+import java.security.Principal;
+
 /**
  * @author Paval Shlyk
  * @since 27/10/2023
@@ -23,4 +25,7 @@ User signIn(String login, String password) throws UserNotFoundException, UserAcc
 void signOut(long userId);
 
 void register(User user, String password);
+
+void verifyByUserAccess(Principal principal, long userId) throws UserAccessViolationException;
+
 }

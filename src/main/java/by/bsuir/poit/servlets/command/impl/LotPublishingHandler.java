@@ -20,9 +20,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LotPublishingHandler implements RequestHandler {
 private final LotService lotService;
+
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
-      Lot lot = ParserUtils.parse(Lot.class, request);
+      Lot lot = ParserUtils.parseLot(request);
       lotService.save(lot);
       response.setStatus(HttpServletResponse.SC_CREATED);
 }
