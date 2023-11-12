@@ -6,7 +6,6 @@ import by.bsuir.poit.dao.connections.ConnectionConfig;
 import by.bsuir.poit.dao.connections.ConnectionPool;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.servlets.command.RequestHandlerProvider;
-import by.bsuir.poit.servlets.command.RequestMethod;
 import jakarta.inject.Named;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;

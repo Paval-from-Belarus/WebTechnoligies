@@ -16,9 +16,9 @@ import lombok.RequiredArgsConstructor;
  * @author Paval Shlyk
  * @since 08/11/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/lot/publish")
+@RequestHandlerDefinition(urlPatterns = "/lot/create")
 @RequiredArgsConstructor
-public class LotPublishingHandler implements RequestHandler {
+public class LotCreationHandler implements RequestHandler {
 private final LotService lotService;
 
 @Override

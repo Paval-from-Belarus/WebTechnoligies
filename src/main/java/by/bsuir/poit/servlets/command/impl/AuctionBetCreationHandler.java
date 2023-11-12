@@ -1,20 +1,18 @@
 package by.bsuir.poit.servlets.command.impl;
 
 import by.bsuir.poit.context.RequestHandlerDefinition;
-import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.servlets.command.RequestHandler;
-import by.bsuir.poit.servlets.command.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author Paval Shlyk
- * @since 27/10/2023
+ * @since 12/11/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/auction")
-public class AuctionHandler implements RequestHandler {
+@RequestHandlerDefinition(urlPatterns = "/auction/bet/create")
+public class AuctionBetCreationHandler implements RequestHandler {
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
-      throw new ResourceModifyingException("Slow exception");
+
 }
 }

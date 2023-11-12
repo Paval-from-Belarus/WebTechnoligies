@@ -7,18 +7,12 @@ import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.ParserUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.desktop.ScreenSleepEvent;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static by.bsuir.poit.servlets.command.impl.LotModificationHandler.LotModificationType.*;
 
@@ -27,14 +21,12 @@ import static by.bsuir.poit.servlets.command.impl.LotModificationHandler.LotModi
  * There are all kinds of modifications
  *
  * @author Paval Shlyk
- * @see LotPublishingHandler
+ * @see LotCreationHandler
  * @since 08/11/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/lot/modify")
-@RequiredArgsConstructor
+@RequestHandlerDefinition(urlPatterns = "/lot/update")
 public class LotModificationHandler implements RequestHandler {
 private static final Logger LOGGER = LogManager.getLogger(LotModificationHandler.class);
-private final LotService lotService;
 public static final String LOT_MODIFICATION_PARAMETER = "type";
 
 public enum LotModificationType {
@@ -42,7 +34,6 @@ public enum LotModificationType {
 }
 
 public LotModificationHandler(LotService lotService) {
-      this.lotService = lotService;
       this.lotModificationMap = Map.of(
 	  AUCTION, lot -> lotService.updateLotAuction(lot.getId(), lot.getAuctionId()),
 	  CUSTOMER, lot -> lotService.updateLotCustomer(lot.getId(), lot.getCustomerId()),
