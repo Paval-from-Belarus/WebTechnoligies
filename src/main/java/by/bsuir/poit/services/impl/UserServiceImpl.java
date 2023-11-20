@@ -1,17 +1,15 @@
 package by.bsuir.poit.services.impl;
 
 import by.bsuir.poit.bean.Client;
-import by.bsuir.poit.bean.ClientFeedback;
+import by.bsuir.poit.bean.User;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.ClientDao;
-import by.bsuir.poit.dao.ClientFeedbackDao;
-import by.bsuir.poit.services.ClientService;
+import by.bsuir.poit.dao.UserDao;
+import by.bsuir.poit.services.UserService;
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 /**
  * @author Paval Shlyk
@@ -19,13 +17,26 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class ClientServiceImpl implements ClientService {
-private static final Logger LOGGER = LogManager.getLogger(ClientServiceImpl.class);
+public class UserServiceImpl implements UserService {
+private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 private final ClientDao clientDao;
+private final UserDao userDao;
 
 @Override
 public Client findClientByUserId(long userId) {
       return clientDao.findById(userId).orElseThrow(() -> newClientNotFoundException(userId));
+}
+
+@Override
+public User findUserByUserId(long userId) {
+      return userDao.findById(userId).orElseThrow(() -> newUserNotFoundException(userId));
+}
+
+private static UserNotFoundException newUserNotFoundException(long userId) {
+      final String msg = String.format("User by id=%d not found", userId);
+      LOGGER.warn(msg);
+      throw new UserNotFoundException(msg);
+
 }
 
 private static UserNotFoundException newClientNotFoundException(long clientId) {

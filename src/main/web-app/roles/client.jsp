@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:include page="../templates/localization.jsp"/>
 <html lang="${param.lang}">
 <head>
     <title>Client page</title>
@@ -32,7 +31,7 @@
                     ${lot.getStartPrice}
             </div>
             <c:if test="${lot.getCustomerId != null}">
-                <div class="lot-seller">
+                <div class="lot-customer">
                     <a href="${pageContext.request.contextPath}/api/client?clientId=${lot.getCustomerId}">
                         Click to see customer page
                     </a>

@@ -1,5 +1,6 @@
 package by.bsuir.poit.utils;
 
+import by.bsuir.poit.bean.AuctionBet;
 import by.bsuir.poit.bean.Lot;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.LongFunction;
 
 /**
  * @author Paval Shlyk
@@ -18,6 +20,7 @@ import java.util.function.Function;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ParserUtils {
 private static final Logger LOGGER = LogManager.getLogger(ParserUtils.class);
+//the information about lot
 public static final String LOT_TITLE = "lot_title";
 public static final String LOT_ID = "lot_id";
 public static final String AUCTION_TYPE_ID = "auction_type_id";
@@ -46,6 +49,25 @@ public static Lot parseLot(HttpServletRequest request) {
 		.ifPresent(builder::startPrice);
       } catch (NumberFormatException e) {
 	    LOGGER.error("Failed to parse lot from request parameters {}", e.toString());
+	    throw new IllegalStateException(e);
+      }
+      return builder.build();
+}
+
+//the information about auction bet
+public static final String AUCTION_BET_VALUE = "bet";
+public static final String AUCTION_ID = "auction_id";
+
+public static AuctionBet parseBet(HttpServletRequest request) {
+      var builder = AuctionBet.builder();
+      try {
+	    parseRequestParameter(Double.class, request, AUCTION_BET_VALUE)
+		.ifPresent(builder::bet);
+	    parseRequestParameter(Long.class, request, AUCTION_ID)
+		.ifPresent(builder::auctionId);
+	    //all other fields are set via upper level
+      } catch (NumberFormatException e) {
+	    LOGGER.error("Failed to pars auction bet from request parameters");
 	    throw new IllegalStateException(e);
       }
       return builder.build();

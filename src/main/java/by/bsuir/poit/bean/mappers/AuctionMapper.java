@@ -33,6 +33,7 @@ default Auction fromResultSet(ResultSet set) throws SQLException {
 		 .auctionTypeId(set.getLong("type_id"))
 		 .duration(set.getTimestamp("duration"))
 		 .membersLimit(set.getInt("members_limit"))
+		 .adminId(set.getLong("admin_id"))
 		 .build();
 }
 

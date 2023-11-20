@@ -6,7 +6,7 @@ import by.bsuir.poit.bean.Lot;
 import by.bsuir.poit.bean.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.ClientFeedbackService;
-import by.bsuir.poit.services.ClientService;
+import by.bsuir.poit.services.UserService;
 import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.servlets.UserDetails;
 import by.bsuir.poit.servlets.command.RequestHandler;
@@ -39,9 +39,9 @@ public static final String USERNAME = "username";
 public static final String RANKING = "ranking";
 public static final String ACCOUNT = "account";
 public static final String CURRENT_PAGE = "currentPage";
-public static final String LOT_STATUSES = "lotStatuses";
+
 private final LotService lotService;
-private final ClientService clientService;
+private final UserService userService;
 private final ClientFeedbackService clientFeedbackService;
 
 @Override
@@ -72,7 +72,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 	    ClientFeedback feedback = clientFeedbackService.findByLotIdAndClientTargetId(lot.getId(), clientId);
 	    feedbacks.put(lot, feedback);
       }
-      Client client = clientService.findClientByUserId(clientId);
+      Client client = userService.findClientByUserId(clientId);
       LOGGER.trace("Following client will be depicted: {}", client.toString());
       request.setAttribute(CURRENT_PAGE, currentPage);
       request.setAttribute(PAGE_LOTS, lots);
@@ -82,13 +82,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
       request.setAttribute(USERNAME, client.getName());
       request.setAttribute(RANKING, client.getRanking());
       request.setAttribute(ACCOUNT, client.getAccount());
-      request.setAttribute(LOT_STATUSES, Map.of(
-	  Lot.BLOCKED_STATUS, "Blocked",
-	  Lot.BEFORE_AUCTION_STATUS, "Ready to auction",
-	  Lot.SELL_STATUS, "Customer is found",
-	  Lot.SENT_STATUS, "The lot is sent to customer",
-	  Lot.DELIVERIED_STATUS, "The lot is deliveried to customer"
-      ));
+      request.setAttribute(PageUtils.LOT_STATUSES, PageUtils.LOT_STATUSES_MAP);
       PageUtils.includeWith(request, response, PageUtils.CLIENT_PAGE);
 }
 }

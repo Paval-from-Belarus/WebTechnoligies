@@ -28,4 +28,6 @@ private Date eventDate;
 private Date lastRegisterDate;
 @NotNull
 private Long auctionTypeId;
+@NotNull
+private Long adminId;
 }

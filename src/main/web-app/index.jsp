@@ -13,26 +13,26 @@
     <script src="./js/lobby.js" type="text/javascript"></script>
 </head>
 <body>
-<section>
+<div>
     <blockquote>
         Information about site
     </blockquote>
-</section>
-<section>
+</div>
+<div>
     <blockquote>
         Information about nearest auction
     </blockquote>
-</section>
+</div>
 <section>
     <div class="authorization-form">
         <h1>
             <fmt:message key="label.authorizationTitle"/>
         </h1>
-        <form id="authorization-form" action="${param.request.contextPath}/api/auth" method="post">
+        <form id="authorization-form" action="${pageContext.request.contextPath}/api/auth" method="post">
             <label for="auth_user_name"><fmt:message key="label.username"/></label>
             <input type="text" id="auth_user_name" value="">
             <label for="auth_password"><fmt:message key="label.password"/></label>
-            <input type="password" , id="auth_password" value="">
+            <input type="password" id="auth_password" value="">
             <input type="button" value="authorize">
         </form>
     </div>
@@ -49,7 +49,7 @@
             <input type="password" id="reg-password" value="">
             <label for="admin-role"><fmt:message key="label.adminRole"/></label>
             <input type="checkbox" id="admin-role">
-            <input type="button", value="register">
+            <input type="button" , value="register">
         </form>
     </div>
 </section>

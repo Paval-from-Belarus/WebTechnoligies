@@ -41,7 +41,8 @@ CREATE TABLE auction
     price_step         DECIMAL(10, 2)                                         NOT NULL,
     auction_type_id    BIGINT                                                 NOT NULL,
     duration           TIMESTAMP                                              NULL,
-    members_limit      INT                                                    NULL
+    members_limit      INT                                                    NULL,
+    admin_user_id      BIGINT                                                 NOT NULL
 );
 CREATE TABLE auction_type
 (
@@ -136,7 +137,10 @@ ALTER TABLE auction
     ADD CONSTRAINT FK_auction_auction_type
         FOREIGN KEY (auction_type_id) REFERENCES auction_type (auction_type_id) ON DELETE Restrict ON UPDATE Restrict
 ;
-
+ALTER TABLE auction_bet
+    ADD CONSTRAINT FK_auction_bet_client
+        FOREIGN KEY (admin_user_id) REFERENCES user (user_id) ON DELETE Restrict ON UPDATE Restrict
+;
 ALTER TABLE lot
     ADD CONSTRAINT FK_lot_auction_type
         FOREIGN KEY (auction_type_id) REFERENCES auction_type (auction_type_id) ON DELETE Restrict ON UPDATE Restrict

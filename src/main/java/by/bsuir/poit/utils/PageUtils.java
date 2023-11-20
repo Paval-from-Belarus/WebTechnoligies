@@ -1,5 +1,6 @@
 package by.bsuir.poit.utils;
 
+import by.bsuir.poit.bean.Lot;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +28,15 @@ public static final String CLIENT_PAGE = "/client";
 public static final String APPLICATION_NAME = "/jdbc-servlets";
 public static final String ERROR_REASON = "errorReasons";
 public static final String ERROR_CODE = "errorCode";
+public static final String LOT_STATUSES = "lotStatuses";
+public static final Map<Short, String> LOT_STATUSES_MAP = Map.of(
+    Lot.BLOCKED_STATUS, "Blocked",
+    Lot.BEFORE_AUCTION_STATUS, "Ready to auction",
+    Lot.SELL_STATUS, "Customer is found",
+    Lot.SENT_STATUS, "The lot is sent to customer",
+    Lot.DELIVERIED_STATUS, "The lot is deliveried to customer"
+);
+
 public static void sendError(HttpServletRequest request, HttpServletResponse response, int errorCode, String... messages) {
       final String REASON_LBL = "reason_";
       Map<String, String> map = new HashMap<>();
@@ -40,7 +50,7 @@ public static void sendError(HttpServletRequest request, HttpServletResponse res
       try {
 	    forwardTo(request, response, ERROR_PAGE);
       } catch (ServletException | IOException e) {
-            throw new IllegalStateException(e);
+	    throw new IllegalStateException(e);
       }
 
 }
