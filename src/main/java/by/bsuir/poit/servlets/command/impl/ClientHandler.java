@@ -47,10 +47,6 @@ private final ClientFeedbackService clientFeedbackService;
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       UserDetails details = (UserDetails) request.getUserPrincipal();
-      if (details.role() != User.CLIENT) {
-	    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Sorry, but you cannot see client page");
-	    return;
-      }
       long clientId = details.id();
       if (request.getParameter(CLIENT_ID) != null) {
 	    clientId = Long.parseLong(request.getParameter(CLIENT_ID));

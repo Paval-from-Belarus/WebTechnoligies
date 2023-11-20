@@ -1,6 +1,5 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.ClientFeedback;
 import by.bsuir.poit.bean.DeliveryPoint;
 import by.bsuir.poit.bean.EnglishLot;
 import by.bsuir.poit.bean.Lot;
@@ -39,6 +38,16 @@ public List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException {
 	    throw new ResourceBusyException(e);
       }
 
+}
+
+@Override
+public List<Lot> findAllByStatus(short status) {
+      try {
+	    return lotDao.findAllByStatus(status);
+      } catch (DataAccessException e) {
+	    LOGGER.error("Failed to fetch lot by status={}", status);
+	    throw new ResourceBusyException(e);
+      }
 }
 
 @Override

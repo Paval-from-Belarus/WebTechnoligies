@@ -137,8 +137,8 @@ ALTER TABLE auction
     ADD CONSTRAINT FK_auction_auction_type
         FOREIGN KEY (auction_type_id) REFERENCES auction_type (auction_type_id) ON DELETE Restrict ON UPDATE Restrict
 ;
-ALTER TABLE auction_bet
-    ADD CONSTRAINT FK_auction_bet_client
+ALTER TABLE auction
+    ADD CONSTRAINT FK_auction_admin
         FOREIGN KEY (admin_user_id) REFERENCES user (user_id) ON DELETE Restrict ON UPDATE Restrict
 ;
 ALTER TABLE lot

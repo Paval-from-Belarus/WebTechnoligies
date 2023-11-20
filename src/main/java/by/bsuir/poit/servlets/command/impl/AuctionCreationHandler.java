@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @author Paval Shlyk
  * @since 27/10/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/auction/create")
+@RequestHandlerDefinition(urlPatterns = "/auction/new")
 public class AuctionCreationHandler implements RequestHandler {
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {

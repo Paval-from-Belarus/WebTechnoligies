@@ -1,7 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
 import by.bsuir.poit.bean.mappers.ClientMapper;
-import by.bsuir.poit.bean.mappers.UserMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
@@ -23,7 +22,7 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 @Repository
-public class ClientDaoImpl extends AbstractDao<Client> implements ClientDao {
+public class ClientDaoImpl extends AbstractDao implements ClientDao {
 private static final Logger LOGGER = LogManager.getLogger(ClientDaoImpl.class);
 private final ConnectionPool pool;
 private final ClientMapper clientMapper;

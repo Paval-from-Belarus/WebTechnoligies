@@ -16,6 +16,8 @@ import java.util.List;
 public interface LotService {
 List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException;
 
+List<Lot> findAllByStatus(short status);
+
 List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException;
 
 EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException;

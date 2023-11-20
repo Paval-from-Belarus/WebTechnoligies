@@ -15,6 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuctionType {
+public static final long ENGLISH = 1;
+public static final long BLITZ = 2;
+public static final long BLIND = 3;
 private long id;
 @NotNull
 private String name;

@@ -24,7 +24,7 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 @Repository
-public class ClientFeedbackDaoImpl extends AbstractDao<ClientFeedback> implements ClientFeedbackDao {
+public class ClientFeedbackDaoImpl extends AbstractDao implements ClientFeedbackDao {
 private static final Logger LOGGER = LogManager.getLogger(ClientFeedbackDaoImpl.class);
 private final ConnectionPool pool;
 private final ClientFeedbackMapper mapper;

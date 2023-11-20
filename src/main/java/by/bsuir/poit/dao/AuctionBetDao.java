@@ -17,4 +17,6 @@ List<AuctionBet> findAllByAuctionId(long auctionId);
 List<AuctionBet> findAllByAuctionIdAndClientId(long auctionId, long clientId);
 
 List<AuctionBet> findAllByClientId(long clientId);
+
+void save(AuctionBet bet);
 }

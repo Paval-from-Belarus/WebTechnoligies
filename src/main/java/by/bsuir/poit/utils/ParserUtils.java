@@ -65,6 +65,8 @@ public static AuctionBet parseBet(HttpServletRequest request) {
 		.ifPresent(builder::bet);
 	    parseRequestParameter(Long.class, request, AUCTION_ID)
 		.ifPresent(builder::auctionId);
+	    parseRequestParameter(Long.class, request, LOT_ID)
+		.ifPresent(builder::lotId);
 	    //all other fields are set via upper level
       } catch (NumberFormatException e) {
 	    LOGGER.error("Failed to pars auction bet from request parameters");

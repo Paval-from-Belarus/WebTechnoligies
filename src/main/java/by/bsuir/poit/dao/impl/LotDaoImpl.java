@@ -26,21 +26,18 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 @Repository
-public class LotDaoImpl extends AbstractDao<Lot> implements LotDao {
+public class LotDaoImpl extends AbstractDao implements LotDao {
 private static final Logger LOGGER = LogManager.getLogger(LotDaoImpl.class);
 private final ConnectionPool pool;
 private final LotMapper mapper;
 
 @Override
 public Optional<EnglishLot> findEnglishLotById(long id) {
-      Optional<EnglishLot> englishLot = Optional.empty();
+      Optional<EnglishLot> englishLot;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_TYPE_ENGLISH_LOT where LOT_ID = ?")) {
 	    statement.setLong(1, id);
-	    Optional<Lot> lot = fetchEntityAndClose(statement, mapper::fromResultSetEnglish);
-	    if (lot.isPresent()) {
-		  englishLot = Optional.of((EnglishLot) lot.get());
-	    }
+	    englishLot = fetchEntityAndClose(statement, mapper::fromResultSetEnglish);
       } catch (SQLException e) {
 	    LOGGER.error(e);
 	    throw new DataAccessException(e);
@@ -82,6 +79,20 @@ public List<Lot> findAllBySellerId(long sellerId) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from LOT where CLIENT_SELLER_ID = ?")) {
 	    statement.setLong(1, sellerId);
+	    lots = fetchListAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return lots;
+}
+
+@Override
+public List<Lot> findAllByStatus(short status) {
+      List<Lot> lots;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from LOT where status = ?")) {
+	    statement.setShort(1, status);
 	    lots = fetchListAndClose(statement, mapper);
       } catch (SQLException e) {
 	    LOGGER.error(e);

@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 @RequiredArgsConstructor
 @Repository
-public class UserDaoImpl extends AbstractDao<User> implements UserDao {
+public class UserDaoImpl extends AbstractDao implements UserDao {
 private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 private final @NotNull ConnectionPool pool;
 private final @NotNull UserMapper mapper;

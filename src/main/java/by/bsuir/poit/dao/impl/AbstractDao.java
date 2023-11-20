@@ -14,14 +14,14 @@ import java.util.Optional;
  * @author Paval Shlyk
  * @since 08/11/2023
  */
-public abstract class AbstractDao<T> {
+public abstract class AbstractDao {
 /**
  * Fetch entity and close result set
  *
  * @param statement
  * @return fetched entity
  */
-protected Optional<T> fetchEntityAndClose(PreparedStatement statement, ResultSetMapper<T> mapper) throws SQLException {
+protected <T> Optional<T> fetchEntityAndClose(PreparedStatement statement, ResultSetMapper<T> mapper) throws SQLException {
       Optional<T> optional = Optional.empty();
       try (ResultSet set = statement.executeQuery()) {
 	    if (set.next()) {
@@ -30,7 +30,7 @@ protected Optional<T> fetchEntityAndClose(PreparedStatement statement, ResultSet
       }
       return optional;
 }
-protected List<T> fetchListAndClose(PreparedStatement statement, ResultSetMapper<T> mapper) throws SQLException {
+protected <T> List<T> fetchListAndClose(PreparedStatement statement, ResultSetMapper<T> mapper) throws SQLException {
       List<T> list = new ArrayList<>();
       try (ResultSet set = statement.executeQuery()) {
 	    while (set.next()) {

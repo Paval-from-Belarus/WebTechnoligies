@@ -3,6 +3,7 @@ package by.bsuir.poit.dao;
 import by.bsuir.poit.bean.Auction;
 import by.bsuir.poit.bean.BlindAuction;
 import by.bsuir.poit.bean.BlitzAuction;
+import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
@@ -14,16 +15,16 @@ import java.util.Optional;
  * @since 23/10/2023
  */
 public interface AuctionDao {
+/**
+ * @param id the id of auction
+ * @return instance Auction or its corresponding inherent
+ */
 Optional<Auction> findById(long id);
 
-Optional<BlindAuction> findBlindById(long id);
-
-Optional<BlitzAuction> findBlitzById(long id);
+List<Auction> findAllAfterEventDate(Date date);
 
 List<Auction> findAllByAuctionTypeIdAndAfterEventDate(long auctionTypeId, @NotNull Date start);
 
-//using m2m table
-List<Auction> findAllByClientId(long clientId);
-
 List<Auction> findAllByAuctionTypeId(long auctionTypeId);
+void save(Auction auction) throws ResourceModifyingException;
 }

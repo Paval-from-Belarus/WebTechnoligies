@@ -3,9 +3,7 @@ package by.bsuir.poit.dao;
 import by.bsuir.poit.bean.EnglishLot;
 import by.bsuir.poit.bean.Lot;
 import by.bsuir.poit.dao.exception.DataAccessException;
-import by.bsuir.poit.dao.exception.DataModifyingException;
 
-import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +19,7 @@ Optional<Lot> findById(long id);
 List<Lot> findAllByAuctionId(long auctionId);
 
 List<Lot> findAllBySellerId(long sellerId);
+List<Lot> findAllByStatus(short status);
 
 List<Lot> findAllByCustomerId(long customerId);
 Lot save(Lot lot);

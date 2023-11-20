@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Repository
 @RequiredArgsConstructor
-public class AuctionMemberDaoImpl extends AbstractDao<AuctionMember> implements AuctionMemberDao {
+public class AuctionMemberDaoImpl extends AbstractDao implements AuctionMemberDao {
 private static final Logger LOGGER = LogManager.getLogger(AuctionMemberDaoImpl.class);
 private final ConnectionPool pool;
 private final AuctionMemberMapper mapper;
@@ -58,7 +58,7 @@ public List<AuctionMember> findAllByClientId(long clientId) {
 public List<AuctionMember> findAllByAuctionIdAndStatus(long auctionId, short status) {
       List<AuctionMember> list;
       try (Connection connection = pool.getConnection();
-	   PreparedStatement statement = connection.prepareStatement("select * from auction_membere where auction_id = ? and status = ?")) {
+	   PreparedStatement statement = connection.prepareStatement("select * from auction_member where auction_id = ? and status = ?")) {
 	    statement.setLong(1, auctionId);
 	    statement.setShort(2, status);
 	    list = fetchListAndClose(statement, mapper);
@@ -67,5 +67,25 @@ public List<AuctionMember> findAllByAuctionIdAndStatus(long auctionId, short sta
 	    throw new DataAccessException(e);
       }
       return list;
+}
+
+@Override
+public void save(AuctionMember member) {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION_MEMBER " +
+									 "(CLIENT_ID, AUCTION_ID, STATUS) " +
+									 "VALUES (?, ?, ?)")) {
+	    statement.setLong(1, member.getClientId());
+	    statement.setLong(2, member.getAuctionId());
+	    statement.setShort(3, member.getStatus());
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to insert auction member: ", member);
+		  LOGGER.error(msg);
+		  throw new DataAccessException(msg);
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
 }
 }

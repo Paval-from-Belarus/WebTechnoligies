@@ -85,7 +85,8 @@
                 <fmt:message key="auction-bet.input-title"/>
             </label>
             <input id="bet" type="number" step="${param.priceStep}" value/>
-            <input id="auction_id" type="hidden" value="${param.auctionId}">
+            <input id="auction_id" type="hidden" value="${param.auctionId}"/>
+            <input id="lot_id" , type="hidden" value="${lot.getId}"/>
         </form>
         </c:otherwise>
         </c:choose>

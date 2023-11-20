@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @author Paval Shlyk
