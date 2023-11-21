@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.LongFunction;
 
 /**
  * @author Paval Shlyk
@@ -35,17 +34,17 @@ public static Lot parseLot(HttpServletRequest request) {
 	    if (request.getParameter(LOT_TITLE) != null) {
 		  builder.title(request.getParameter(LOT_TITLE));
 	    }
-	    parseRequestParameter(Long.class, request, LOT_ID)
+	    parseRequest(Long.class, request, LOT_ID)
 		.ifPresent(builder::id);
-	    parseRequestParameter(Long.class, request, LOT_CUSTOMER_ID)
+	    parseRequest(Long.class, request, LOT_CUSTOMER_ID)
 		.ifPresent(builder::customerId);
-	    parseRequestParameter(Long.class, request, AUCTION_TYPE_ID)
+	    parseRequest(Long.class, request, AUCTION_TYPE_ID)
 		.ifPresent(builder::auctionTypeId);
-	    parseRequestParameter(Short.class, request, LOT_STATUS)
+	    parseRequest(Short.class, request, LOT_STATUS)
 		.ifPresent(builder::status);
-	    parseRequestParameter(Long.class, request, LOT_SELLER_ID)
+	    parseRequest(Long.class, request, LOT_SELLER_ID)
 		.ifPresent(builder::sellerId);
-	    parseRequestParameter(Double.class, request, LOT_START_PRICE)
+	    parseRequest(Double.class, request, LOT_START_PRICE)
 		.ifPresent(builder::startPrice);
       } catch (NumberFormatException e) {
 	    LOGGER.error("Failed to parse lot from request parameters {}", e.toString());
@@ -61,11 +60,11 @@ public static final String AUCTION_ID = "auction_id";
 public static AuctionBet parseBet(HttpServletRequest request) {
       var builder = AuctionBet.builder();
       try {
-	    parseRequestParameter(Double.class, request, AUCTION_BET_VALUE)
+	    parseRequest(Double.class, request, AUCTION_BET_VALUE)
 		.ifPresent(builder::bet);
-	    parseRequestParameter(Long.class, request, AUCTION_ID)
+	    parseRequest(Long.class, request, AUCTION_ID)
 		.ifPresent(builder::auctionId);
-	    parseRequestParameter(Long.class, request, LOT_ID)
+	    parseRequest(Long.class, request, LOT_ID)
 		.ifPresent(builder::lotId);
 	    //all other fields are set via upper level
       } catch (NumberFormatException e) {
@@ -75,7 +74,7 @@ public static AuctionBet parseBet(HttpServletRequest request) {
       return builder.build();
 }
 
-private static <T extends Number> Optional<T> parseRequestParameter(Class<T> clazz, HttpServletRequest request, String parameter) throws NumberFormatException {
+public static <T extends Number> Optional<T> parseRequest(Class<T> clazz, HttpServletRequest request, String parameter) throws NumberFormatException {
       if (request.getParameter(parameter) == null) {
 	    return Optional.empty();
       }

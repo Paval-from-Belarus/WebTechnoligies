@@ -34,5 +34,13 @@ void updateLotCustomer(long lotId, long customerId) throws ResourceNotFoundExcep
 
 void updateLotDeliveryPoint(long lotId, long deliveryPointId) throws ResourceNotFoundException;
 
-boolean deleteIfPossible(long lotId) throws ResourceModifyingException;
+/**
+ * The method try to delete a lot if no restriction of business logic was corrupted.<br/>
+ * One of the restrictions is to attempt to remove the lot it if already assigned to auction (no way back)
+ *
+ * @param lotId the id of lot
+ * @return the lot had been really deleted or not
+ * @throws ResourceBusyException when database doesn't response
+ */
+boolean deleteIfPossible(long lotId) throws ResourceBusyException;
 }

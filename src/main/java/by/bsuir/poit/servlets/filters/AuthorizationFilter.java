@@ -48,10 +48,17 @@ public void doFilter(HttpServletRequest request, HttpServletResponse response, F
 		new Cookie(AuthorizationUtils.COOKIE_USER_ID, String.valueOf(user.getId())),
 		new Cookie(AuthorizationUtils.COOKIE_USER_ROLE, String.valueOf(user.getRole()))
 	    );
+	    for (Cookie cookie : request.getCookies()) {
+		  if (cookie.getName().equals(AuthorizationUtils.COOKIE_USER_ID) ||
+			  cookie.getName().equals(AuthorizationUtils.COOKIE_USER_ROLE)) {
+			cookie.setMaxAge(0);
+		  }
+	    }
 	    for (Cookie cookie : cookies) {
 		  cookie.setPath(PageUtils.APPLICATION_NAME);
 		  response.addCookie(cookie);
 	    }
+
 	    cookies.forEach(response::addCookie);
 	    LOGGER.trace("User with id {} was authorized", user.getId());
       } catch (Exception e) {

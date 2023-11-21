@@ -53,7 +53,7 @@ private Optional<Principal> buildPrincipalByCookies(HttpServletRequest request, 
       for (Cookie cookie : request.getCookies()) {
 	    if (cookies.containsKey(cookie.getName())) {
 		  LOGGER.warn("Client side holds duplicated cookies. They will be deleted");
-		  removePrincipalCookies(request.getCookies(), response);
+		  AuthorizationUtils.removePrincipalCookies(request.getCookies(), response);
 		  throw new DuplicatedCookieException("Duplicated cookies on server side");
 	    }
 	    if (AuthorizationUtils.isPrincipalCookie(cookie)) {
@@ -78,12 +78,5 @@ private Optional<Principal> buildPrincipalByCookies(HttpServletRequest request, 
       return principal;
 }
 
-private void removePrincipalCookies(Cookie[] cookies, HttpServletResponse response) {
-      for (Cookie cookie : cookies) {
-	    if (AuthorizationUtils.isPrincipalCookie(cookie)) {
-		  cookie.setMaxAge(0);
-		  response.addCookie(cookie);
-	    }
-      }
-}
+
 }

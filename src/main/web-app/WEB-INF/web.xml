@@ -48,6 +48,10 @@
         <filter-name>access</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>params-resolver</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>MainPage</servlet-name>
         <jsp-file>/index.jsp</jsp-file>
@@ -67,7 +71,7 @@
     <!--    pages mapping-->
     <servlet-mapping>
         <servlet-name>MainPage</servlet-name>
-        <url-pattern>/</url-pattern>
+<!--        <url-pattern>/</url-pattern>-->
         <url-pattern>/lobby</url-pattern>
     </servlet-mapping>
     <servlet-mapping>

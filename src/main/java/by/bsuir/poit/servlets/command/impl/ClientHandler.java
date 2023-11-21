@@ -3,7 +3,6 @@ package by.bsuir.poit.servlets.command.impl;
 import by.bsuir.poit.bean.Client;
 import by.bsuir.poit.bean.ClientFeedback;
 import by.bsuir.poit.bean.Lot;
-import by.bsuir.poit.bean.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.ClientFeedbackService;
 import by.bsuir.poit.services.UserService;
@@ -29,7 +28,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ClientHandler implements RequestHandler {
 private static final Logger LOGGER = LogManager.getLogger(ClientHandler.class);
-public static final String CLIENT_ID = "clientId";
+public static final String CLIENT_ID_PARAMETER = "client_id";
 public static final String PAGE_LOTS = "lots";
 public static final String LOTS_PER_PAGE = "lotsPerPage";
 public static final String PAGE_FEEDBACK = "lotFeedbacks";
@@ -48,8 +47,8 @@ private final ClientFeedbackService clientFeedbackService;
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       UserDetails details = (UserDetails) request.getUserPrincipal();
       long clientId = details.id();
-      if (request.getParameter(CLIENT_ID) != null) {
-	    clientId = Long.parseLong(request.getParameter(CLIENT_ID));
+      if (request.getParameter(CLIENT_ID_PARAMETER) != null) {
+	    clientId = Long.parseLong(request.getParameter(CLIENT_ID_PARAMETER));
       }
       int currentPage = 1;
       int lotsPerPage = 5;

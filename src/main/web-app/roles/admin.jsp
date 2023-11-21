@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+         pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
@@ -7,18 +8,18 @@
 </head>
 <body>
 <h1>
-    Hello, ${param.username}
+    Hello, ${username}
 </h1>
 <p>
-    <fmt:message key="label.changeLang"/>
+    <fmt:message key="label.change-lang"/>
 </p>
 <section>
-    <c:if test="${param.currentPage != 1}">
-        <a href="${pageContext.request.contextPath}/api/client?currentPage=${param.currentPage - 1}">Previous</a>
+    <c:if test="${currentPage != 1}">
+        <a href="${pageContext.request.contextPath}/api/client?currentPage=${currentPage - 1}">Previous</a>
     </c:if>
-    <span>Page = ${param.currentPage}</span>
-    <c:if test="${param.currentPage < param.pagesCount}">
-        <a href="${pageContext.request.contextPath}/api/client?currentPage=${param.currentPage + 1}">Next</a>
+    <span>Page = ${currentPage}</span>
+    <c:if test="${currentPage < pagesCount}">
+        <a href="${pageContext.request.contextPath}/api/client?currentPage=${currentPage + 1}">Next</a>
     </c:if>
 </section>
 <form class="auction-form" action="api/auction/new">
@@ -44,7 +45,7 @@
             <fmt:message key="auction.type-blind"/>
         </option>
     </select>
-    <c:forEach var="lot" items="${param.lots}">
+    <c:forEach var="lot" items="${lots}">
         <jsp:include page="templates/lot.jsp"/>
     </c:forEach>
 </form>

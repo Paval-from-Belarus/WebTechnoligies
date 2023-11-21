@@ -4,6 +4,7 @@ import by.bsuir.poit.bean.User;
 import com.google.gson.Gson;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,7 @@ public static String newSecuritySalt() {
 private static final SecureRandom random = new SecureRandom();
 
 public static User parseUser(HttpServletRequest request) throws IOException {
+      request.getParameter(ROLE);
       return User.builder()
 		 .name(request.getParameter(NAME))
 		 .email(request.getParameter(EMAIL))
@@ -64,6 +66,16 @@ public static String bytesToString(byte[] bytes) {
       }
       return String.valueOf(letters.array());
 }
+
+public static void removePrincipalCookies(Cookie[] cookies, HttpServletResponse response) {
+      for (Cookie cookie : cookies) {
+	    if (AuthorizationUtils.isPrincipalCookie(cookie)) {
+		  cookie.setMaxAge(0);
+		  response.addCookie(cookie);
+	    }
+      }
+}
+
 public static boolean isPrincipalCookie(@NotNull Cookie cookie) {
       return cookie.getName().equals(COOKIE_USER_ID) || cookie.getName().equals(COOKIE_USER_ROLE);
 }

@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ControllerUtils {
-private static final String CONTROLLER_URL = "/jdbc-servlets/api";//by this path gate controller is available
+private static final String CONTROLLER_URL = "/api";//by this path gate controller is available
 public static final String CLIENT_ENDPOINT = CONTROLLER_URL + "/client";
 public static final String ADMIN_ENDPOINT = CONTROLLER_URL + "/admin";
 public static final String AUCTION_ENDPOINT = CONTROLLER_URL + "/auction";

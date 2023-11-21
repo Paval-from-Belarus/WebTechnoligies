@@ -24,6 +24,7 @@ public static final String REGISTRATION_PAGE = "/reg";
 public static final String AUTHORIZATION_PAGE = "/auth";
 public static final String ADMIN_PAGE = "/admin";
 public static final String CLIENT_PAGE = "/client";
+public static final String USER_PAGE = "/user";
 //should be injected
 public static final String APPLICATION_NAME = "/jdbc-servlets";
 public static final String ERROR_REASON = "errorReasons";
@@ -55,7 +56,8 @@ public static void sendError(HttpServletRequest request, HttpServletResponse res
 
 }
 
-public static void redirectTo(HttpServletResponse response, String servletPage) throws IOException {
+public static void
+redirectTo(HttpServletResponse response, String servletPage) throws IOException {
       response.sendRedirect(APPLICATION_NAME + servletPage);
 }
 
@@ -68,6 +70,5 @@ public static void includeWith(HttpServletRequest request, HttpServletResponse r
       RequestDispatcher dispatcher = request.getRequestDispatcher(servletPage);
       dispatcher.include(request, response);
 }
-
 
 }

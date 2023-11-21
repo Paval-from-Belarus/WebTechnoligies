@@ -7,3 +7,6 @@ const changeLanguage = (language) => {
     let pageUrl = window.location.href.replace(/\?.*/g, '');
     window.location.href = pageUrl + '?' + `lang=${language}`
 }
+const leave = () => {
+    window.location.href = APPLICATION_PATH + "api/leave";
+}

@@ -4,16 +4,16 @@
 <html>
 <head>
     <title>
-        <fmt:message key="auction.pageTitle"/>
+        <fmt:message key="auction.page-title"/>
     </title>
 </head>
 <body>
 <section>
     <h3>
-        <fmt:message key="auction.type-${param.auctionTypeName}"/>
+        <fmt:message key="auction.type-${auctionTypeName}"/>
     </h3>
     <p>
-        <fmt:message key="auction.description-${param.auctionTypeName}"/>
+        <fmt:message key="auction.description-${auctionTypeName}"/>
     </p>
     <table class="auction__common-info">
         <tr>
@@ -21,16 +21,16 @@
                 <fmt:message key="auction.price-step"/>
             </th>
             <td>
-                ${param.priceStep}
+                ${priceStep}
             </td>
         </tr>
-        <c:if test="${param.auctionTypeName == \"blind\"}">
+        <c:if test="${auctionTypeName == \"blind\"}">
             <tr>
                 <th>
                     <fmt:message key="auction.blind-bet-limit"/>
                 </th>
                 <td>
-                        ${param.blindAuctionBetLimit}
+                        ${blindAuctionBetLimit}
                 </td>
             </tr>
             <tr>
@@ -38,24 +38,24 @@
                     <fmt:message key="auction.blind-bet-timeout"/>
                 </th>
                 <td>
-                        ${param.blindAuctionTimeout}
+                        ${blindAuctionTimeout}
                 </td>
             </tr>
         </c:if>
-        <c:if test="${param.auctionTypeName} == \"blitz\"">
+        <c:if test="${auctionTypeName} == \"blitz\"">
             <tr>
                 <th>
                     <fmt:message key="auction.blitz-exclude-count"/>
                 </th>
                 <td>
-                        ${param.blitzAuctionExcludeCount}
+                        ${blitzAuctionExcludeCount}
                 </td>
             </tr>
         </c:if>
     </table>
 </section>
 <section class="auction-lot-list">
-    <c:forEach var="lot" items="${param.lotList}>">
+    <c:forEach var="lot" items="${lotList}>">
     <div class="client-lot">
         <div class="lot-title">
                 ${lot.getTitle}
@@ -84,8 +84,8 @@
             <label for="bet">
                 <fmt:message key="auction-bet.input-title"/>
             </label>
-            <input id="bet" type="number" step="${param.priceStep}" value/>
-            <input id="auction_id" type="hidden" value="${param.auctionId}"/>
+            <input id="bet" type="number" step="${priceStep}" value/>
+            <input id="auction_id" type="hidden" value="${auctionId}"/>
             <input id="lot_id" , type="hidden" value="${lot.getId}"/>
         </form>
         </c:otherwise>

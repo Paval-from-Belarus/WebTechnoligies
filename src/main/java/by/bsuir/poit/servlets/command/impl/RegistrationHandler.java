@@ -30,11 +30,11 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 	    User user = AuthorizationUtils.parseUser(request);
 	    authorizationService.register(user, password);
 	    LOGGER.trace("User {} registered successfully", user.getId());
-	    response.setStatus(HttpServletResponse.SC_ACCEPTED);
+	    PageUtils.redirectTo(response, PageUtils.USER_PAGE);
       } catch (AuthorizationException e) {
 	    processRegistrationException(e, response);
       } catch (Exception e) {
-	    LOGGER.warn("Failed to register user from ip {}", request.getRemoteAddr());
+	    LOGGER.warn("Failed to register user from ip {} with exception: {}", request.getRemoteAddr(), e.getMessage());
 	    PageUtils.redirectTo(response, PageUtils.ERROR_PAGE);
       }
 }
