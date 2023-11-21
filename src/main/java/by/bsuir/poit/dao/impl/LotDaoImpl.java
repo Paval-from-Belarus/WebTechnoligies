@@ -150,6 +150,22 @@ public Lot save(Lot lot) throws DataModifyingException {
 }
 
 @Override
+public void delete(long lotId) throws DataAccessException, DataModifyingException {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("delete from LOT where LOT_ID = ? and AUCTION_ID IS NULL")) {
+	    statement.setLong(1, lotId);
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to delete lot by id=%d", lotId);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+}
+
+@Override
 public void setAuctionId(long lotId, long auctionId) throws DataAccessException {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("update LOT set AUCTION_ID = ? where LOT_ID = ?")) {

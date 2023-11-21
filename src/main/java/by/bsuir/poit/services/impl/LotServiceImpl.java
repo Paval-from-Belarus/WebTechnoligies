@@ -54,7 +54,7 @@ public List<Lot> findAllByStatus(short status) {
 public List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException {
       try {
 	    return lotDao.findAllByAuctionId(auctionId);
-      } catch (DataModifyingException e) {
+      } catch (DataAccessException e) {
 	    LOGGER.error("Failed to fetch lot by auction id {}", auctionId);
 	    throw new ResourceBusyException(e);
       }
@@ -80,7 +80,7 @@ public DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundE
 		  throw newDeliveryPointNotFoundException(lotId, "lot holds null for delivery point");
 	    }
 	    return deliveryPointDao.findById(deliveryPointId).orElseThrow(() -> newDeliveryPointNotFoundException(lotId, "dao failed to find delivery point"));
-      } catch (DataModifyingException e) {
+      } catch (DataAccessException e) {
 	    LOGGER.error(e);
 	    throw new ResourceNotFoundException(e);
       }
@@ -135,6 +135,20 @@ public void updateLotDeliveryPoint(long lotId, long deliveryPointId) throws Reso
 	    LOGGER.error(e);
 	    throw new ResourceNotFoundException(e);
       }
+}
+
+@Override
+public boolean deleteIfPossible(long lotId) throws ResourceModifyingException {
+      boolean isDeleted = true;
+      try {
+	    lotDao.delete(lotId);
+      } catch (DataModifyingException e) {
+	    isDeleted = false;
+      } catch (DataAccessException e) {
+	    LOGGER.error("Failed to try delete lot by id={}", lotId);
+	    throw new ResourceBusyException(e);
+      }
+      return isDeleted;
 }
 
 

@@ -39,6 +39,7 @@ protected <T> List<T> fetchListAndClose(PreparedStatement statement, ResultSetMa
       }
       return list;
 }
+
 /**
  * @param statement
  * @return true if a set is not empty. Otherwise, return false

@@ -18,6 +18,11 @@
 <c:if test="${param.currentPage < param.pagesCount}">
     <a href="${pageContext.request.contextPath}/api/client?currentPage=${param.currentPage + 1}">Next</a>
 </c:if>
+<div>
+    <p>
+        Don't forget to implement functionality to remove lot
+    </p>
+</div>
 <section class="client-lots">
     <c:forEach var="lot" items="${param.lots}">
         <div class="client-lot">

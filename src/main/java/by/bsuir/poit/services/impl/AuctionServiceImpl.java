@@ -1,14 +1,15 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.*;
-import by.bsuir.poit.bean.mappers.AuctionMapper;
+import by.bsuir.poit.bean.Auction;
+import by.bsuir.poit.bean.AuctionBet;
+import by.bsuir.poit.bean.AuctionMember;
+import by.bsuir.poit.bean.AuctionType;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.AuctionBetDao;
 import by.bsuir.poit.dao.AuctionDao;
 import by.bsuir.poit.dao.AuctionMemberDao;
 import by.bsuir.poit.dao.AuctionTypeDao;
 import by.bsuir.poit.dao.exception.DataAccessException;
-import by.bsuir.poit.dao.exception.DataModifyingException;
 import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
@@ -20,9 +21,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.LongFunction;
-import java.util.stream.Collectors;
 
 /**
  * @author Paval Shlyk
@@ -57,9 +55,10 @@ public List<Auction> findByClientId(long clientId) {
 	    List<AuctionMember> members = auctionMemberDao.findAllByClientId(clientId);
 	    auctions = new ArrayList<>();
 	    for (AuctionMember member : members) {
-		  auctionDao
-		      .findById(member.getAuctionId())
-		      .ifPresent(auctions::add);
+		  Auction auction = auctionDao
+					.findById(member.getAuctionId())
+					.orElseThrow(() -> newAuctionNotFoundException(member.getAuctionId()));
+		  auctions.add(auction);
 	    }
       } catch (DataAccessException e) {
 	    final String msg = String.format("Failed to find auctions by given clientId=%d", clientId);

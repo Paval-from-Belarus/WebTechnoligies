@@ -15,9 +15,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-public static final int CLIENT = 1;
-public static final int ADMIN = 2;
-public static final int OFFICER = 3;//the grant to all
+public static final short CLIENT = 1;
+public static final short ADMIN = 2;
+public static final short OFFICER = 3;//the grant to all
 
 public static final short STATUS_NOT_ACTIVE = 1;
 public static final short STATUS_ACTIVE = 2;

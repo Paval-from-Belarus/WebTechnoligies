@@ -33,4 +33,6 @@ void updateLotStatus(long lotId, short lotStatus) throws ResourceNotFoundExcepti
 void updateLotCustomer(long lotId, long customerId) throws ResourceNotFoundException;
 
 void updateLotDeliveryPoint(long lotId, long deliveryPointId) throws ResourceNotFoundException;
+
+boolean deleteIfPossible(long lotId) throws ResourceModifyingException;
 }

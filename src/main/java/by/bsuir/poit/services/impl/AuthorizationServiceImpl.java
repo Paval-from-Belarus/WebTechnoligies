@@ -86,8 +86,10 @@ public void register(@NotNull User user, @NotNull String password) throws Resour
 		  userDao.save(user);
 		  isRegistered = true;
 	    }
+	    //update client
 	    if (isRegistered && user.getRole() == User.CLIENT) {
 		  Client client = clientMapper.fromUser(user);
+		  //todo: implement @Transactional for method
 		  clientDao.save(client);
 	    }
       } catch (DataModifyingException e) {
