@@ -1,8 +1,6 @@
 package by.bsuir.poit.dao;
 
 import by.bsuir.poit.bean.Auction;
-import by.bsuir.poit.bean.BlindAuction;
-import by.bsuir.poit.bean.BlitzAuction;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import jakarta.validation.constraints.NotNull;
 
@@ -26,5 +24,6 @@ List<Auction> findAllAfterEventDate(Date date);
 List<Auction> findAllByAuctionTypeIdAndAfterEventDate(long auctionTypeId, @NotNull Date start);
 
 List<Auction> findAllByAuctionTypeId(long auctionTypeId);
+List<Auction> findHeadersAllByAdminIdSortedByEventDateDesc(long adminId);
 void save(Auction auction) throws ResourceModifyingException;
 }

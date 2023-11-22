@@ -1,9 +1,11 @@
 package by.bsuir.poit.services;
 
 import by.bsuir.poit.bean.*;
+import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -28,9 +30,11 @@ List<AuctionBet> findAllBetsByClientId(long auctionId, long clientId) throws Res
 
 AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundException;
 
+List<Auction> findHeadersByAdminId(long adminId) throws ResourceBusyException;
+
 List<AuctionType> findAllTypes();
 
-void saveAuction(Auction auction) throws ResourceModifyingException;
+void saveAuction(Principal principal, Auction auction) throws ResourceModifyingException;
 
-void saveBet(AuctionBet bet) throws ResourceNotFoundException;
+void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFoundException;
 }

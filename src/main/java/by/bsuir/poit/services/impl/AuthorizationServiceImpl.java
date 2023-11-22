@@ -116,6 +116,22 @@ public void verifyByUserAccess(Principal principal, long userId) throws UserAcce
       }
 }
 
+@Override
+public void verifyByUserRole(Principal principal, short role) throws UserAccessViolationException {
+      UserDetails details = (UserDetails) principal;
+      if (principal == null || details.role() != role) {
+	    final String msg = String.format("User %s has invalid role for requested=%d", principal.getName(), role);
+	    LOGGER.error(msg);
+	    throw new UserAccessViolationException(msg);
+      }
+}
+
+@Override
+public long getUserIdByPrincipal(Principal principal) throws UserNotFoundException {
+      UserDetails details = (UserDetails) principal;
+      return details.id();
+}
+
 private static AuthorizationException newUserNotFoundException(String login) {
       final String msg = String.format("Attempt to find not existing user with login=%s", login);
       LOGGER.info(msg);

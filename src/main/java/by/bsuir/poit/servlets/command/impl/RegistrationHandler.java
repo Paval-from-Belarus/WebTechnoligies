@@ -30,7 +30,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 	    User user = AuthorizationUtils.parseUser(request);
 	    authorizationService.register(user, password);
 	    LOGGER.trace("User {} registered successfully", user.getId());
-	    PageUtils.redirectTo(response, PageUtils.USER_PAGE);
+	    PageUtils.redirectTo(response, PageUtils.START_PAGE);
       } catch (AuthorizationException e) {
 	    processRegistrationException(e, response);
       } catch (Exception e) {

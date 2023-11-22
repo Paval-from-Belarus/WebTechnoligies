@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -132,17 +133,36 @@ public List<Auction> findAllByAuctionTypeId(long auctionTypeId) {
 }
 
 @Override
+public List<Auction> findHeadersAllByAdminIdSortedByEventDateDesc(long adminId) {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION " +
+									 "where ADMIN_USER_ID = ?" +
+									 "order by EVENT_DATE DESC ")) {
+	    statement.setLong(1, adminId);
+	    return fetchListAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+
+
+}
+
+@Override
 public void save(Auction auction) throws ResourceModifyingException {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION " +
 									 "(EVENT_DATE, LAST_REGISTER_DATE, PRICE_STEP, AUCTION_TYPE_ID, DURATION, MEMBERS_LIMIT, ADMIN_USER_ID) " +
 									 "VALUES(?, ?, ?, ?, ?, ?, ?)")) {
 	    statement.setDate(1, auction.getEventDate());
-	    statement.setDate(2, auction.getLastRegisterDate());
+	    statement.setNull(2, Types.DATE);
+//	    statement.setDate(2, auction.getLastRegisterDate());
 	    statement.setDouble(3, auction.getPriceStep());
 	    statement.setLong(4, auction.getAuctionTypeId());
-	    statement.setTimestamp(5, auction.getDuration());
-	    statement.setInt(6, auction.getMembersLimit());
+	    statement.setNull(5, Types.TIMESTAMP);
+//	    statement.setTimestamp(5, auction.getDuration());
+	    statement.setNull(6, Types.INTEGER);
+//	    statement.setInt(6, auction.getMembersLimit());
 	    statement.setLong(7, auction.getAdminId());
 	    if (statement.executeUpdate() != 1) {
 		  final String msg = String.format("Failed to insert auction %s", auction);

@@ -1,16 +1,21 @@
-.client-page__content {
+.user-page__content {
     display: flex;
+    flex-direction: row;
     justify-content: start;
     width: 90%;
     margin-left: 5%;
 }
-.client-info {
+.user-info {
     margin: auto;
     display: flex;
     flex-direction: column;
     row-gap: 5rem;
 }
 .client-info__next-lot {
+    display: flex;
+    justify-content: center;
+}
+.admin-info__next-auction {
     display: flex;
     justify-content: center;
 }
@@ -23,7 +28,10 @@
 .client-lot__history {
     flex-grow: 1;
 }
-.client-lot {
+.admin-auction__history {
+    flex-grow: 1;
+}
+.user-lot {
     display: flex;
     justify-content: center;
     margin: auto;

@@ -31,14 +31,12 @@ private final AuctionService auctionService;
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       AuctionBet auctionBet = ParserUtils.parseBet(request);
-      UserDetails principal = (UserDetails) request.getUserPrincipal();
-      assert principal != null;
-      auctionBet.setClientId(principal.id());
       auctionBet.setTime(new Timestamp(new Date().getTime()));
       try {
-	    auctionService.saveBet(auctionBet);
+	    auctionService.saveBet(request.getUserPrincipal(), auctionBet);
       } catch (ResourceNotFoundException e) {
-	    final String msg = String.format("Failed to save bet for user=%d with size=%f", principal.id(), auctionBet.getBet());
+	    Principal principal = request.getUserPrincipal();
+	    final String msg = String.format("Failed to save bet for user=%s with size=%f", principal.getName(), auctionBet.getBet());
 	    LOGGER.error(msg);
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       }

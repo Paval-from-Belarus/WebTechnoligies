@@ -1,5 +1,6 @@
 package by.bsuir.poit.utils;
 
+import by.bsuir.poit.bean.Auction;
 import by.bsuir.poit.bean.AuctionBet;
 import by.bsuir.poit.bean.Lot;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,6 +9,13 @@ import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -56,6 +64,8 @@ public static Lot parseLot(HttpServletRequest request) {
 //the information about auction bet
 public static final String AUCTION_BET_VALUE = "bet";
 public static final String AUCTION_ID = "auction_id";
+public static final String PRICE_STEP = "price_step";
+public static final String EVENT_DATE = "event_date";
 
 public static AuctionBet parseBet(HttpServletRequest request) {
       var builder = AuctionBet.builder();
@@ -69,6 +79,30 @@ public static AuctionBet parseBet(HttpServletRequest request) {
 	    //all other fields are set via upper level
       } catch (NumberFormatException e) {
 	    LOGGER.error("Failed to pars auction bet from request parameters");
+	    throw new IllegalStateException(e);
+      }
+      return builder.build();
+}
+
+private static final SimpleDateFormat SIMPLE_DATE_FORMAT =
+    new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+public static Auction parseAuction(HttpServletRequest request) {
+      var builder = Auction.builder();
+      try {
+	    parseRequest(Double.class, request, PRICE_STEP)
+		.ifPresent(builder::priceStep);
+	    LOGGER.trace("Date parsing: {}", request.getParameter(EVENT_DATE));
+	    Date eventDate = SIMPLE_DATE_FORMAT.parse(request.getParameter(EVENT_DATE));
+	    builder.eventDate(new java.sql.Date(eventDate.getTime()));
+	    parseRequest(Long.class, request, AUCTION_TYPE_ID)
+		.ifPresent(builder::auctionTypeId);
+	    builder.duration(new Timestamp(120));
+      } catch (NumberFormatException e) {
+	    LOGGER.error("Failed to parse auction entity from request values by reason: {}", e.getMessage());
+	    throw new IllegalStateException(e);
+      } catch (ParseException e) {
+	    LOGGER.error("Failed to parse date {}", request.getParameter(EVENT_DATE));
 	    throw new IllegalStateException(e);
       }
       return builder.build();

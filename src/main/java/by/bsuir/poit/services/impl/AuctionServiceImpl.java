@@ -14,10 +14,12 @@ import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
+import by.bsuir.poit.servlets.UserDetails;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,6 +120,16 @@ public AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundEx
 }
 
 @Override
+public List<Auction> findHeadersByAdminId(long adminId) throws ResourceBusyException {
+      try {
+	    return auctionDao.findHeadersAllByAdminIdSortedByEventDateDesc(adminId);
+      } catch (DataAccessException e) {
+	    LOGGER.error("Failed to fetch all auction by adminId={}", adminId);
+	    throw new ResourceBusyException(e);
+      }
+}
+
+@Override
 public List<AuctionType> findAllTypes() {
       try {
 	    return auctionTypeDao.findAll();
@@ -128,8 +140,10 @@ public List<AuctionType> findAllTypes() {
 }
 
 @Override
-public void saveAuction(Auction auction) throws ResourceModifyingException {
+public void saveAuction(Principal principal, Auction auction) throws ResourceModifyingException {
       try {
+	    UserDetails details = (UserDetails) principal;
+	    auction.setAdminId(details.id());
 	    auctionDao.save(auction);
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to save auction {}", auction);
@@ -138,8 +152,10 @@ public void saveAuction(Auction auction) throws ResourceModifyingException {
 }
 
 @Override
-public void saveBet(AuctionBet bet) throws ResourceNotFoundException {
+public void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFoundException {
+      UserDetails details = (UserDetails) principal;
       try {
+	    bet.setClientId(details.id());
 	    auctionBetDao.save(bet);
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to save auction bet {}", bet);

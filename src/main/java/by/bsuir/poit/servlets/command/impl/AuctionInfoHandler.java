@@ -74,7 +74,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 		  throw new IllegalStateException(msg);
 	    }
 	    List<Lot> lots = lotService.findAllByAuction(auction.getId());
-	    request.setAttribute(AUCTION_TYPE_NAME, type.getName());
+	    request.setAttribute(AUCTION_TYPE_NAME, type.getId());
 	    request.setAttribute(EVENT_DATE, auction.getLastRegisterDate());
 	    if (auction.getMembersLimit() != null) {
 		  request.setAttribute(MEMBER_LIMIT, auction.getMembersLimit());

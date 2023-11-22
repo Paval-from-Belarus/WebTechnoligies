@@ -68,6 +68,14 @@
         <servlet-name>ClientPage</servlet-name>
         <jsp-file>/roles/client.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>AuctionPage</servlet-name>
+        <jsp-file>/auction.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>AssignmentPage</servlet-name>
+        <jsp-file>/assignment.jsp</jsp-file>
+    </servlet>
     <!--    pages mapping-->
     <servlet-mapping>
         <servlet-name>MainPage</servlet-name>
@@ -85,6 +93,14 @@
     <servlet-mapping>
         <servlet-name>AdminPage</servlet-name>
         <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuctionPage</servlet-name>
+        <url-pattern>/auction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AssignmentPage</servlet-name>
+        <url-pattern>/assignment</url-pattern>
     </servlet-mapping>
     <error-page>
         <error-code>403</error-code>

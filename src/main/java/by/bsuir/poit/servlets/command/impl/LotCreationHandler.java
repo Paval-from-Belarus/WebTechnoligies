@@ -21,7 +21,7 @@ import java.security.Principal;
  * @author Paval Shlyk
  * @since 08/11/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/lot/create")
+@RequestHandlerDefinition(urlPatterns = "/lot/new")
 @RequiredArgsConstructor
 public class LotCreationHandler implements RequestHandler {
 private final LotService lotService;

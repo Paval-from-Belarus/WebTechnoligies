@@ -56,7 +56,7 @@
 </section>
 <section class="auction-lot-list">
     <c:forEach var="lot" items="${lotList}>">
-    <div class="client-lot">
+    <div class="user-lot">
         <div class="lot-title">
                 ${lot.getTitle()}
         </div>

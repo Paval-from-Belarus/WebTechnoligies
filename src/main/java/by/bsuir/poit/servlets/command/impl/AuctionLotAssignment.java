@@ -1,11 +1,8 @@
 package by.bsuir.poit.servlets.command.impl;
 
-import by.bsuir.poit.bean.Auction;
 import by.bsuir.poit.bean.Lot;
 import by.bsuir.poit.bean.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
-import by.bsuir.poit.services.AuctionService;
-import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.services.UserService;
 import by.bsuir.poit.servlets.UserDetails;
@@ -19,31 +16,37 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.security.Principal;
 import java.util.List;
 
 /**
  * @author Paval Shlyk
- * @since 08/11/2023
+ * @since 22/11/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/admin")
 @RequiredArgsConstructor
-public class AdminHandler implements RequestHandler {
-public static final String AUCTIONS = "auctionList";
+@RequestHandlerDefinition(urlPatterns = "/auction/assign")
+public class AuctionLotAssignment implements RequestHandler {
+private static final Logger LOGGER = LogManager.getLogger(AdminHandler.class);
+public static final String PAGE_TYPE = "pageType";
+public static final String PAGE_LOTS = "lots";
 public static final String USERNAME = "username";
-private final AuthorizationService authorizationService;
+
+private final LotService lotService;
 private final UserService userService;
-private final AuctionService auctionService;
+
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
-      Principal principal = request.getUserPrincipal();
-      authorizationService.verifyByUserAccess(principal, User.ADMIN);
-      long adminId = authorizationService.getUserIdByPrincipal(principal);
-      User admin = userService.findUserByUserId(adminId);
+      UserDetails details = (UserDetails) request.getUserPrincipal();
+      if (details.role() != User.ADMIN) {
+	    response.sendError(HttpServletResponse.SC_FORBIDDEN, "You cannot see such page");
+	    return;
+      }
+      long adminId = details.id();
       Paginator paginator = new Paginator(request, 5);
-      List<Auction> allAuctions = auctionService.findHeadersByAdminId(adminId);
-      paginator.configure(allAuctions, AUCTIONS);
-      request.setAttribute(USERNAME, admin.getName());
-      PageUtils.includeWith(request, response, PageUtils.ADMIN_PAGE);
+      List<Lot> uncommittedLots = lotService.findAllByStatus(Lot.BEFORE_AUCTION_STATUS);
+      paginator.configure(uncommittedLots, PAGE_LOTS);
+      User user = userService.findUserByUserId(adminId);
+      request.setAttribute(USERNAME, user.getName());
+      request.setAttribute(PAGE_TYPE, UserPageType.ADMIN);
+      PageUtils.includeWith(request, response, PageUtils.AUCTION_ASSIGNMENT_PAGE);
 }
 }

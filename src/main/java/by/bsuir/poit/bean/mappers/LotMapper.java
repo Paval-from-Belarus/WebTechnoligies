@@ -26,12 +26,12 @@ default Lot fromResultSet(ResultSet set) throws SQLException {
 		 .title(set.getString("title"))
 		 .status(set.getShort("status"))
 		 .startPrice(set.getDouble("start_price"))
-		 .actualPrice(set.getDouble("actual_price"))
+		 .actualPrice(set.getObject("actual_price", Double.class))
 		 .auctionTypeId(set.getLong("auction_type_id"))
 		 .sellerId(set.getLong("client_seller_id"))
-		 .customerId(set.getLong("client_customer_id"))
-		 .deliveryPointId(set.getLong("delivery_point_id"))
-		 .auctionId(set.getLong("auction_id"))
+		 .customerId(set.getObject("client_customer_id", Long.class))
+		 .deliveryPointId(set.getObject("delivery_point_id", Long.class))
+		 .auctionId(set.getObject("auction_id", Long.class))
 		 .build();
 }
 

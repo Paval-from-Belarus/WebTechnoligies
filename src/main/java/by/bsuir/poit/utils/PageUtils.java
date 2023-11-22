@@ -25,6 +25,8 @@ public static final String AUTHORIZATION_PAGE = "/auth";
 public static final String ADMIN_PAGE = "/admin";
 public static final String CLIENT_PAGE = "/client";
 public static final String USER_PAGE = "/user";
+public static final String AUCTION_ASSIGNMENT_PAGE = "/assignment";
+public static final String AUCTION = "/auction";
 //should be injected
 public static final String APPLICATION_NAME = "/jdbc-servlets";
 public static final String ERROR_REASON = "errorReasons";

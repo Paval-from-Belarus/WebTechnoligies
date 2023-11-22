@@ -30,10 +30,10 @@ default Auction fromResultSet(ResultSet set) throws SQLException {
 		 .eventDate(set.getDate("event_date"))
 		 .lastRegisterDate(set.getDate("last_register_date"))
 		 .priceStep(set.getDouble("price_step"))
-		 .auctionTypeId(set.getLong("type_id"))
+		 .auctionTypeId(set.getLong("auction_type_id"))
 		 .duration(set.getTimestamp("duration"))
 		 .membersLimit(set.getInt("members_limit"))
-		 .adminId(set.getLong("admin_id"))
+		 .adminId(set.getLong("admin_user_id"))
 		 .build();
 }
 

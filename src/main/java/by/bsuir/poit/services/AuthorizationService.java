@@ -28,4 +28,7 @@ void register(User user, String password);
 
 void verifyByUserAccess(Principal principal, long userId) throws UserAccessViolationException;
 
+void verifyByUserRole(Principal principal, short role) throws UserAccessViolationException;
+
+long getUserIdByPrincipal(Principal principal) throws UserNotFoundException;
 }

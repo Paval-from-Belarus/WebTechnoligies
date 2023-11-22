@@ -2,6 +2,7 @@ package by.bsuir.poit.servlets;
 
 import by.bsuir.poit.context.Autowired;
 import by.bsuir.poit.context.BeanUtils;
+import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.servlets.command.RequestHandlerProvider;
 import by.bsuir.poit.servlets.command.RequestMethod;
@@ -52,7 +53,12 @@ private void processRequest(HttpServletRequest request, HttpServletResponse resp
 		  RequestDispatcher dispatcher = request.getRequestDispatcher(PageUtils.ERROR_PAGE);
 		  dispatcher.forward(request, response);
 	    }
-      } catch (Throwable e) {
+
+      } catch (ResourceBusyException e) {
+	    LOGGER.error("Some resource is busy. Server cannot make response. Message={} \n stack={}", e.getMessage(), Arrays.toString(e.getStackTrace()));
+	    response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+      }
+      catch (Throwable e) {
 	    LOGGER.error("Gate controller catch exception with message ={} \n {}", e.getMessage(), Arrays.toString(e.getStackTrace()));
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
       }
