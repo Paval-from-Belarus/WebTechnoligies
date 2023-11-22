@@ -1,14 +1,8 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.Auction;
-import by.bsuir.poit.bean.AuctionBet;
-import by.bsuir.poit.bean.AuctionMember;
-import by.bsuir.poit.bean.AuctionType;
+import by.bsuir.poit.bean.*;
 import by.bsuir.poit.context.Service;
-import by.bsuir.poit.dao.AuctionBetDao;
-import by.bsuir.poit.dao.AuctionDao;
-import by.bsuir.poit.dao.AuctionMemberDao;
-import by.bsuir.poit.dao.AuctionTypeDao;
+import by.bsuir.poit.dao.*;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
@@ -23,6 +17,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Paval Shlyk
@@ -36,6 +31,7 @@ private final AuctionDao auctionDao;
 private final AuctionMemberDao auctionMemberDao;
 private final AuctionBetDao auctionBetDao;
 private final AuctionTypeDao auctionTypeDao;
+private final LotDao lotDao;
 
 @Override
 public List<Auction> findAfterEventDate(Date date) {
@@ -152,15 +148,41 @@ public void saveAuction(Principal principal, Auction auction) throws ResourceMod
 }
 
 @Override
+//@Transactional
 public void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFoundException {
+      if (bet.getLotId() == null || bet.getAuctionId() == null) {
+	    final String msg = String.format("Failed to save bet because on of the bet field is null: %s", bet);
+	    LOGGER.warn(msg);
+	    throw new ResourceModifyingException(msg);
+      }
       UserDetails details = (UserDetails) principal;
+      bet.setClientId(details.id());
       try {
-	    bet.setClientId(details.id());
+	    Lot lot = lotDao.findById(bet.getLotId()).orElseThrow(() -> newLotNotFoundException(bet.getLotId()));
+	    if (lot.getActualPrice() != null && lot.getActualPrice() > bet.getBet()) {
+		  throw newIllegalBetValue(bet);
+	    }
 	    auctionBetDao.save(bet);
+	    lot.setActualPrice(bet.getBet());
+	    lotDao.save(lot);
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to save auction bet {}", bet);
 	    throw new ResourceModifyingException(e);
       }
+}
+
+private ResourceModifyingException newIllegalBetValue(AuctionBet bet) {
+      final String msg = String.format("The given bet has invalid value %s", bet);
+      LOGGER.info(msg);
+      throw new ResourceModifyingException(msg);
+
+}
+
+private ResourceNotFoundException newLotNotFoundException(long lotId) {
+      final String msg = String.format("Failed to find lot by given id=%d", lotId);
+      LOGGER.info(msg);
+      throw new ResourceNotFoundException(msg);
+
 }
 
 private ResourceNotFoundException newAuctionTypeNotFoundException(long auctionTypeId) {

@@ -85,7 +85,7 @@
                 <%@include file="../templates/lot.jsp" %>
             </c:forEach>
         </div>
-        <c:if test="${lots.size()} > 0">
+        <c:if test="${lots.size() > 0}">
             <%@include file="../templates/page-switcher.jsp" %>
         </c:if>
     </div>

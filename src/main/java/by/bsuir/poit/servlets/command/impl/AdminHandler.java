@@ -1,23 +1,17 @@
 package by.bsuir.poit.servlets.command.impl;
 
 import by.bsuir.poit.bean.Auction;
-import by.bsuir.poit.bean.Lot;
 import by.bsuir.poit.bean.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.AuthorizationService;
-import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.services.UserService;
-import by.bsuir.poit.servlets.UserDetails;
-import by.bsuir.poit.servlets.UserPageType;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.PageUtils;
 import by.bsuir.poit.utils.Paginator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.security.Principal;
 import java.util.List;

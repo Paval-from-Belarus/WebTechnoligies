@@ -22,7 +22,7 @@ List<Lot> findAllByAuctionId(long auctionId);
 List<Lot> findAllBySellerId(long sellerId);
 
 List<Lot> findAllByStatus(short status);
-
+List<Lot> findAllByStatusOrderByStartingPriceDesc(short status);
 List<Lot> findAllByCustomerId(long customerId);
 
 Lot save(Lot lot);

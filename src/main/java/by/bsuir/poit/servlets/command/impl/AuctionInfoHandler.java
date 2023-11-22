@@ -35,7 +35,7 @@ private static final Logger LOGGER = LogManager.getLogger(AuctionInfoHandler.cla
 public static final String AUCTION_ID_PARAMETER = "auction_id";
 //the parameters for jsp page
 //the common info about auction
-public static final String AUCTION_TYPE_NAME = "auctionTypeName";
+public static final String AUCTION_TYPE_ID = "auctionType";
 public static final String AUCTION_ID = "auctionId";
 public static final String EVENT_DATE = "eventDate";
 public static final String MEMBER_LIMIT = "memberLimit";
@@ -74,7 +74,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 		  throw new IllegalStateException(msg);
 	    }
 	    List<Lot> lots = lotService.findAllByAuction(auction.getId());
-	    request.setAttribute(AUCTION_TYPE_NAME, type.getId());
+	    request.setAttribute(AUCTION_TYPE_ID, type.getId());
 	    request.setAttribute(EVENT_DATE, auction.getLastRegisterDate());
 	    if (auction.getMembersLimit() != null) {
 		  request.setAttribute(MEMBER_LIMIT, auction.getMembersLimit());
@@ -88,6 +88,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 	    if (handler != null) {
 		  handler.accept(request, auction);
 	    }
+	    PageUtils.includeWith(request, response, PageUtils.AUCTION);
       } catch (ResourceNotFoundException e) {
 	    String msg = String.format("The auction by given id=%s is not present", auctionId);
 	    LOGGER.info(msg);

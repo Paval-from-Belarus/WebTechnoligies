@@ -3,6 +3,8 @@ package by.bsuir.poit.servlets.command.impl;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.servlets.command.RequestHandler;
+import by.bsuir.poit.utils.ControllerUtils;
+import by.bsuir.poit.utils.PageUtils;
 import by.bsuir.poit.utils.ParserUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +18,7 @@ import java.util.Optional;
  * @author Paval Shlyk
  * @since 21/11/2023
  */
-@RequestHandlerDefinition(urlPatterns = "/log/delete")
+@RequestHandlerDefinition(urlPatterns = "/lot/delete")
 @RequiredArgsConstructor
 public class LotDeletionHandler implements RequestHandler {
 private static final Logger LOGGER = LogManager.getLogger(LotDeletionHandler.class);
@@ -34,7 +36,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
       if (!isDeleted) {
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
       } else {
-	    response.setStatus(HttpServletResponse.SC_OK);
+	    PageUtils.redirectTo(response, PageUtils.USER_PAGE);
       }
 }
 }

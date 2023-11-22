@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
          pageEncoding="utf-8" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${lang}"/>
 <fmt:setBundle basename="localization"/>
 <html>
@@ -110,7 +110,7 @@
                     <tr>
                         <td colspan="2">
                             <div class="auction-info-link">
-                                <a href="${pageContext.request.contextPath}/api/auction/info">
+                                <a href="${pageContext.request.contextPath}/api/auction/info?auction_id=${auction.getId()}">
                                     <fmt:message key="label.auction-link"/>
                                 </a>
                             </div>
@@ -119,7 +119,7 @@
                     <tr>
                         <td colspan="2">
                             <div class="auction-lot-link">
-                                <a href="${pageContext.request.contextPath}/api/auction /assign">
+                                <a href="${pageContext.request.contextPath}/api/auction/assign">
                                     <fmt:message key="label.auction-assign-lot"/>
                                 </a>
                             </div>
@@ -127,7 +127,7 @@
                     </tr>
                 </table>
             </c:forEach>
-            <c:if test="${auctionList.size()} > 0">
+            <c:if test="${auctionList.size() > 0}">
                 <%@include file="../templates/page-switcher.jsp" %>
             </c:if>
         </div>

@@ -4,10 +4,7 @@ import by.bsuir.poit.bean.Auction;
 import by.bsuir.poit.bean.AuctionBet;
 import by.bsuir.poit.bean.AuctionMember;
 import by.bsuir.poit.bean.AuctionType;
-import by.bsuir.poit.dao.AuctionBetDao;
-import by.bsuir.poit.dao.AuctionDao;
-import by.bsuir.poit.dao.AuctionMemberDao;
-import by.bsuir.poit.dao.AuctionTypeDao;
+import by.bsuir.poit.dao.*;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
@@ -31,6 +28,7 @@ private AuctionDao auctionDao = mock(AuctionDao.class);
 private AuctionMemberDao auctionMemberDao = mock(AuctionMemberDao.class);
 private AuctionBetDao auctionBetDao = mock(AuctionBetDao.class);
 private AuctionTypeDao auctionTypeDao = mock(AuctionTypeDao.class);
+private LotDao lotDao = mock(LotDao.class);
 private AuctionServiceImpl auctionService;
 
 @BeforeEach
@@ -39,9 +37,11 @@ public void initMockDao() {
       auctionMemberDao = mock(AuctionMemberDao.class);
       auctionBetDao = mock(AuctionBetDao.class);
       auctionTypeDao = mock(AuctionTypeDao.class);
+      lotDao = mock(LotDao.class);
       auctionService = new AuctionServiceImpl(
 	  auctionDao, auctionMemberDao,
-	  auctionBetDao, auctionTypeDao);
+	  auctionBetDao, auctionTypeDao,
+	  lotDao);
 }
 
 @Test

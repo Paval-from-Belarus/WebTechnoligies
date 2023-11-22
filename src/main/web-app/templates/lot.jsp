@@ -3,7 +3,7 @@
         ${lot.getTitle()}
     </div>
     <tbody class="lot-info">
-    <c:if test="${pageType} == UserPageType.ADMIN">
+    <c:if test="${pageType == 1}">
         <tr>
             <th>
                 <fmt:message key="lot.id"/>
@@ -13,7 +13,7 @@
             </td>
         </tr>
     </c:if>
-    <c:if test="${lot.getCustomerId()} != null">
+    <c:if test="${not empty lot.getCustomerId()}">
         <tr>
             <th>
                 <fmt:message key="lot.customer-title"/>
@@ -26,15 +26,14 @@
             </td>
         </tr>
     </c:if>
-
-    <c:if test="${pageType} == UserPageType.CLIENT">
+    <c:if test="${pageType == 0}">
         <tr>
             <th>
                 <fmt:message key="lot.auction-title"/>
             </th>
             <td>
                 <c:choose>
-                    <c:when test="${lot.getAuctionId()} == null">
+                    <c:when test="${empty lot.getAuctionId()}">
                         <div>
                             <a href="${pageContext.request.contextPath}/api/lot/delete?lot_id=${lot.getId()}">
                                 <fmt:message key="lot.delete"/>
@@ -68,7 +67,7 @@
             ${lot.getStartPrice()}
         </td>
     </tr>
-    <c:if test="${lot.getActualPrice() != null}">
+    <c:if test="${not empty lot.getActualPrice()}">
         <tr class="lot-actual-price">
             <th class="lot-actual-price-title">
                 <fmt:message key="lot.actual-price"/>
@@ -78,7 +77,7 @@
             </td>
         </tr>
     </c:if>
-    <c:if test="${feedbacks.get(lot)} != null">
+    <c:if test="${not empty feedbacks} && ${not empty feedbacks.get(lot)}">
         <tr class="lot-ranking">
             <th class="lot-ranking-title">
                 <fmt:message key="lot.ranking"/>

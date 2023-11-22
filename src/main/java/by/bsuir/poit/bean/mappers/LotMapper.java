@@ -2,6 +2,8 @@ package by.bsuir.poit.bean.mappers;
 
 import by.bsuir.poit.bean.EnglishLot;
 import by.bsuir.poit.bean.Lot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
@@ -17,6 +19,7 @@ import java.sql.SQLException;
  */
 @Mapper(unmappedSourcePolicy = ReportingPolicy.ERROR, componentModel = MappingConstants.ComponentModel.JAKARTA)
 public interface LotMapper extends ResultSetMapper<Lot> {
+
 EnglishLot updateEnglishWithParent(@MappingTarget EnglishLot englishLot, Lot lot);
 
 @Override

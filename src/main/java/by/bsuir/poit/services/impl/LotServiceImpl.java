@@ -32,6 +32,16 @@ private final LotDao lotDao;
 private final DeliveryPointDao deliveryPointDao;
 
 @Override
+public List<Lot> findAllBeforeAuctionLots() {
+      try {
+	    return lotDao.findAllByStatusOrderByStartingPriceDesc(Lot.BEFORE_AUCTION_STATUS);
+      } catch (DataAccessException e) {
+	    LOGGER.error("Failed to fetch lots by before_auction status");
+	    throw new DataAccessException(e);
+      }
+}
+
+@Override
 public List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException {
       try {
 	    return lotDao.findAllBySellerId(clientId);

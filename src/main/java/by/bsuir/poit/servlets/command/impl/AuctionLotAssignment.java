@@ -6,7 +6,7 @@ import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.services.UserService;
 import by.bsuir.poit.servlets.UserDetails;
-import by.bsuir.poit.servlets.UserPageType;
+import by.bsuir.poit.servlets.PageType;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.PageUtils;
 import by.bsuir.poit.utils.Paginator;
@@ -42,11 +42,12 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
       }
       long adminId = details.id();
       Paginator paginator = new Paginator(request, 5);
-      List<Lot> uncommittedLots = lotService.findAllByStatus(Lot.BEFORE_AUCTION_STATUS);
+      List<Lot> uncommittedLots = lotService.findAllBeforeAuctionLots();
       paginator.configure(uncommittedLots, PAGE_LOTS);
       User user = userService.findUserByUserId(adminId);
       request.setAttribute(USERNAME, user.getName());
-      request.setAttribute(PAGE_TYPE, UserPageType.ADMIN);
+      request.setAttribute(PAGE_TYPE, PageType.ADMIN.ordinal());
+      //recursively returns to the same page
       PageUtils.includeWith(request, response, PageUtils.AUCTION_ASSIGNMENT_PAGE);
 }
 }

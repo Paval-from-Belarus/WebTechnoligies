@@ -16,6 +16,8 @@ import java.util.List;
  * @since 27/10/2023
  */
 public interface LotService {
+List<Lot> findAllBeforeAuctionLots();
+
 List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException;
 
 List<Lot> findAllByStatus(short status);

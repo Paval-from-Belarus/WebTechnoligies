@@ -99,6 +99,22 @@ public List<Lot> findAllByStatus(short status) {
 }
 
 @Override
+public List<Lot> findAllByStatusOrderByStartingPriceDesc(short status) {
+      List<Lot> lots;
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from LOT where STATUS = ?" +
+									 "ORDER BY START_PRICE DESC ")) {
+	    statement.setShort(1, status);
+	    lots = fetchListAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+      return lots;
+
+}
+
+@Override
 public List<Lot> findAllByCustomerId(long customerId) {
       List<Lot> lots;
       try (Connection connection = pool.getConnection();
