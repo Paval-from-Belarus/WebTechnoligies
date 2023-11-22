@@ -44,22 +44,25 @@ public void doFilter(HttpServletRequest request, HttpServletResponse response, F
 	    }
 	    session = request.getSession(true);
 	    session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL);
-	    List<Cookie> cookies = List.of(
-		new Cookie(AuthorizationUtils.COOKIE_USER_ID, String.valueOf(user.getId())),
-		new Cookie(AuthorizationUtils.COOKIE_USER_ROLE, String.valueOf(user.getRole()))
-	    );
-	    for (Cookie cookie : request.getCookies()) {
-		  if (cookie.getName().equals(AuthorizationUtils.COOKIE_USER_ID) ||
-			  cookie.getName().equals(AuthorizationUtils.COOKIE_USER_ROLE)) {
-			cookie.setMaxAge(0);
-		  }
-	    }
-	    for (Cookie cookie : cookies) {
-		  cookie.setPath(PageUtils.APPLICATION_NAME);
-		  response.addCookie(cookie);
-	    }
-
-	    cookies.forEach(response::addCookie);
+	    session.setAttribute(AuthorizationUtils.COOKIE_USER_ID, String.valueOf(user.getId()));
+	    session.setAttribute(AuthorizationUtils.COOKIE_USER_ROLE, String.valueOf(user.getRole()));
+//	    List<Cookie> cookies = List.of(
+//		new Cookie(AuthorizationUtils.COOKIE_USER_ID, String.valueOf(user.getId())),
+//		new Cookie(AuthorizationUtils.COOKIE_USER_ROLE, String.valueOf(user.getRole()))
+//	    );
+//	    for (Cookie cookie : request.getCookies()) {
+//		  if (cookie.getName().equals(AuthorizationUtils.COOKIE_USER_ID) ||
+//			  cookie.getName().equals(AuthorizationUtils.COOKIE_USER_ROLE)) {
+//			cookie.setMaxAge(-1);
+//		  }
+//	    }
+//	    for (Cookie cookie : cookies) {
+//		  cookie.setPath(PageUtils.APPLICATION_NAME);
+//		  cookie.setMaxAge(MAX_INACTIVE_INTERVAL);
+//		  response.addCookie(cookie);
+//	    }
+//
+//	    cookies.forEach(response::addCookie);
 	    LOGGER.trace("User with id {} was authorized", user.getId());
       } catch (Exception e) {
 	    LOGGER.warn(e);

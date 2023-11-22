@@ -3,6 +3,7 @@ package by.bsuir.poit.services;
 import by.bsuir.poit.bean.ClientFeedback;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Paval Shlyk
@@ -11,7 +12,7 @@ import java.util.List;
 public interface ClientFeedbackService {
 @Deprecated
 List<ClientFeedback> findAllByLotId(long lotId);
-ClientFeedback findByLotIdAndClientTargetId(long lotId, long clientTargetId);
-ClientFeedback findByLotIdAndClientAuthorId(long lotId, long clientAuthorId);
+Optional<ClientFeedback> findByLotIdAndClientTargetId(long lotId, long clientTargetId);
+Optional<ClientFeedback> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId);
 List<ClientFeedback> findAllBySellerId(long clientId);
 }

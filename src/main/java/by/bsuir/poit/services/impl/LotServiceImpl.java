@@ -12,10 +12,12 @@ import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
+import by.bsuir.poit.servlets.UserDetails;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -87,8 +89,12 @@ public DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundE
 }
 
 @Override
-public void save(Lot lot) throws ResourceModifyingException {
+public void save(Principal principal, Lot lot) throws ResourceModifyingException {
       try {
+	    UserDetails details = (UserDetails) principal;
+	    assert details != null;
+	    lot.setStatus(Lot.BEFORE_AUCTION_STATUS);
+	    lot.setSellerId(details.id());
 	    lotDao.save(lot);
       } catch (DataAccessException e) {
 	    LOGGER.error(e);

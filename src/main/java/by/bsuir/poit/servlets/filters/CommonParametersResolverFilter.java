@@ -3,10 +3,7 @@ package by.bsuir.poit.servlets.filters;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -35,18 +32,15 @@ private final Map<String, String> nextLanguageMap = Map.of(
 @Override
 protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
       String langParameter = request.getParameter(LANGUAGE);
-      Cookie[] cookies = request.getCookies();
-      if (cookies == null) {
-	    cookies = new Cookie[0];
+      HttpSession session = request.getSession();
+      if (session == null) {
+	    chain.doFilter(request, response);
+	    return;
       }
-      Optional<Cookie> optionalLangCookie = Arrays.stream(cookies)
-						.filter(cookie -> cookie.getName().equals(LANGUAGE))
-						.findAny();
-      if (langParameter == null && optionalLangCookie.isEmpty()) {
-	    Cookie cookie = new Cookie(LANGUAGE, DEFAULT_LANGUAGE);
+      if (langParameter == null && session.getAttribute(LANGUAGE) == null) {
+	    session.setAttribute(LANGUAGE, DEFAULT_LANGUAGE);
 	    request.setAttribute(LANGUAGE, DEFAULT_LANGUAGE);
 	    request.setAttribute(NEXT_LANGUAGE, nextLanguageMap.get(DEFAULT_LANGUAGE));
-	    response.addCookie(cookie);
 	    chain.doFilter(request, response);
 	    return;
       }
@@ -54,16 +48,13 @@ protected void doFilter(HttpServletRequest request, HttpServletResponse response
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND, "No localization for given parameter");
 	    return;
       }
-      Cookie langCookie;
       if (langParameter != null) {
-	    optionalLangCookie.ifPresent(oldCookie -> oldCookie.setMaxAge(0));
-	    langCookie = new Cookie(LANGUAGE, langParameter);
-	    response.addCookie(langCookie);
+	    session.setAttribute(LANGUAGE, langParameter);
       } else {
-	    langCookie = optionalLangCookie.get();
+	    langParameter = (String) session.getAttribute(LANGUAGE);
       }
-      request.setAttribute(LANGUAGE, langCookie.getValue());
-      request.setAttribute(NEXT_LANGUAGE, nextLanguageMap.get(langCookie.getValue()));
+      request.setAttribute(LANGUAGE, langParameter);
+      request.setAttribute(NEXT_LANGUAGE, nextLanguageMap.get(langParameter));
       chain.doFilter(request, response);
 }
 }

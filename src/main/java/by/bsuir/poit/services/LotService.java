@@ -6,7 +6,9 @@ import by.bsuir.poit.bean.Lot;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
+import jakarta.validation.constraints.NotNull;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -24,7 +26,7 @@ EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException;
 
 DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundException;
 
-void save(Lot lot) throws ResourceModifyingException;
+void save(@NotNull Principal principal, Lot lot) throws ResourceModifyingException;
 
 void updateLotAuction(long lotId, long auctionId) throws ResourceNotFoundException;
 

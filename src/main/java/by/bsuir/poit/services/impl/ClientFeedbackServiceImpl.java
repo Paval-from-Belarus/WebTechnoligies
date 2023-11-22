@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Paval Shlyk
@@ -27,13 +28,13 @@ public List<ClientFeedback> findAllByLotId(long lotId) {
 }
 
 @Override
-public ClientFeedback findByLotIdAndClientTargetId(long lotId, long clientTargetId) {
-      return clientFeedbackDao.findByIdAndTargetId(lotId, clientTargetId).orElseThrow(() -> newFeedbackNotFoundException("by lotId=%d and targetId=%d", lotId, clientTargetId));
+public Optional<ClientFeedback> findByLotIdAndClientTargetId(long lotId, long clientTargetId) {
+      return clientFeedbackDao.findByIdAndTargetId(lotId, clientTargetId);
 }
 
 @Override
-public ClientFeedback findByLotIdAndClientAuthorId(long lotId, long clientAuthorId) {
-      return clientFeedbackDao.findByIdAndAuthorId(lotId, clientAuthorId).orElseThrow(() -> newFeedbackNotFoundException("by lotId=%d and authorId=%d", lotId, clientAuthorId));
+public Optional<ClientFeedback> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId) {
+      return clientFeedbackDao.findByIdAndAuthorId(lotId, clientAuthorId);
 }
 
 @Override

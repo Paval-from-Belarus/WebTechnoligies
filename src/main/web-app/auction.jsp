@@ -58,23 +58,23 @@
     <c:forEach var="lot" items="${lotList}>">
     <div class="client-lot">
         <div class="lot-title">
-                ${lot.getTitle}
+                ${lot.getTitle()}
         </div>
         <div class="lot-status">
-                ${pageContext.request.lotStatuses.get(lot.getStatus)}
+                ${pageContext.request.lotStatuses.get(lot.getStatus())}
         </div>
         <div class="lot-start-price">
-                ${lot.getStartPrice}
+                ${lot.getStartPrice()}
         </div>
         <div class="lot-seller">
-            <a href="${pageContext.request.contextPath}/api/client?clientId=${lot.getCustomerId}">
+            <a href="${pageContext.request.contextPath}/api/client?clientId=${lot.getCustomerId()}">
                 Click to see seller page
             </a>
         </div>
         <c:choose>
-        <c:when test="${lot.getCustomerId != null}">
+        <c:when test="${lot.getCustomerId() != null}">
         <div class="lot-customer">
-            <a href="${pageContext.request.contextPath}/api/client?clientId=${lot.getCustomerId}">
+            <a href="${pageContext.request.contextPath}/api/client?clientId=${lot.getCustomerId()}">
                 Click to see customer page
             </a>
         </div>
@@ -86,7 +86,7 @@
             </label>
             <input id="bet" type="number" step="${priceStep}" value/>
             <input id="auction_id" type="hidden" value="${auctionId}"/>
-            <input id="lot_id" , type="hidden" value="${lot.getId}"/>
+            <input id="lot_id" , type="hidden" value="${lot.getId()}"/>
         </form>
         </c:otherwise>
         </c:choose>

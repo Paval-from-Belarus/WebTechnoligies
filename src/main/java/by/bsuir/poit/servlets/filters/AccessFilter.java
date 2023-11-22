@@ -43,7 +43,7 @@ protected void doFilter(HttpServletRequest request, HttpServletResponse response
 	    LOGGER.trace("Redirection to start page");
 	    return;
       }
-      if (isRequestToUserPage(requestURI)) {
+      if (principal != null && isRequestToUserPage(requestURI)) {
 	    LOGGER.trace("Redirection to corresponding user page");
 	    PageUtils.redirectTo(response, pageByUserRole(principal));
 	    return;

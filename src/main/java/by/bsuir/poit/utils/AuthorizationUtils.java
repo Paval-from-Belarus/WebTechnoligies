@@ -70,7 +70,7 @@ public static String bytesToString(byte[] bytes) {
 public static void removePrincipalCookies(Cookie[] cookies, HttpServletResponse response) {
       for (Cookie cookie : cookies) {
 	    if (AuthorizationUtils.isPrincipalCookie(cookie)) {
-		  cookie.setMaxAge(0);
+		  cookie.setMaxAge(-1);
 		  response.addCookie(cookie);
 	    }
       }

@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -123,13 +120,29 @@ public Lot save(Lot lot) throws DataModifyingException {
 									 "values (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
 	    statement.setString(1, lot.getTitle());
 	    statement.setDouble(2, lot.getStartPrice());
-	    statement.setDouble(3, lot.getActualPrice());
+	    if (lot.getActualPrice() == null) {
+		  statement.setNull(3, Types.DECIMAL);
+	    } else {
+		  statement.setDouble(3, lot.getActualPrice());
+	    }
 	    statement.setLong(4, lot.getAuctionTypeId());
 	    statement.setShort(5, lot.getStatus());
 	    statement.setLong(6, lot.getSellerId());
-	    statement.setLong(7, lot.getCustomerId());
-	    statement.setLong(8, lot.getDeliveryPointId());
-	    statement.setLong(9, lot.getAuctionId());
+	    if (lot.getCustomerId() == null) {
+		  statement.setNull(7, Types.BIGINT);
+	    } else {
+		  statement.setLong(7, lot.getCustomerId());
+	    }
+	    if (lot.getDeliveryPointId() == null) {
+		  statement.setNull(8, Types.BIGINT);
+	    } else {
+		  statement.setLong(8, lot.getDeliveryPointId());
+	    }
+	    if (lot.getAuctionId() == null) {
+		  statement.setNull(9, Types.BIGINT);
+	    } else {
+		  statement.setLong(9, lot.getAuctionId());
+	    }
 	    if (statement.executeUpdate() != 1) {
 		  final String msg = String.format("Failed to insert lot entity into table: %s", lot);
 		  LOGGER.error(msg);

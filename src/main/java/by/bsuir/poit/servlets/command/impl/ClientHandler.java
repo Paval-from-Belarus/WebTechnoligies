@@ -64,8 +64,9 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
       //easily may be replaced by Hibernate lazy (or not) fetching
       Map<Lot, ClientFeedback> feedbacks = new HashMap<>();
       for (Lot lot : lots) {
-	    ClientFeedback feedback = clientFeedbackService.findByLotIdAndClientTargetId(lot.getId(), clientId);
-	    feedbacks.put(lot, feedback);
+	    clientFeedbackService
+		.findByLotIdAndClientTargetId(lot.getId(), clientId)
+		.ifPresent(feedback -> feedbacks.put(lot, feedback));
       }
       Client client = userService.findClientByUserId(clientId);
       LOGGER.trace("Following client will be depicted: {}", client.toString());
