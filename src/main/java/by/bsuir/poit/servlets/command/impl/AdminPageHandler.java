@@ -17,6 +17,8 @@ import java.security.Principal;
 import java.util.List;
 
 /**
+ * This class is responsible for handling requests related to the admin page. It retrieves the user principal from the request, verifies the user's access level, and retrieves the admin user information. It also provides pagination functionality for displaying a list of auctions associated with the admin user. The admin username is set as a request attribute, and the admin page is included in the response.
+ *
  * @author Paval Shlyk
  * @since 08/11/2023
  */
@@ -28,6 +30,7 @@ public static final String USERNAME = "username";
 private final AuthorizationService authorizationService;
 private final UserService userService;
 private final AuctionService auctionService;
+
 @Override
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       Principal principal = request.getUserPrincipal();

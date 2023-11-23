@@ -22,6 +22,13 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 /**
+ * This class is responsible for handling requests related to auction assignment page.
+ * It retrieves the necessary data from the database and sets the attributes in the request object.
+ * If the user is not an admin, it sends a forbidden error response.
+ * It uses {@link Paginator} to paginate the list of lots.
+ * The assigned auction and the admin user details are set as attributes in the request object.
+ * Finally, it includes the auction assignment page in the response.
+ *
  * @author Paval Shlyk
  * @since 22/11/2023
  */

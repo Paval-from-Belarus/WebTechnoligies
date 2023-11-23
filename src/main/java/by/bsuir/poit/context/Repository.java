@@ -1,6 +1,8 @@
 package by.bsuir.poit.context;
 
 /**
+ * Stereotype annotation for dao beans.
+ * Alternative to Spring {@code @Repository} annotation
  * @author Paval Shlyk
  * @since 30/10/2023
  */

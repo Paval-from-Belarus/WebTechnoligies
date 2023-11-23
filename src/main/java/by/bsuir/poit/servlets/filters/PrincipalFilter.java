@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * Build principal by session attributes supplied from {@link AuthorizationFilter}
+ *
  * @author Paval Shlyk
  * @since 07/11/2023
  */

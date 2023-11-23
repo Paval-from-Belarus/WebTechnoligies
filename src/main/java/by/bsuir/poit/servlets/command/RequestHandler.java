@@ -4,8 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * The context automatically search each bean annotated with <code>@RequestHandlerDefinition</code>
- * and add to <code>Map</code>
+ * The context automatically search each bean annotated with {@link by.bsuir.poit.context.RequestHandlerDefinition}
+ * and supposed to be injected into {@link by.bsuir.poit.context.RequestHandlerMap}
+ *
  * @author Paval Shlyk
  * @since 27/10/2023
  */

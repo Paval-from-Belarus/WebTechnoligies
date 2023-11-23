@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * The filter resolve common for each page attributes (such as language)
+ *
  * @author Paval Shlyk
  * @since 21/11/2023
  */

@@ -1,8 +1,6 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.bean.Lot;
 import com.google.gson.Gson;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

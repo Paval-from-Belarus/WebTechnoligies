@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This is a utility class that provides various helper methods and constants for handling pages in a web application.
+ *
  * @author Paval Shlyk
  * @since 23/10/2023
  */
@@ -43,6 +45,14 @@ public static final Map<Short, String> LOT_STATUSES_MAP = Map.of(
     Lot.DELIVERIED_STATUS, "The lot is deliveried to customer"
 );
 
+/**
+ * Sends an error response to the client with the specified error code and messages.
+ *
+ * @param request   the HttpServletRequest object
+ * @param response  the HttpServletResponse object
+ * @param errorCode the error code
+ * @param messages  the error messages
+ */
 public static void sendError(HttpServletRequest request, HttpServletResponse response, int errorCode, String... messages) {
       final String REASON_LBL = "reason_";
       Map<String, String> map = new HashMap<>();
@@ -60,6 +70,14 @@ public static void sendError(HttpServletRequest request, HttpServletResponse res
       }
 
 }
+
+/**
+ * Determines the {@link UserPageType} based on the given role.
+ *
+ * @param role the user role
+ * @return the UserPageType corresponding to the role
+ * @throws IllegalStateException if an invalid role is passed
+ */
 public static UserPageType typeOfRole(short role) {
       if (role == User.ADMIN) {
 	    return UserPageType.ADMIN;
@@ -69,15 +87,41 @@ public static UserPageType typeOfRole(short role) {
       }
       throw new IllegalStateException("The invalid role was passed to build UserPageType");
 }
+
+/**
+ * Redirects the client to the specified servlet page.
+ *
+ * @param response    the HttpServletResponse object
+ * @param servletPage the servlet page URL
+ * @throws IOException if an I/O error occurs
+ */
 public static void redirectTo(HttpServletResponse response, String servletPage) throws IOException {
       response.sendRedirect(APPLICATION_NAME + servletPage);
 }
 
+/**
+ * Forwards the request and response objects to the specified servlet page.
+ *
+ * @param request     the HttpServletRequest object
+ * @param response    the HttpServletResponse object
+ * @param servletPage the servlet page URL
+ * @throws IOException      if an I/O error occurs
+ * @throws ServletException if a servlet error occurs
+ */
 public static void forwardTo(HttpServletRequest request, HttpServletResponse response, String servletPage) throws IOException, ServletException {
       RequestDispatcher dispatcher = request.getRequestDispatcher(servletPage);
       dispatcher.forward(request, response);
 }
 
+/**
+ * Includes the specified servlet page in the response.
+ *
+ * @param request     the HttpServletRequest object
+ * @param response    the HttpServletResponse object
+ * @param servletPage the servlet page URL
+ * @throws ServletException if a servlet error occurs
+ * @throws IOException      if an I/O error occurs
+ */
 public static void includeWith(HttpServletRequest request, HttpServletResponse response, String servletPage) throws ServletException, IOException {
       RequestDispatcher dispatcher = request.getRequestDispatcher(servletPage);
       dispatcher.include(request, response);

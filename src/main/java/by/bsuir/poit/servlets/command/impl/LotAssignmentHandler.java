@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
+ * Responsible for supplement of attributes assignment jsp page (page where admin can assign a lot to chosen auction)
  * @author Paval Shlyk
  * @since 23/11/2023
  */

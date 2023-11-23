@@ -6,6 +6,7 @@
 <fmt:setBundle basename="localization"/>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>
         <fmt:message key="label.user-page-name"/>
     </title>

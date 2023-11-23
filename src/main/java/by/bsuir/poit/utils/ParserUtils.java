@@ -36,6 +36,12 @@ public static final String LOT_SELLER_ID = "seller_id";
 public static final String LOT_CUSTOMER_ID = "lot_customer_id";
 public static final String LOT_START_PRICE = "lot_start_price";
 
+/**
+ * Parses the lot's information from the HttpServletRequest.
+ *
+ * @param request The HttpServletRequest object.
+ * @return The parsed Lot object.
+ */
 public static Lot parseLot(HttpServletRequest request) {
       var builder = Lot.builder();//the setting to initial status on parse stage is not a valid
       try {
@@ -67,6 +73,12 @@ public static final String AUCTION_ID = "auction_id";
 public static final String PRICE_STEP = "price_step";
 public static final String EVENT_DATE = "event_date";
 
+/**
+ * Parses the auction bet information from the HttpServletRequest.
+ *
+ * @param request The HttpServletRequest object.
+ * @return The parsed AuctionBet object.
+ */
 public static AuctionBet parseBet(HttpServletRequest request) {
       var builder = AuctionBet.builder();
       try {
@@ -87,6 +99,12 @@ public static AuctionBet parseBet(HttpServletRequest request) {
 private static final SimpleDateFormat SIMPLE_DATE_FORMAT =
     new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
+/**
+ * Parses the auction information from the HttpServletRequest.
+ *
+ * @param request The HttpServletRequest object.
+ * @return The parsed Auction object.
+ */
 public static Auction parseAuction(HttpServletRequest request) {
       var builder = Auction.builder();
       try {
@@ -115,6 +133,15 @@ public static <T extends Number> Optional<T> parseRequest(Class<T> clazz, HttpSe
       return Optional.of(parse(clazz, request.getParameter(parameter)));
 }
 
+/**
+ * Parses the request parameter to the specified data type.
+ *
+ * @param clazz The data type class.
+ * @param value The value which should be parsed
+ * @param <T>   The data type.
+ * @return The parsed value as Optional.
+ * @throws NumberFormatException if the parsing fails.
+ */
 @SuppressWarnings("unchecked")
 private static <T extends Number> T parse(Class<T> clazz, String value) throws NumberFormatException {
       final Map<Class<?>, Function<String, ?>> map = Map.of(
@@ -129,6 +156,14 @@ private static <T extends Number> T parse(Class<T> clazz, String value) throws N
       return (T) parser.apply(value);
 }
 
+/**
+ * Parses the string value to the specified enum type.
+ *
+ * @param clazz The enum type class.
+ * @param value The string value.
+ * @param <T>   The enum type.
+ * @return The parsed enum value as Optional.
+ */
 public static <T extends Enum<?>> Optional<T> parseEnum(Class<T> clazz, String value) {
       if (value == null) {
 	    return Optional.empty();

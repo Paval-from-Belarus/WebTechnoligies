@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This class is responsible for handling request to client page.
+ * It aggregates information and supplies really jsp-servlet page to build web-client view
  * @author Paval Shlyk
  * @since 07/11/2023
  */

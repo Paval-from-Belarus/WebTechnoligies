@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * This filter accomplishes pre-authorization work.
+ * Truly, exactly filter configure Principal and check validness of credentials.
+ *
  * @author Paval Shlyk
  * @since 23/10/2023
  */

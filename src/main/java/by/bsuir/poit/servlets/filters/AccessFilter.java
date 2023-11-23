@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * This filter verifies access to application endpoints (such kind of WebSecurityConfig).
+ * There is a list of available endpoints for unauthorized access (generally, registration/authorization endpoints; resource endpoints)
  * @author Paval Shlyk
  * @since 07/11/2023
  */

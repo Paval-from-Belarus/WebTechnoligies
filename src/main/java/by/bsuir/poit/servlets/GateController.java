@@ -24,9 +24,21 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This is a servlet that acts as a front controller for handling requests to the gate API.
+ * It processes GET and POST requests and delegates them to the appropriate request handler.
+ * The request handler is determined based on the URL mapping provided in the request.
+ * If no handler is found for the mapping, an error page is displayed.
+ * In case of any exception, an error response is sent.
+ */
 @WebServlet(name = "Gate", urlPatterns = {"/api/*"})
 public class GateController extends HttpServlet {
 private static final Logger LOGGER = LogManager.getLogger(GateController.class);
+/**
+ * Provider allow process with {@link RequestHandler} callback
+ * (alternative to the Command pattern that fully based on DI approach).
+ * The bean should be injected by {@link #init(ServletConfig)} method
+ */
 @Autowired
 private RequestHandlerProvider handlerProvider;
 
@@ -57,8 +69,7 @@ private void processRequest(HttpServletRequest request, HttpServletResponse resp
       } catch (ResourceBusyException e) {
 	    LOGGER.error("Some resource is busy. Server cannot make response. Message={} \n stack={}", e.getMessage(), Arrays.toString(e.getStackTrace()));
 	    response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-      }
-      catch (Throwable e) {
+      } catch (Throwable e) {
 	    LOGGER.error("Gate controller catch exception with message ={} \n {}", e.getMessage(), Arrays.toString(e.getStackTrace()));
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
       }
