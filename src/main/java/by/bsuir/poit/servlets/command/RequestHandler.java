@@ -11,5 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @FunctionalInterface
 public interface RequestHandler {
+
 void accept(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

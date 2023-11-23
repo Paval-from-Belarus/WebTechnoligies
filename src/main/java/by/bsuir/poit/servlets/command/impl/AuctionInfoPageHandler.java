@@ -7,8 +7,10 @@ import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.services.UserService;
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
+import by.bsuir.poit.servlets.UserDetails;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.PageUtils;
+import by.bsuir.poit.utils.Paginator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,17 +32,18 @@ import java.util.function.BiConsumer;
 
 @RequestHandlerDefinition(urlPatterns = "/auction/info")
 @RequiredArgsConstructor
-public class AuctionInfoHandler implements RequestHandler {
-private static final Logger LOGGER = LogManager.getLogger(AuctionInfoHandler.class);
+public class AuctionInfoPageHandler implements RequestHandler {
+private static final Logger LOGGER = LogManager.getLogger(AuctionInfoPageHandler.class);
 public static final String AUCTION_ID_PARAMETER = "auction_id";
 //the parameters for jsp page
 //the common info about auction
 public static final String AUCTION_TYPE_ID = "auctionType";
 public static final String AUCTION_ID = "auctionId";
+public static final String PAGE_TYPE = "pageType";
 public static final String EVENT_DATE = "eventDate";
 public static final String MEMBER_LIMIT = "memberLimit";
 public static final String PRICE_STEP = "priceStep";
-public static final String ADMIN_NAME = "adminName";
+public static final String USER_NAME = "username";
 public static final String LOT_LIST = "lotList";
 //auction specific info
 public static final String BLIND_AUCTION_BET_LIMIT = "blindAuctionBetLimit";
@@ -65,23 +68,21 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
       }
       long auctionId = optionalAuctionId.get();
       try {
+	    UserDetails details = (UserDetails) request.getUserPrincipal();
 	    Auction auction = auctionService.findById(auctionId);
 	    AuctionType type = auctionService.findTypeByAuctionId(auction.getId());
-	    User admin = userService.findUserByUserId(auction.getAdminId());
-	    if (admin.getRole() != User.ADMIN) {
-		  final String msg = String.format("User that holds auction by id=%d admin position is not admin", auction.getId());
-		  LOGGER.error(msg);
-		  throw new IllegalStateException(msg);
-	    }
-	    List<Lot> lots = lotService.findAllByAuction(auction.getId());
+	    List<Lot> allLots = lotService.findAllByAuction(auction.getId());
+	    Paginator paginator = new Paginator(request, 5);
+	    List<Lot> pageLots = paginator.configure(allLots, LOT_LIST);
 	    request.setAttribute(AUCTION_TYPE_ID, type.getId());
 	    request.setAttribute(EVENT_DATE, auction.getLastRegisterDate());
 	    if (auction.getMembersLimit() != null) {
 		  request.setAttribute(MEMBER_LIMIT, auction.getMembersLimit());
 	    }
+	    request.setAttribute(PAGE_TYPE, PageUtils.typeOfRole(details.role()).ordinal());
 	    request.setAttribute(PRICE_STEP, auction.getPriceStep());
-	    request.setAttribute(ADMIN_NAME, admin.getName());
-	    request.setAttribute(LOT_LIST, lots);
+//	    request.setAttribute(USER_NAME, user.getName());
+	    request.setAttribute(LOT_LIST, pageLots);
 	    request.setAttribute(PageUtils.LOT_STATUSES, PageUtils.LOT_STATUSES_MAP);
 	    request.setAttribute(AUCTION_ID, auction.getId());
 	    BiConsumer<HttpServletRequest, Auction> handler = requestSpecificAuctionHandlerMap.get(auction.getClass());

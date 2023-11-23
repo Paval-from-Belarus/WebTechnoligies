@@ -119,7 +119,7 @@
                     <tr>
                         <td colspan="2">
                             <div class="auction-lot-link">
-                                <a href="${pageContext.request.contextPath}/api/auction/assign">
+                                <a href="${pageContext.request.contextPath}/api/auction/assign?auction_id=${auction.getId()}">
                                     <fmt:message key="label.auction-assign-lot"/>
                                 </a>
                             </div>

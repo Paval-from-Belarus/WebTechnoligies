@@ -7,6 +7,8 @@ import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
 import by.bsuir.poit.servlets.UserDetails;
 import by.bsuir.poit.servlets.command.RequestHandler;
+import by.bsuir.poit.utils.ControllerUtils;
+import by.bsuir.poit.utils.PageUtils;
 import by.bsuir.poit.utils.ParserUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,5 +42,6 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
 	    LOGGER.error(msg);
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       }
+      PageUtils.redirectTo(response, ControllerUtils.AUCTION_ENDPOINT + "?auction_id=" + auctionBet.getAuctionId());
 }
 }

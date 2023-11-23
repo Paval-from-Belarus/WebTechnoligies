@@ -42,7 +42,7 @@
                     </c:when>
                     <c:otherwise>
                         <div class="lot-auction">
-                            <a href="${pageContext.request.contextPath}/api/auction?auctionId=${lot.getAuctionId()}">
+                            <a href="${pageContext.request.contextPath}/api/auction/info?auction_id=${lot.getAuctionId()}">
                                 <fmt:message key="lot.auction-link"/>
                             </a>
                         </div>

@@ -8,7 +8,7 @@ import by.bsuir.poit.services.ClientFeedbackService;
 import by.bsuir.poit.services.UserService;
 import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.servlets.UserDetails;
-import by.bsuir.poit.servlets.PageType;
+import by.bsuir.poit.servlets.UserPageType;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.PageUtils;
 import by.bsuir.poit.utils.Paginator;
@@ -28,8 +28,8 @@ import java.util.Map;
  */
 @RequestHandlerDefinition(urlPatterns = "/client")
 @RequiredArgsConstructor
-public class ClientHandler implements RequestHandler {
-private static final Logger LOGGER = LogManager.getLogger(ClientHandler.class);
+public class ClientPageHandler implements RequestHandler {
+private static final Logger LOGGER = LogManager.getLogger(ClientPageHandler.class);
 public static final String CLIENT_ID_PARAMETER = "client_id";
 public static final String PAGE_LOTS = "lots";
 public static final String LOTS_PER_PAGE = "lotsPerPage";
@@ -70,7 +70,7 @@ public void accept(HttpServletRequest request, HttpServletResponse response) thr
       request.setAttribute(RANKING, client.getRanking());
       request.setAttribute(ACCOUNT, client.getAccount());
       request.setAttribute(PageUtils.LOT_STATUSES, PageUtils.LOT_STATUSES_MAP);
-      request.setAttribute(PAGE_TYPE, PageType.CLIENT.ordinal());
+      request.setAttribute(PAGE_TYPE, UserPageType.CLIENT.ordinal());
       PageUtils.includeWith(request, response, PageUtils.CLIENT_PAGE);
 }
 }

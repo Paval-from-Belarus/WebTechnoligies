@@ -43,6 +43,21 @@ public Optional<EnglishLot> findEnglishLotById(long id) {
 }
 
 @Override
+public Optional<Lot> findByIdAndStatus(long id, short status) {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("select * from LOT where  LOT_ID = ? and STATUS = ?")) {
+	    statement.setLong(1, id);
+	    statement.setShort(2, status);
+	    return fetchEntityAndClose(statement, mapper);
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+
+
+}
+
+@Override
 public Optional<Lot> findById(long id) {
       Optional<Lot> lot;
       try (Connection connection = pool.getConnection();
@@ -178,6 +193,33 @@ public Lot save(Lot lot) throws DataModifyingException {
 
 }
 
+/**
+ * This method assign provided status and set auctionId to one.
+ * The current auctionId should be null.
+ * Otherwise, method falls
+ *
+ * @param lotId     the id of an existing lot
+ * @param status    new status of a lot to be assigned
+ * @param auctionId auctionId for which lot will be assigned
+ */
+@Override
+public void assignLotWithStatusToAuction(long lotId, short status, long auctionId) {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("update LOT SET STATUS = ?, AUCTION_ID = ? where LOT_ID = ? and AUCTION_ID IS NULL")) {
+	    statement.setShort(1, status);
+	    statement.setLong(2, auctionId);
+	    statement.setLong(3, lotId);
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to update lot with id=%d for given auction_id=%d", lotId, auctionId);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+}
+
 @Override
 public void delete(long lotId) throws DataAccessException, DataModifyingException {
       try (Connection connection = pool.getConnection();
@@ -239,6 +281,23 @@ public void setCustomerId(long lotId, long customerId) throws DataAccessExceptio
 		  LOGGER.error(msg);
 		  throw new DataModifyingException(msg);
 
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+}
+
+@Override
+public void setActualPrice(long lotId, double auctionPrice) throws DataAccessException {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("update LOT set ACTUAL_PRICE = ? where LOT_ID = ?")) {
+	    statement.setDouble(1, auctionPrice);
+	    statement.setLong(2, lotId);
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to update lot with id=%d to auctionPrice=%f", lotId, auctionPrice);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
 	    }
       } catch (SQLException e) {
 	    LOGGER.error(e);

@@ -22,7 +22,7 @@ import java.util.List;
  */
 @RequestHandlerDefinition(urlPatterns = "/admin")
 @RequiredArgsConstructor
-public class AdminHandler implements RequestHandler {
+public class AdminPageHandler implements RequestHandler {
 public static final String AUCTIONS = "auctionList";
 public static final String USERNAME = "username";
 private final AuthorizationService authorizationService;

@@ -64,20 +64,28 @@
         </c:if>
     </table>
 </section>
+<div>
+    The page type is ${pageType}
+</div>
 <section class="auction-lot-list">
     <c:forEach var="lot" items="${lotList}">
         <%@include file="/templates/lot.jsp" %>
-        <c:if test="${empty lot.getCustomerId()}">
+        <c:if test="${empty lot.getCustomerId() && pageType == 0}">
             <form action="${pageContext.request.contextPath}/api/auction/bet/new" method="post">
-                <label for="bet">
-                    <fmt:message key="auction-bet.input-title"/>
-                </label>
-                <input id="bet" type="number" step="${priceStep}" value/>
-                <input id="auction_id" type="hidden" value="${auctionId}"/>
-                <input id="lot_id" type="hidden" value="${lot.getId()}"/>
+                <c:choose>
+                    <c:when test="${empty lot.getActualPrice()}">
+                        <input name="bet" type="number" step="${priceStep}" value="${lot.getStartPrice() + priceStep}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <input name="bet" type="number" step="${priceStep}" value="${lot.getActualPrice() + priceStep}"/>
+                    </c:otherwise>
+                </c:choose>
+                <input name="auction_id" type="hidden" value="${auctionId}"/>
+                <input name="lot_id" type="hidden" value="${lot.getId()}"/>
             </form>
         </c:if>
     </c:forEach>
 </section>
+<%@include file="/templates/footer.jsp" %>
 </body>
 </html>

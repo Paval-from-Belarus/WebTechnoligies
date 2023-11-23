@@ -5,6 +5,7 @@ import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.*;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.services.AuctionService;
+import by.bsuir.poit.services.exception.authorization.UserAccessViolationException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
@@ -17,7 +18,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Paval Shlyk
@@ -136,6 +136,24 @@ public List<AuctionType> findAllTypes() {
 }
 
 @Override
+//@Transactional
+public void assignLot(Principal principal, long auctionId, long lotId) throws UserAccessViolationException, ResourceModifyingException {
+      try {
+	    //current no check
+	    UserDetails details = (UserDetails) principal;
+	    if (details.role() != User.ADMIN) {
+		  final String msg = String.format("Assign lot to auction can only admin. Not user with id = %s", details.role());
+		  LOGGER.info(msg);
+		  throw new UserAccessViolationException(msg);
+	    }
+	    lotDao.assignLotWithStatusToAuction(lotId, Lot.AUCTION_STATUS, auctionId);
+      } catch (DataAccessException e) {
+	    LOGGER.info("Failed to update auctionId={} and auction status for given auction={}", auctionId, lotId);
+	    throw new ResourceBusyException(e);
+      }
+}
+
+@Override
 public void saveAuction(Principal principal, Auction auction) throws ResourceModifyingException {
       try {
 	    UserDetails details = (UserDetails) principal;
@@ -163,8 +181,7 @@ public void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFound
 		  throw newIllegalBetValue(bet);
 	    }
 	    auctionBetDao.save(bet);
-	    lot.setActualPrice(bet.getBet());
-	    lotDao.save(lot);
+	    lotDao.setActualPrice(lot.getId(), bet.getBet());
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to save auction bet {}", bet);
 	    throw new ResourceModifyingException(e);

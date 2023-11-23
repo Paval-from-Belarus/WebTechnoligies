@@ -17,10 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -149,11 +146,12 @@ public List<Auction> findHeadersAllByAdminIdSortedByEventDateDesc(long adminId) 
 }
 
 @Override
+//@Transactional
 public void save(Auction auction) throws ResourceModifyingException {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION " +
 									 "(EVENT_DATE, LAST_REGISTER_DATE, PRICE_STEP, AUCTION_TYPE_ID, DURATION, MEMBERS_LIMIT, ADMIN_USER_ID) " +
-									 "VALUES(?, ?, ?, ?, ?, ?, ?)")) {
+									 "VALUES(?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
 	    statement.setDate(1, auction.getEventDate());
 	    statement.setNull(2, Types.DATE);
 //	    statement.setDate(2, auction.getLastRegisterDate());
@@ -169,10 +167,71 @@ public void save(Auction auction) throws ResourceModifyingException {
 		  LOGGER.error(msg);
 		  throw new DataModifyingException(msg);
 	    }
+	    Optional<Long> auctionId = fetchLongKeyAndClose(statement);
+	    if (auctionId.isEmpty()) {
+		  throw new IllegalStateException("The Sql Exception should be thrown before");
+	    }
+	    auction.setId(auctionId.get());
+	    if (auction.getAuctionTypeId() == AuctionType.BLITZ) {
+		  BlitzAuction blitzAuction = BlitzAuction.builder()
+						  .iterationLimit(new Timestamp(120))
+						  .memberExcludeLimit(5)
+						  .build();
+		  blitzAuction = mapper.updateBlitzWithParent(blitzAuction, auction);
+		  saveBlitz(blitzAuction);
+	    }
+	    if (auction.getAuctionTypeId() == AuctionType.BLIND) {
+		  BlindAuction blindAuction = BlindAuction.builder()
+						  .betLimit(2)
+						  .timeout(new Timestamp(12))
+						  .build();
+		  blindAuction = mapper.updateBlindWithParent(blindAuction, auction);
+		  saveBlind(blindAuction);
+	    }
       } catch (SQLException e) {
 	    LOGGER.error(e);
 	    throw new DataAccessException(e);
       }
+}
+
+private void saveBlitz(BlitzAuction auction) {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION_TYPE_BLITZ " +
+									 "(AUCTION_ID, ITERATION_TIME, MEMBERS_EXCLUDE_LIMIT) " +
+									 "values (?, ?, ?)")) {
+	    statement.setLong(1, auction.getId());
+	    statement.setTimestamp(2, auction.getIterationLimit());
+	    statement.setInt(3, auction.getMemberExcludeLimit());
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to insert blitz auction %s", auction);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+}
+
+private void saveBlind(BlindAuction auction) {
+      try (Connection connection = pool.getConnection();
+	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION_TYPE_BLIND " +
+									 "(AUCTION_ID, BET_LIMIT, TIMEOUT) " +
+									 "values (?, ?, ?)")) {
+	    statement.setLong(1, auction.getId());
+	    statement.setInt(2, auction.getBetLimit());
+	    statement.setTimestamp(3, auction.getTimeout());
+	    if (statement.executeUpdate() != 1) {
+		  final String msg = String.format("Failed to insert blind auction %s", auction);
+		  LOGGER.error(msg);
+		  throw new DataModifyingException(msg);
+	    }
+      } catch (SQLException e) {
+	    LOGGER.error(e);
+	    throw new DataAccessException(e);
+      }
+
+
 }
 
 private DataAccessException newAuctionNotFoundException(long auctionId) {

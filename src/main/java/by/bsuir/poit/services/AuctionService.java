@@ -1,6 +1,7 @@
 package by.bsuir.poit.services;
 
 import by.bsuir.poit.bean.*;
+import by.bsuir.poit.services.exception.authorization.UserAccessViolationException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
@@ -33,6 +34,8 @@ AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundException
 List<Auction> findHeadersByAdminId(long adminId) throws ResourceBusyException;
 
 List<AuctionType> findAllTypes();
+
+void assignLot(Principal principal, long auctionId, long lotId) throws UserAccessViolationException, ResourceModifyingException;
 
 void saveAuction(Principal principal, Auction auction) throws ResourceModifyingException;
 

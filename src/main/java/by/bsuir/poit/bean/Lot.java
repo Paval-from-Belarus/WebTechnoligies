@@ -17,6 +17,7 @@ import lombok.experimental.SuperBuilder;
 public class Lot {
 public static final short BLOCKED_STATUS = 1;
 public static final short BEFORE_AUCTION_STATUS = 2;
+public static final short AUCTION_STATUS = 6;
 public static final short SELL_STATUS = 3;
 public static final short SENT_STATUS = 4;
 public static final short DELIVERIED_STATUS = 5;

@@ -1,6 +1,8 @@
 package by.bsuir.poit.utils;
 
 import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.bean.User;
+import by.bsuir.poit.servlets.UserPageType;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +38,7 @@ public static final Map<Short, String> LOT_STATUSES_MAP = Map.of(
     Lot.BLOCKED_STATUS, "Blocked",
     Lot.BEFORE_AUCTION_STATUS, "Ready to auction",
     Lot.SELL_STATUS, "Customer is found",
+    Lot.AUCTION_STATUS, "The lot is placed at auction",
     Lot.SENT_STATUS, "The lot is sent to customer",
     Lot.DELIVERIED_STATUS, "The lot is deliveried to customer"
 );
@@ -57,9 +60,16 @@ public static void sendError(HttpServletRequest request, HttpServletResponse res
       }
 
 }
-
-public static void
-redirectTo(HttpServletResponse response, String servletPage) throws IOException {
+public static UserPageType typeOfRole(short role) {
+      if (role == User.ADMIN) {
+	    return UserPageType.ADMIN;
+      }
+      if (role == User.CLIENT) {
+	    return UserPageType.CLIENT;
+      }
+      throw new IllegalStateException("The invalid role was passed to build UserPageType");
+}
+public static void redirectTo(HttpServletResponse response, String servletPage) throws IOException {
       response.sendRedirect(APPLICATION_NAME + servletPage);
 }
 
