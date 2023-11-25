@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="Configurations" status="INFO" monitorInterval="5">
+    <Properties>
+        <Property name="log-path">$${env:CATALINA_BASE}/logs/jdbc-servlets</Property>
+        <Property name="archive">${log-path}/archive</Property>
+    </Properties>
+    <Appenders>
+        <Console name="ErrorOut" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%t]: %m%n"/>
+        </Console>
+        <File name="FileOut" fileName="${log-path}/server.logs">
+            <PatternLayout pattern="%d{hh:mm:s yyyy:mm:ss} %-5p [%t] %m%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="by.bsuir.poit.servlets.GateController" level="trace" additivity="false">
+            <AppenderRef ref="FileOut"/>
+        </Logger>
+        <Logger name="by.bsuir.poit.context.BeanFactory" level="trace" additivity="false">
+            <AppenderRef ref="FileOut"/>
+        </Logger>
+        <Root level="trace">
+            <AppenderRef ref="FileOut"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,173 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Main page</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="../js/navigation.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/user.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar__title" onclick="changePage('news')">
+                <div class="navbar__title-logo">
+                    <!-- <img src="img/nav-links/mascot.png" alt="Pet OS logo"> -->
+                </div>
+                <div class="navbar__title-text">
+                    <p>Applicatio name</p>
+                </div>
+            </div>
+            <div class="navbar__links-wrapper">
+                <menu class="navbar__links">
+                    <button class="navbar__link" onclick="changePage('lobby')">
+                        <!-- <img src="img/nav-links/megaphone.png" alt="megaphone" class="navbar__link-icon"> -->
+                        <div class="navbar__link-text">
+                            Main page
+                        </div>
+                    </button>
+                    <button class="navbar__link" onclick="changePage('user')">
+                        <div class="navbar__link-text">
+                            User Page
+                        </div>
+                    </button>
+                    <button class="navbar__link" onclick="changeLanguage('ru')">
+                        <div class="navbar__link-text">
+                            Change language
+                        </div>
+                    </button>
+                </menu>
+            </div>
+        </nav>
+    </header>
+    <div class="client-page__title common__title">
+        Client page
+    </div>
+    <div class="user-page__content">
+        <section class="user-info">
+            <div class="client-info__credentials">
+                <div class="common-table__title">
+                    Common client info
+                </div>
+                <table class="common-table credentials-info">
+                    <tbody class="common-table__body">
+                        <tr>
+                            <th class="select-table__item common_plain">User name</th>
+                            <td class="common_plain">Paval</td>
+                        </tr>
+                        <tr>
+                            <th class="select-table__item common_plain">Email</th>
+                            <td class="common_plain">star-war@mail.ru</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="client-info__next-lot">
+                <form id="select-table" class="form__select-table" method="post">
+                    <div class="select-table common-table">
+                      <div class="select-table__title common-table__title">
+                        Fill values to publicate new lot
+                      </div>      
+                        <table class="select-table__body common-table__body">
+                        <tbody>
+                            <tr>
+                                <th class="select-table__item common_plain">
+                                    Lot title
+                                </th>
+                                <td>
+                                    <input class="select-table__selector" name="lot_title"type="text" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="select-table__item common_plain">
+                                    Start price
+                                </th>
+                                <td>
+                                    <input name="lot_start_price select-table__selector" type="number" step="0.01" required>
+                                </td>
+                            </tr>
+                          <tr>
+                            <th class="select-table__item common__plain">
+                              Auction type
+                            </th>
+                            <td>
+                              <select id="auction_type_id" name="auction_type_id" class="select-table__selector button-bordered">
+                                <option value="1" selected="">English</option>
+                                <option value="2">Blind</option>
+                                <option value="3">Blitz</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">
+                              <input class="select-table__accept button-bordered" type="submit" value="Submit">
+                            </td>
+                          </tr>
+                      </tbody></table>
+                    </div>
+                  </form>
+            </div>
+        </section>
+        <section class="client-lot__history">
+            <div class="client-lot-list">
+                <table class="user-lot common-block">
+                    <div class="lot-title">
+                        Lot-title
+                    </div>
+                    <tbody class="lot-info">
+                        <tr>
+                            <th>
+                                Customer
+                            </th>
+                            <td>
+                                <a href="/customer" class="lot-action common-button">customer</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Auction
+                            </th>
+                            <td>
+                                <a href="/auction" class="lot-action common-button">visit auction</a>
+                            </td>
+                        </tr>
+                        <tr class="lot-status">
+                            <th>Lot status</th>
+                            <td>Status value</td>
+                        </tr>
+                        <tr class="lot-start-price">
+                            <th class="lot-start-price-title">
+                                start-price
+                            </th>
+                            <td class="lot-start-price-value">
+                                0.123$
+                            </td>
+                        </tr>
+                        <tr class="lot-actual-price">
+                            <th class="lot-actual-price-title">
+                                actual-price
+                            </th>
+                            <td class="lot-actual-price-value">
+                                0.12321$
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="common__select-switch">
+                <input type="text" class="select-switch__chosen-item" readonly="" value="1">
+                <div class="select-switch__group">
+                  <input type="button" class="button-bordered" id="prev-switcher-item" value="<">
+                  <div class="select-switch__middles">
+                    <input type="button" class="select-switch__group-item button-bordered " id="left-switcher-item" value="1">
+                    <input type="button" class="select-switch__group-item button-bordered " id="center-switcher-item" value="2">
+                    <input type="button" class="select-switch__group-item button-bordered " id="right-switcher-item" value="3">
+                  </div>
+                  <input type="button" class="button-bordered " id="next-switcher-item" value=">">
+                </div>
+              </div>
+        </section>
+    </div>
+    <footer>
+        © 2023 Paval-from-Belarus. PetOS Software Foundation.
+    </footer>
+</body>

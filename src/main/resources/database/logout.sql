@@ -1,0 +1,1 @@
+update USER set STATUS = 1 where STATUS = 2;

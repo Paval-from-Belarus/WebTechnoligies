@@ -1,0 +1,48 @@
+.user-page__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    width: 90%;
+    margin-left: 5%;
+}
+.user-info {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5rem;
+}
+.client-info__next-lot {
+    display: flex;
+    justify-content: center;
+}
+.admin-info__next-auction {
+    display: flex;
+    justify-content: center;
+}
+.client-info__credentials {
+    margin:auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.client-lot__history {
+    flex-grow: 1;
+}
+.admin-auction__history {
+    flex-grow: 1;
+}
+.user-lot {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    width: 50%;
+    font-size: large;
+}
+.lot-title {
+    font-style: italic;
+    font-size: xx-large;
+    text-align: center;
+}
+.lot-action {
+    cursor: grabbing;
+}
