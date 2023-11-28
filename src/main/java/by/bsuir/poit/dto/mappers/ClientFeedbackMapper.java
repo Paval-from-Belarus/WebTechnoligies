@@ -1,6 +1,6 @@
-package by.bsuir.poit.bean.mappers;
+package by.bsuir.poit.dto.mappers;
 
-import by.bsuir.poit.bean.ClientFeedback;
+import by.bsuir.poit.dto.ClientFeedback;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

@@ -1,7 +1,6 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.bean.User;
-import com.google.gson.Gson;
+import by.bsuir.poit.dto.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,9 +13,6 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Paval Shlyk

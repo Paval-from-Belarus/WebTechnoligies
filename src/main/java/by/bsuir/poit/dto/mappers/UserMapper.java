@@ -1,7 +1,6 @@
-package by.bsuir.poit.bean.mappers;
+package by.bsuir.poit.dto.mappers;
 
-import by.bsuir.poit.bean.Client;
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.User;
 import org.mapstruct.*;
 
 import java.sql.ResultSet;

@@ -1,8 +1,8 @@
 package by.bsuir.poit.servlets.command.impl;
 
-import by.bsuir.poit.bean.Client;
-import by.bsuir.poit.bean.ClientFeedback;
-import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.dto.Client;
+import by.bsuir.poit.dto.ClientFeedback;
+import by.bsuir.poit.dto.Lot;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.ClientFeedbackService;
 import by.bsuir.poit.services.UserService;

@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.bean.Auction;
+import by.bsuir.poit.dto.Auction;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import jakarta.validation.constraints.NotNull;
 

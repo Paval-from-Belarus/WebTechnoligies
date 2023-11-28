@@ -1,21 +1,17 @@
 package by.bsuir.poit.servlets.command.impl;
 
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.AuthorizationUtils;
 import by.bsuir.poit.utils.ControllerUtils;
 import by.bsuir.poit.utils.PageUtils;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 /**
  * @author Paval Shlyk

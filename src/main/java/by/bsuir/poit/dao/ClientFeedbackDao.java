@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.bean.ClientFeedback;
+import by.bsuir.poit.dto.ClientFeedback;
 
 import java.util.List;
 import java.util.Optional;

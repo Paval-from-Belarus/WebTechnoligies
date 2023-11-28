@@ -1,6 +1,6 @@
-package by.bsuir.poit.bean.mappers;
+package by.bsuir.poit.dto.mappers;
 
-import by.bsuir.poit.bean.DeliveryPoint;
+import by.bsuir.poit.dto.DeliveryPoint;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

@@ -1,7 +1,7 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.bean.EnglishLot;
-import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.dto.EnglishLot;
+import by.bsuir.poit.dto.Lot;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
 

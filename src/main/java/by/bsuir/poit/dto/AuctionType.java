@@ -1,12 +1,10 @@
-package by.bsuir.poit.bean;
+package by.bsuir.poit.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
 
 /**
  * @author Paval Shlyk
@@ -16,15 +14,13 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuctionBet {
+public class AuctionType {
+public static final long ENGLISH = 1;
+public static final long BLITZ = 2;
+public static final long BLIND = 3;
 private long id;
-private double bet;
-private Timestamp time;
-//foreign keys
 @NotNull
-private Long lotId;
+private String name;
 @NotNull
-private Long clientId;
-@NotNull
-private Long auctionId;
+private String description;
 }

@@ -1,9 +1,8 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.Client;
-import by.bsuir.poit.bean.User;
-import by.bsuir.poit.bean.mappers.ClientMapper;
-import by.bsuir.poit.bean.mappers.UserMapper;
+import by.bsuir.poit.dto.Client;
+import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.mappers.ClientMapper;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.UserDao;
@@ -23,7 +22,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.Principal;
-import java.util.function.LongFunction;
 
 /**
  * @author Paval Shlyk

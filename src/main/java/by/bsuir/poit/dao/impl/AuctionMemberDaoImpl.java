@@ -1,7 +1,7 @@
 package by.bsuir.poit.dao.impl;
 
-import by.bsuir.poit.bean.AuctionMember;
-import by.bsuir.poit.bean.mappers.AuctionMemberMapper;
+import by.bsuir.poit.dto.AuctionMember;
+import by.bsuir.poit.dto.mappers.AuctionMemberMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.AuctionMemberDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;

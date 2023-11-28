@@ -1,10 +1,10 @@
 package by.bsuir.poit.dao.impl;
 
-import by.bsuir.poit.bean.mappers.ClientMapper;
+import by.bsuir.poit.dto.mappers.ClientMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.bean.Client;
+import by.bsuir.poit.dto.Client;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
 import lombok.RequiredArgsConstructor;

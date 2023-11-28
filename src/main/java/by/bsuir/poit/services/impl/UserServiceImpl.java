@@ -1,7 +1,7 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.Client;
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.Client;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.UserDao;

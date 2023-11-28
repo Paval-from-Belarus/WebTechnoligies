@@ -1,9 +1,9 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.Auction;
-import by.bsuir.poit.bean.AuctionBet;
-import by.bsuir.poit.bean.AuctionMember;
-import by.bsuir.poit.bean.AuctionType;
+import by.bsuir.poit.dto.Auction;
+import by.bsuir.poit.dto.AuctionBet;
+import by.bsuir.poit.dto.AuctionMember;
+import by.bsuir.poit.dto.AuctionType;
 import by.bsuir.poit.dao.*;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;

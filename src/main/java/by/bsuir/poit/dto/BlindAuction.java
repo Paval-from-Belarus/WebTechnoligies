@@ -1,4 +1,4 @@
-package by.bsuir.poit.bean;
+package by.bsuir.poit.dto;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;

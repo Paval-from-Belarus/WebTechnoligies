@@ -1,10 +1,10 @@
 package by.bsuir.poit.dao.impl;
 
-import by.bsuir.poit.bean.mappers.UserMapper;
+import by.bsuir.poit.dto.mappers.UserMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

@@ -1,11 +1,10 @@
 package by.bsuir.poit.servlets.filters;
 
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.context.Autowired;
 import by.bsuir.poit.context.BeanUtils;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.utils.AuthorizationUtils;
-import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.*;
@@ -13,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * This filter accomplishes pre-authorization work.

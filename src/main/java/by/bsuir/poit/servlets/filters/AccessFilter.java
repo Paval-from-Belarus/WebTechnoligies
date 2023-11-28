@@ -1,9 +1,6 @@
 package by.bsuir.poit.servlets.filters;
 
-import by.bsuir.poit.bean.User;
-import by.bsuir.poit.context.Autowired;
-import by.bsuir.poit.context.BeanUtils;
-import by.bsuir.poit.services.AuthorizationService;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.servlets.UserDetails;
 import by.bsuir.poit.utils.ControllerUtils;
 import by.bsuir.poit.utils.PageUtils;

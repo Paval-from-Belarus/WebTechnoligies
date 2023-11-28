@@ -1,6 +1,6 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.*;
+import by.bsuir.poit.dto.*;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.*;
 import by.bsuir.poit.dao.exception.DataAccessException;

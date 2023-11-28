@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.bean.AuctionBet;
+import by.bsuir.poit.dto.AuctionBet;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.bean.User;
-import by.bsuir.poit.dao.exception.DataAccessException;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.dao.exception.DataModifyingException;
 
 import java.util.Optional;

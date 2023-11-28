@@ -1,13 +1,12 @@
-package by.bsuir.poit.bean.mappers;
+package by.bsuir.poit.dto.mappers;
 
-import by.bsuir.poit.bean.Auction;
-import by.bsuir.poit.bean.BlindAuction;
-import by.bsuir.poit.bean.BlitzAuction;
+import by.bsuir.poit.dto.Auction;
+import by.bsuir.poit.dto.BlindAuction;
+import by.bsuir.poit.dto.BlitzAuction;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

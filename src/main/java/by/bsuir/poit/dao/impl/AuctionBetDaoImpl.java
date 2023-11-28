@@ -3,15 +3,14 @@ package by.bsuir.poit.dao.impl;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.AuctionBetDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.bean.AuctionBet;
-import by.bsuir.poit.bean.mappers.AuctionBetMapper;
+import by.bsuir.poit.dto.AuctionBet;
+import by.bsuir.poit.dto.mappers.AuctionBetMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

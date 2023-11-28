@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
-import by.bsuir.poit.bean.mappers.ResultSetMapper;
+import by.bsuir.poit.dto.mappers.ResultSetMapper;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

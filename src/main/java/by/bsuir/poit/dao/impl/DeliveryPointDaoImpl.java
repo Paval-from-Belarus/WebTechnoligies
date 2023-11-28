@@ -3,8 +3,8 @@ package by.bsuir.poit.dao.impl;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.DeliveryPointDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.bean.DeliveryPoint;
-import by.bsuir.poit.bean.mappers.DeliveryPointMapper;
+import by.bsuir.poit.dto.DeliveryPoint;
+import by.bsuir.poit.dto.mappers.DeliveryPointMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 /**
  * @author Paval Shlyk

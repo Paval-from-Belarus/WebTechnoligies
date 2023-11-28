@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.bean.AuctionMember;
+import by.bsuir.poit.dto.AuctionMember;
 
 import java.util.List;
 

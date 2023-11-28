@@ -1,8 +1,8 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.bean.Auction;
-import by.bsuir.poit.bean.AuctionBet;
-import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.dto.Auction;
+import by.bsuir.poit.dto.AuctionBet;
+import by.bsuir.poit.dto.Lot;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,6 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;

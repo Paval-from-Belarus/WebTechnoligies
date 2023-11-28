@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.bean.DeliveryPoint;
+import by.bsuir.poit.dto.DeliveryPoint;
 
 import java.util.Optional;
 

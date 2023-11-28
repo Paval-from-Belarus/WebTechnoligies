@@ -1,7 +1,7 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.User;
-import by.bsuir.poit.bean.mappers.ClientMapper;
+import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.mappers.ClientMapper;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.exception.DataAccessException;

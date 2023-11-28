@@ -1,8 +1,8 @@
 package by.bsuir.poit.services;
 
-import by.bsuir.poit.bean.DeliveryPoint;
-import by.bsuir.poit.bean.EnglishLot;
-import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.dto.DeliveryPoint;
+import by.bsuir.poit.dto.EnglishLot;
+import by.bsuir.poit.dto.Lot;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;

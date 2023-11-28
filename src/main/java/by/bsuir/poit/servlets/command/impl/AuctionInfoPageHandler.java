@@ -1,6 +1,6 @@
 package by.bsuir.poit.servlets.command.impl;
 
-import by.bsuir.poit.bean.*;
+import by.bsuir.poit.dto.*;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.LotService;

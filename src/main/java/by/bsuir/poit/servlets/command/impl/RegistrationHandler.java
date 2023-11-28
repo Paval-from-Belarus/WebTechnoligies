@@ -1,6 +1,6 @@
 package by.bsuir.poit.servlets.command.impl;
 
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.exception.authorization.AuthorizationException;

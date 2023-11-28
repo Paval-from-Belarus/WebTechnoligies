@@ -1,6 +1,6 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.ClientFeedback;
+import by.bsuir.poit.dto.ClientFeedback;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.ClientFeedbackDao;
 import by.bsuir.poit.services.ClientFeedbackService;

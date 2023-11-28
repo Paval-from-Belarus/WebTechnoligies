@@ -1,7 +1,7 @@
 package by.bsuir.poit.services;
 
-import by.bsuir.poit.bean.Client;
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.Client;
+import by.bsuir.poit.dto.User;
 
 /**
  * @author Paval Shlyk

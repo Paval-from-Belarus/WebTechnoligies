@@ -1,4 +1,4 @@
-package by.bsuir.poit.bean;
+package by.bsuir.poit.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,11 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientFeedback {
+public class DeliveryPoint {
 private long id;
-private double ranking;
-private String text;
-private long lotId;
-private long authorId;
-private long targetId;
+private String cityCode;
+private String streetName;
+private String houseNumber;
+private String name;
 }

@@ -1,8 +1,7 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.bean.Client;
+import by.bsuir.poit.dto.Client;
 
-import java.util.List;
 import java.util.Optional;
 
 /**

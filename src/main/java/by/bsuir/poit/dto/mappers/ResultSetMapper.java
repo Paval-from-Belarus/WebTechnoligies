@@ -1,4 +1,4 @@
-package by.bsuir.poit.bean.mappers;
+package by.bsuir.poit.dto.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

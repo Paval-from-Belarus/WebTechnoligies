@@ -25,7 +25,7 @@
     </context-param>
     <context-param>
         <param-name>mappers-beans-package</param-name>
-        <param-value>by.bsuir.poit.bean.mappers</param-value>
+        <param-value>by.bsuir.poit.dto.mappers</param-value>
     </context-param>
     <context-param>
         <param-name>dao-beans-package</param-name>

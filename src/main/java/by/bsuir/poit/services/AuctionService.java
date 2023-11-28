@@ -1,6 +1,6 @@
 package by.bsuir.poit.services;
 
-import by.bsuir.poit.bean.*;
+import by.bsuir.poit.dto.*;
 import by.bsuir.poit.services.exception.authorization.UserAccessViolationException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;

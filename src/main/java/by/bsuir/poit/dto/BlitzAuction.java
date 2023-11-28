@@ -1,4 +1,4 @@
-package by.bsuir.poit.bean;
+package by.bsuir.poit.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

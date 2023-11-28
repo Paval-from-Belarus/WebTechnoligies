@@ -1,7 +1,7 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.bean.Lot;
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.Lot;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.servlets.UserPageType;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;

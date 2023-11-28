@@ -1,7 +1,7 @@
 package by.bsuir.poit.servlets.command.impl;
 
-import by.bsuir.poit.bean.Auction;
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.Auction;
+import by.bsuir.poit.dto.User;
 import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.AuthorizationService;
