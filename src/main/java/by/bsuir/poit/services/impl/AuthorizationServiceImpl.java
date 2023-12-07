@@ -1,13 +1,12 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.dto.ClientDto;
+import by.bsuir.poit.dao.ClientRepository;
+import by.bsuir.poit.dao.UserRepository;
+import by.bsuir.poit.dao.UserStatusRepository;
 import by.bsuir.poit.dto.UserDto;
-import by.bsuir.poit.dto.mappers.ClientMapper;
-import by.bsuir.poit.context.Service;
-import by.bsuir.poit.dao.ClientDao;
-import by.bsuir.poit.dao.UserDao;
-import by.bsuir.poit.dao.exception.DataAccessException;
-import by.bsuir.poit.dao.exception.DataModifyingException;
+import by.bsuir.poit.dto.mappers.UserMapper;
+import by.bsuir.poit.model.Client;
+import by.bsuir.poit.model.User;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.exception.authorization.AuthorizationException;
 import by.bsuir.poit.services.exception.authorization.UserAccessViolationException;
@@ -20,7 +19,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 
 /**
@@ -31,83 +35,75 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class AuthorizationServiceImpl implements AuthorizationService {
 private static final Logger LOGGER = LogManager.getLogger(AuthorizationServiceImpl.class);
-private final UserDao userDao;
-private final ClientDao clientDao;
-private final ClientMapper clientMapper;
+private final UserRepository userRepository;
+private final ClientRepository clientDao;
+private final UserMapper userMapper;
+private final UserStatusRepository userStatusRepository;
 
 @Override
+@Transactional
 public UserDto signIn(String login, String password) {
-      UserDto user;
-      try {
-	    user = userDao.findByName(login).orElseThrow(() -> newUserNotFoundException(login));
-	    String salt = user.getSecuritySalt();
-	    String passwordHash = AuthorizationUtils.encodePassword(password, salt);
-	    if (!user.getPasswordHash().equals(passwordHash)) {
-		  final String msg = String.format("Invalid password for user with login=%s", login);
-		  LOGGER.info(msg);
-		  throw new UserAccessViolationException(msg);
-	    }
-	    if (user.getStatus() == UserDto.STATUS_ACTIVE) {
-		  userDao.setUserStatus(user.getId(), UserDto.STATUS_NOT_ACTIVE);
-		  final String msg = String.format("User with login=%s is already active", login);
-		  LOGGER.warn(msg);
-		  // TODO: 27/10/2023 send message to change password
-		  throw new AuthorizationException(msg);
-	    }
-	    userDao.setUserStatus(user.getId(), UserDto.STATUS_ACTIVE);
-      } catch (DataAccessException e) {
-	    LOGGER.error(e);
-	    throw new ResourceBusyException(e);
+      User user = userRepository
+		      .findByName(login)
+		      .orElseThrow(() -> newUserNotFoundException(login));
+      String salt = user.getSalt();
+      String passwordHash = AuthorizationUtils.encodePassword(password, salt);
+      if (!user.getHash().equals(passwordHash)) {
+	    final String msg = String.format("Invalid password for user with login=%s", login);
+	    LOGGER.info(msg);
+	    throw new UserAccessViolationException(msg);
       }
-      return user;
+      if (user.getUserStatus().getId() == User.STATUS_ACTIVE) {
+	    user.setUserStatus(userStatusRepository.getReferenceById(User.STATUS_NOT_ACTIVE));
+	    final String msg = String.format("User with login=%s is already active", login);
+	    LOGGER.warn(msg);
+	    // TODO: 27/10/2023 send message to change password
+	    throw new AuthorizationException(msg);
+      }
+      user.setUserStatus(userStatusRepository.getReferenceById(User.STATUS_ACTIVE));
+      return userMapper.toDto(user);
+
 }
 
 @Override
 public void signOut(long userId) {
-      try {
-	    userDao.setUserStatus(userId, UserDto.STATUS_NOT_ACTIVE);
-      } catch (DataModifyingException e) {
-	    LOGGER.error("Failed to sign-out user {}", e.toString());
-	    throw new ResourceBusyException(e);
+      userRepository.setUserStatus(userId, User.STATUS_NOT_ACTIVE);
+}
+
+//this method should be implemented as a stored routine
+@Override
+@Transactional
+public void register(@NotNull UserDto dto, @NotNull String password) throws ResourceModifyingException {
+      if (userRepository.existsByName(dto.getName())) {
+	    throw newUserAlreadyExistsException(dto);
+      }
+      String salt = AuthorizationUtils.newSecuritySalt();
+      String hash = AuthorizationUtils.encodePassword(password, salt);
+      User user = userMapper.toEntity(dto);
+      user.setHash(hash);
+      user.setSalt(salt);
+      user.setUserStatus(userStatusRepository.getReferenceById(User.STATUS_NOT_ACTIVE));
+      user = userRepository.save(user);
+      if (user.getRole() == User.CLIENT) {
+	    Client client = Client.builder()
+				.ranking(0.0)
+				.account(BigDecimal.ZERO)
+				.user(user)
+				.build();
+	    clientDao.save(client);
       }
 }
 
-@Override
-public void register(@NotNull UserDto user, @NotNull String password) throws ResourceModifyingException {
-      boolean isRegistered = false;
-      String salt = AuthorizationUtils.newSecuritySalt();
-      String passwordHash = AuthorizationUtils.encodePassword(password, salt);
-      user.setPasswordHash(passwordHash);
-      user.setSecuritySalt(salt);
-      try {
-	    if (!userDao.existsByName(user.getName())) {
-		  userDao.save(user);
-		  isRegistered = true;
-	    }
-	    //update client
-	    if (isRegistered && user.getRole() == UserDto.CLIENT) {
-		  ClientDto client = clientMapper.fromUser(user);
-		  //todo: implement @Transactional for method
-		  clientDao.save(client);
-	    }
-      } catch (DataModifyingException e) {
-	    LOGGER.warn(e);
-	    throw new ResourceModifyingException(e);
-      } catch (DataAccessException e) {
-	    LOGGER.error(e);
-	    throw new ResourceBusyException(e);
-      }
-      if (!isRegistered) {
-	    String msg = String.format("User by name=%s is already exists", user.getName());
-	    LOGGER.info(msg);
-	    throw new UserAccessViolationException(msg);
-      }
+@ExceptionHandler(DataAccessException.class)
+public void handleException(DataAccessException e) {
+      LOGGER.warn(e);
+      throw new ResourceBusyException(e);
 }
 
 @Override
 public void verifyByUserAccess(Principal principal, long userId) throws UserAccessViolationException {
       UserDetails details = (UserDetails) principal;
-      if (details.role() != UserDto.ADMIN && details.id() != userId) {
+      if (details.role() != User.ADMIN && details.id() != userId) {
 	    final String msg = String.format("User rights verification failed for principal %s", details);
 	    LOGGER.warn(msg);
 	    throw new UserAccessViolationException(msg);
@@ -134,6 +130,13 @@ private static AuthorizationException newUserNotFoundException(String login) {
       final String msg = String.format("Attempt to find not existing user with login=%s", login);
       LOGGER.info(msg);
       return new UserNotFoundException(msg);
+}
+
+private static AuthorizationException newUserAlreadyExistsException(UserDto dto) {
+      final String msg = String.format("The user by given credentials is already exists %s", dto);
+      LOGGER.warn(msg);
+      throw new UserAccessViolationException(msg);
+
 }
 
 

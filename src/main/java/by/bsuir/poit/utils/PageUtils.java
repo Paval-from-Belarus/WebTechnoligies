@@ -1,7 +1,7 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.dto.LotDto;
-import by.bsuir.poit.dto.UserDto;
+import by.bsuir.poit.model.Lot;
+import by.bsuir.poit.model.User;
 import by.bsuir.poit.servlets.UserPageType;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -32,17 +32,17 @@ public static final String USER_PAGE = "/user";
 public static final String AUCTION_ASSIGNMENT_PAGE = "/assignment";
 public static final String AUCTION = "/auction";
 //should be injected
-public static final String APPLICATION_NAME = "/jdbc-servlets";
+public static final String APPLICATION_NAME = "";
 public static final String ERROR_REASON = "errorReasons";
 public static final String ERROR_CODE = "errorCode";
 public static final String LOT_STATUSES = "lotStatuses";
 public static final Map<Short, String> LOT_STATUSES_MAP = Map.of(
-    LotDto.BLOCKED_STATUS, "Blocked",
-    LotDto.BEFORE_AUCTION_STATUS, "Ready to auction",
-    LotDto.SELL_STATUS, "Customer is found",
-    LotDto.AUCTION_STATUS, "The lot is placed at auction",
-    LotDto.SENT_STATUS, "The lot is sent to customer",
-    LotDto.DELIVERIED_STATUS, "The lot is deliveried to customer"
+    Lot.BLOCKED_STATUS, "Blocked",
+    Lot.BEFORE_AUCTION_STATUS, "Ready to auction",
+    Lot.SELL_STATUS, "Customer is found",
+    Lot.AUCTION_STATUS, "The lot is placed at auction",
+    Lot.SENT_STATUS, "The lot is sent to customer",
+    Lot.DELIVERIED_STATUS, "The lot is deliveried to customer"
 );
 
 /**
@@ -79,10 +79,10 @@ public static void sendError(HttpServletRequest request, HttpServletResponse res
  * @throws IllegalStateException if an invalid role is passed
  */
 public static UserPageType typeOfRole(short role) {
-      if (role == UserDto.ADMIN) {
+      if (role == User.ADMIN) {
 	    return UserPageType.ADMIN;
       }
-      if (role == UserDto.CLIENT) {
+      if (role == User.CLIENT) {
 	    return UserPageType.CLIENT;
       }
       throw new IllegalStateException("The invalid role was passed to build UserPageType");

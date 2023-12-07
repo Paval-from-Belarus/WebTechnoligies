@@ -13,13 +13,14 @@ import java.util.Optional;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
-public interface UserDao extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 Optional<User> findById(long id);
 
 Optional<User> findByName(String name);
 
 boolean existsByName(String name);
-
+@Modifying
+void saveNew(User user);
 @Query("update User set userStatus.id = :status where id = :user_id")
 @Modifying
 void setUserStatus(@Param("user_id") long userId, @Param("status") short status) throws DataAccessException;

@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuctionTypeDto {
-
 private long id;
 @NotNull
 private String name;

@@ -15,6 +15,12 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "lot", schema = "auction_db")
 public class Lot {
+public static final short BLOCKED_STATUS = 1;
+public static final short BEFORE_AUCTION_STATUS = 2;
+public static final short AUCTION_STATUS = 6;
+public static final short SELL_STATUS = 3;
+public static final short SENT_STATUS = 4;
+public static final short DELIVERIED_STATUS = 5;
 @Id
 @Column(name = "lot_id", nullable = false)
 private Long id;
@@ -26,10 +32,10 @@ private String title;
 
 @NotNull
 @Column(name = "start_price", nullable = false, precision = 10, scale = 2)
-private BigDecimal startPrice;
+private Double startPrice;
 
 @Column(name = "auction_price", precision = 10, scale = 2)
-private BigDecimal auctionPrice;
+private Double auctionPrice;
 
 @NotNull
 @Column(name = "status", nullable = false)

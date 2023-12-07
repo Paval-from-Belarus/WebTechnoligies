@@ -2,10 +2,8 @@ package by.bsuir.poit.controller;
 
 import by.bsuir.poit.dto.Create;
 import by.bsuir.poit.dto.UserDto;
-import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.exception.authorization.AuthorizationException;
-import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

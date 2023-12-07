@@ -3,9 +3,10 @@ package by.bsuir.poit.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
-import java.math.BigDecimal;
-import java.time.Instant;
+import java.util.Date;
 
 @Builder
 @AllArgsConstructor
@@ -21,11 +22,12 @@ private Long id;
 
 @NotNull
 @Column(name = "bet", nullable = false, precision = 10, scale = 2)
-private BigDecimal bet;
+private Double bet;
 
 @NotNull
 @Column(name = "time", nullable = false)
-private Instant time;
+@CreatedDate
+private Date time;
 
 @NotNull
 @ManyToOne(fetch = FetchType.LAZY, optional = false)

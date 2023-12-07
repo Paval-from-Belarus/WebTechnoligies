@@ -1,8 +1,6 @@
 package by.bsuir.poit.controller;
 
-import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.LotService;
-import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

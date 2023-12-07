@@ -25,13 +25,11 @@ private Long id;
 private double priceStep;
 @NotNull(groups = Create.class)
 private Integer membersLimit;
-@Null
-private Timestamp duration;
 @NotNull
 private Date eventDate;
 private Date lastRegisterDate;
 @NotNull(groups = Create.class)
 private Long auctionTypeId;
-@NotNull(groups = Create.class)
+@Null(groups = Create.class)//the value is assign via Principal
 private Long adminId;
 }

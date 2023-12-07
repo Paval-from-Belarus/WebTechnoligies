@@ -2,6 +2,7 @@ package by.bsuir.poit.controller;
 
 import by.bsuir.poit.dto.AuctionDto;
 import by.bsuir.poit.dto.UserDto;
+import by.bsuir.poit.model.User;
 import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.UserService;
@@ -40,11 +41,11 @@ public void accept(
     @NotNull Principal principal,
     HttpServletRequest request,
     HttpServletResponse response) throws Exception {
-      authorizationService.verifyByUserAccess(principal, UserDto.ADMIN);
+      authorizationService.verifyByUserAccess(principal, User.ADMIN);
       long adminId = authorizationService.getUserIdByPrincipal(principal);
       UserDto admin = userService.findUserByUserId(adminId);
       Paginator paginator = new Paginator(request, 5);
-      List<AuctionDto> allAuctions = auctionService.findHeadersByAdminId(adminId);
+      List<AuctionDto> allAuctions = auctionService.findHeadersByPrincipal(adminId);
       paginator.configure(allAuctions, AUCTIONS);
       request.setAttribute(USERNAME, admin.getName());
       PageUtils.includeWith(request, response, PageUtils.ADMIN_PAGE);

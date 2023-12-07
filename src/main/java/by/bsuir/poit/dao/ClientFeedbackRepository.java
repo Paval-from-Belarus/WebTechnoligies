@@ -11,7 +11,7 @@ import java.util.Optional;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
-public interface ClientFeedbackDao extends JpaRepository<ClientFeedback, Long> {
+public interface ClientFeedbackRepository extends JpaRepository<ClientFeedback, Long> {
 List<ClientFeedback> findAllByTargetClientId(long clientId);
 
 List<ClientFeedback> findAllByAuthorClientId(long clientId);

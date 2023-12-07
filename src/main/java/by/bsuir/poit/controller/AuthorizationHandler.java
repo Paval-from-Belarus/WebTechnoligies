@@ -1,8 +1,7 @@
 package by.bsuir.poit.controller;
 
 import by.bsuir.poit.dto.UserDto;
-import by.bsuir.poit.context.RequestHandlerDefinition;
-import by.bsuir.poit.servlets.command.RequestHandler;
+import by.bsuir.poit.model.User;
 import by.bsuir.poit.utils.AuthorizationUtils;
 import by.bsuir.poit.utils.ControllerUtils;
 import by.bsuir.poit.utils.PageUtils;
@@ -24,11 +23,11 @@ private static final Logger LOGGER = LogManager.getLogger(AuthorizationHandler.c
 public void accept(HttpServletRequest request, HttpServletResponse response) throws Exception {
       UserDto user = (UserDto) request.getAttribute(AuthorizationUtils.USER_ATTRIBUTE);
       assert user != null;
-      if (user.getRole() == UserDto.ADMIN) {
+      if (user.getRole() == User.ADMIN) {
 	    PageUtils.redirectTo(response, ControllerUtils.ADMIN_ENDPOINT);
 	    return;
       }
-      if (user.getRole() == UserDto.CLIENT) {
+      if (user.getRole() == User.CLIENT) {
 	    PageUtils.redirectTo(response, ControllerUtils.CLIENT_ENDPOINT);
 	    return;
       }

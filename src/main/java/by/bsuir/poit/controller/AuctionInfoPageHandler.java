@@ -1,14 +1,12 @@
 package by.bsuir.poit.controller;
 
 import by.bsuir.poit.dto.*;
-import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.services.UserService;
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
 import by.bsuir.poit.servlets.UserDetails;
-import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.PageUtils;
 import by.bsuir.poit.utils.Paginator;
 import jakarta.servlet.http.HttpServletRequest;

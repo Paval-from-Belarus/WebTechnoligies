@@ -1,17 +1,21 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.dto.AuctionDto;
-import by.bsuir.poit.dto.AuctionBetDto;
-import by.bsuir.poit.dto.AuctionMemberDto;
-import by.bsuir.poit.dto.AuctionTypeDto;
 import by.bsuir.poit.dao.*;
-import by.bsuir.poit.dao.exception.DataAccessException;
+import by.bsuir.poit.dto.AuctionBetDto;
+import by.bsuir.poit.dto.AuctionDto;
+import by.bsuir.poit.model.Auction;
+import by.bsuir.poit.model.AuctionBet;
+import by.bsuir.poit.model.AuctionMember;
+import by.bsuir.poit.model.AuctionType;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataAccessException;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,90 +27,84 @@ import static org.mockito.Mockito.*;
  * @author Paval Shlyk
  * @since 20/11/2023
  */
+@SpringBootTest
 class AuctionServiceImplTest {
-private AuctionDao auctionDao = mock(AuctionDao.class);
-private AuctionMemberDao auctionMemberDao = mock(AuctionMemberDao.class);
-private AuctionBetDao auctionBetDao = mock(AuctionBetDao.class);
-private AuctionTypeDao auctionTypeDao = mock(AuctionTypeDao.class);
-private LotDao lotDao = mock(LotDao.class);
+@MockBean
+private AuctionRepository auctionRepository;
+@MockBean
+private AuctionMemberRepository auctionMemberRepository;
+@MockBean
+private AuctionBetRepository auctionBetRepository;
+@MockBean
+private AuctionTypeRepository auctionTypeDao;
+@MockBean
+private LotRepository lotRepository;
+@Autowired
 private AuctionServiceImpl auctionService;
-
-@BeforeEach
-public void initMockDao() {
-      auctionDao = mock(AuctionDao.class);
-      auctionMemberDao = mock(AuctionMemberDao.class);
-      auctionBetDao = mock(AuctionBetDao.class);
-      auctionTypeDao = mock(AuctionTypeDao.class);
-      lotDao = mock(LotDao.class);
-      auctionService = new AuctionServiceImpl(
-	  auctionDao, auctionMemberDao,
-	  auctionBetDao, auctionTypeDao,
-	  lotDao);
-}
 
 @Test
 void findAfterEventDate() {
-      List<AuctionDto> list = new ArrayList<>();
+      Auction entity = mock(Auction.class);
+      doReturn(42).when(entity).getId();
       Date date = new Date();
-      doReturn(list).when(auctionDao).findAllAfterEventDate(date);
-      assertEquals(list, auctionService.findAfterEventDate(date));
-      doThrow(DataAccessException.class).when(auctionDao).findAllAfterEventDate(date);
+      doReturn(List.of(entity)).when(auctionRepository).findAllAfterEventDate(date);
+      List<AuctionDto> dto = auctionService.findAfterEventDate(date);
+      assertTrue(dto.size() == 1 && dto.getFirst().getId() == 42);
+      doThrow(DataAccessException.class).when(auctionRepository).findAllAfterEventDate(date);
       assertThrows(ResourceBusyException.class, () -> auctionService.findAfterEventDate(date));
-      doThrow(IllegalStateException.class).when(auctionDao).findAllAfterEventDate(date);
+      doThrow(IllegalStateException.class).when(auctionRepository).findAllAfterEventDate(date);
       assertThrows(IllegalStateException.class, () -> auctionService.findAfterEventDate(date));
 }
 
 @Test
 void findByClientId() {
-      List<AuctionMemberDto> members = List.of(
-	  new AuctionMemberDto(1L, 1L, (short) 2),
-	  new AuctionMemberDto(2L, 2L, (short) 2)
-      );
-      AuctionDto auction = new AuctionDto();
-      when(auctionMemberDao.findAllByClientId(anyLong())).thenReturn(members);
-      when(auctionDao.findById(anyLong())).thenReturn(Optional.empty());
-      assertThrows(ResourceNotFoundException.class, () -> auctionService.findByClientId(anyLong()));
-      when(auctionDao.findById(anyLong())).thenReturn(Optional.of(auction));
+      AuctionMember member = mock(AuctionMember.class);
+      Auction auction = mock(Auction.class);
+      doReturn(auction).when(member).getAuction();
+      doReturn(42).when(auction).getId();
+      when(auctionMemberRepository.findAllByClientId(anyLong())).thenReturn(List.of(member));
       assertTrue(
-	  auctionService.findByClientId(anyLong()).stream().allMatch(auction::equals)
+	  auctionService.findByClientId(anyLong()).stream().allMatch(dto -> dto.getId() == 42)
       );
-      when(auctionDao.findById(anyLong())).thenThrow(DataAccessException.class);
+      when(auctionMemberRepository.findAllByClientId(anyLong())).thenThrow(DataAccessException.class);
       assertThrows(ResourceBusyException.class, () -> auctionService.findByClientId(anyLong()));
 }
 
 @Test
 void findById() {
-      doThrow(DataAccessException.class).when(auctionDao).findById(anyLong());
+      doThrow(DataAccessException.class).when(auctionRepository).findById(anyLong());
       assertThrows(ResourceBusyException.class, () -> auctionService.findById(anyLong()));
-      AuctionDto auction = new AuctionDto();
-      doReturn(Optional.of(auction)).when(auctionDao).findById(anyLong());
-      assertEquals(auction, auctionService.findById(anyLong()));
+      Auction auction = mock(Auction.class);
+      doReturn(42).when(auction).getId();
+      doReturn(Optional.of(auction)).when(auctionRepository).findById(anyLong());
+      assertEquals(42, auctionService.findById(anyLong()).getId());
 }
 
 @Test
 void findAllBetsByClientId() {
-      List<AuctionBetDto> firstUserBets = List.of();
-      List<AuctionBetDto> secondUserBets = List.of(
-	  AuctionBetDto.builder().bet(0.3).build(),
-	  AuctionBetDto.builder().bet(0.7).build());
+      AuctionBet bet = mock(AuctionBet.class);
+      Auction auction = mock(Auction.class);
       long auctionId = 42;
-      doReturn(firstUserBets).when(auctionBetDao).findAllByAuctionIdAndClientId(auctionId, 1);
-      doReturn(secondUserBets).when(auctionBetDao).findAllByAuctionIdAndClientId(auctionId, 2);
-      assertEquals(firstUserBets, auctionService.findAllBetsByClientId(auctionId, 1));
-      assertEquals(secondUserBets, auctionService.findAllBetsByClientId(auctionId, 2));
+      doReturn(auction).when(bet).getAuction();
+      doReturn(auction).when(auction).getId();
+      List<AuctionBet> firstUserBets = List.of();
+      List<AuctionBet> secondUserBets = List.of(bet);
+      doReturn(firstUserBets).when(auctionBetRepository).findAllByAuctionIdAndClientId(auctionId, 1);
+      doReturn(secondUserBets).when(auctionBetRepository).findAllByAuctionIdAndClientId(auctionId, 2);
+      assertTrue(auctionService.findAllBetsByClientId(auctionId, 1).isEmpty());
+      List<AuctionBetDto> dtoList = auctionService.findAllBetsByClientId(auctionId, 2);
+      assertTrue(dtoList.stream().allMatch(dtoBet -> dtoBet.getAuctionId() == auctionId));
 }
 
 @Test
 void findTypeByAuctionId() {
-      AuctionTypeDto type = AuctionTypeDto.builder()
-			     .id(1).name("First type").description("No description")
-			     .build();
-      AuctionDto auction = AuctionDto.builder()
-			    .auctionTypeId(1L)
-			    .build();
-      when(auctionDao.findById(anyLong())).thenReturn(Optional.of(auction));
-      when(auctionTypeDao.findById(1)).thenReturn(Optional.of(type));
-      assertEquals(type, auctionService.findTypeByAuctionId(anyLong()));
+      long auctionTypeId = 1;
+      AuctionType type = mock(AuctionType.class);
+      Auction auction = mock(Auction.class);
+      doReturn(auctionTypeId).when(type).getId();
+      when(auctionRepository.findById(anyLong())).thenReturn(Optional.of(auction));
+      when(auction.getAuctionType()).thenReturn(type);
+      assertEquals(auctionTypeId, auctionService.findTypeByAuctionId(anyLong()).getId());
       when(auctionTypeDao.findById(anyLong())).thenReturn(Optional.empty());
       assertThrows(ResourceNotFoundException.class, () -> auctionService.findTypeByAuctionId(anyLong()));
 }

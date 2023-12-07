@@ -1,10 +1,8 @@
 package by.bsuir.poit.controller;
 
-import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.servlets.UserDetails;
-import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.AuthorizationUtils;
 import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.http.HttpServletRequest;

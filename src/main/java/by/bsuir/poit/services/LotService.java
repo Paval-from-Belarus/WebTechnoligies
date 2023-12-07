@@ -57,7 +57,7 @@ List<LotDto> findAllByAuction(long auctionId) throws ResourceBusyException;
  * @return EnglishLot object
  * @throws ResourceNotFoundException if the resource is not found
  */
-EnglishLotDto findEnglishLot(long lotId) throws ResourceNotFoundException;
+LotDto findEnglishLot(long lotId) throws ResourceNotFoundException;
 
 /**
  * Returns the DeliveryPoint object associated with a particular lot ID.

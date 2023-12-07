@@ -2,6 +2,7 @@ package by.bsuir.poit.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 
@@ -18,16 +19,17 @@ public static final int BLOCKED = 2;
 @Id
 @Column(name = "user_id", nullable = false)
 private Long id;
-
-@MapsId
-@OneToOne(fetch = FetchType.LAZY, optional = false)
-@JoinColumn(name = "user_id", nullable = false)
-private User user;
+@Column(name = "name", table = "user")
+private String name;
 
 @Column(name = "account", precision = 10, scale = 2)
 private BigDecimal account;
 
 @Column(name = "ranking", precision = 10, scale = 2)
-private BigDecimal ranking;
+private Double ranking;
 
+@MapsId
+@OneToOne(fetch = FetchType.LAZY, optional = false)
+@JoinColumn(name = "user_id", nullable = false)
+private User user;
 }

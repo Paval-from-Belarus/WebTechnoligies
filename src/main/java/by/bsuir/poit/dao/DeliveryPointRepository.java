@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao;
 
-import by.bsuir.poit.model.AuctionType;
+import by.bsuir.poit.model.DeliveryPoint;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -9,6 +9,7 @@ import java.util.Optional;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
-public interface AuctionTypeDao extends JpaRepository<AuctionType, Long> {
-Optional<AuctionType> findById(long typeId);
+public interface DeliveryPointRepository extends JpaRepository<DeliveryPoint, Long> {
+Optional<DeliveryPoint> findById(long id);
 }
+

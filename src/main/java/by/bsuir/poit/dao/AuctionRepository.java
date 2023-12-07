@@ -2,7 +2,6 @@ package by.bsuir.poit.dao;
 
 
 import by.bsuir.poit.model.Auction;
-import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,7 +13,7 @@ import java.util.Optional;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
-public interface AuctionDao extends JpaRepository<Auction, Long> {
+public interface AuctionRepository extends JpaRepository<Auction, Long> {
 /**
  * @param id the id of auction
  * @return instance Auction or its corresponding inherent

@@ -1,24 +1,20 @@
-package by.bsuir.poit.servlets.filters;
+package by.bsuir.poit.servlets.interceptors;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
- * The filter resolve common for each page attributes (such as language)
+ * The interceptor resolve common for each page attribute (such as language)
  *
  * @author Paval Shlyk
  * @since 21/11/2023
  */
-@WebFilter(filterName = "params-resolver")
-public class CommonParametersResolverFilter extends HttpFilter {
+@Component
+public class CommonParametersResolverInterceptor implements HandlerInterceptor {
 public static final String LANGUAGE = "lang";
 public static final String NEXT_LANGUAGE = "nextLang";
 public static final String DEFAULT_LANGUAGE = "en";
@@ -32,23 +28,21 @@ private final Map<String, String> nextLanguageMap = Map.of(
 );
 
 @Override
-protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
       String langParameter = request.getParameter(LANGUAGE);
       HttpSession session = request.getSession();
       if (session == null) {
-	    chain.doFilter(request, response);
-	    return;
+	    return true;//do nothing
       }
       if (langParameter == null && session.getAttribute(LANGUAGE) == null) {
 	    session.setAttribute(LANGUAGE, DEFAULT_LANGUAGE);
 	    request.setAttribute(LANGUAGE, DEFAULT_LANGUAGE);
 	    request.setAttribute(NEXT_LANGUAGE, nextLanguageMap.get(DEFAULT_LANGUAGE));
-	    chain.doFilter(request, response);
-	    return;
+	    return true;//proceed the sequence
       }
       if (langParameter != null && AVAILABLE_LANGUAGES.stream().noneMatch(langParameter::equals)) {
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND, "No localization for given parameter");
-	    return;
+	    return false;//we handle error by self
       }
       if (langParameter != null) {
 	    session.setAttribute(LANGUAGE, langParameter);
@@ -57,6 +51,6 @@ protected void doFilter(HttpServletRequest request, HttpServletResponse response
       }
       request.setAttribute(LANGUAGE, langParameter);
       request.setAttribute(NEXT_LANGUAGE, nextLanguageMap.get(langParameter));
-      chain.doFilter(request, response);
+      return true;
 }
 }

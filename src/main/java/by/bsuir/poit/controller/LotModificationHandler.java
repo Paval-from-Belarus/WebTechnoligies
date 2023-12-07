@@ -1,9 +1,7 @@
 package by.bsuir.poit.controller;
 
 import by.bsuir.poit.dto.LotDto;
-import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.LotService;
-import by.bsuir.poit.servlets.command.RequestHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +28,7 @@ import static by.bsuir.poit.controller.LotModificationHandler.LotModificationTyp
  */
 @Controller
 @RequestMapping("/api/lot/update")
-public class LotModificationHandler implements RequestHandler {
+public class LotModificationHandler {
 private static final Logger LOGGER = LogManager.getLogger(LotModificationHandler.class);
 
 public enum LotModificationType {

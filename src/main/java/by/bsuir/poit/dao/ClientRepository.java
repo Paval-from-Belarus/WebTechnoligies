@@ -9,6 +9,6 @@ import java.util.Optional;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
-public interface ClientDao extends JpaRepository<Client, LotDao> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
 Optional<Client> findById(long clientId);
 }

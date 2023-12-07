@@ -70,7 +70,7 @@ AuctionTypeDto findTypeByAuctionId(long auctionId) throws ResourceNotFoundExcept
  * @return A list of Auction objects representing the headers of the auctions.
  * @throws ResourceBusyException If the resource is currently busy.
  */
-List<AuctionDto> findHeadersByAdminId(long adminId) throws ResourceBusyException;
+List<AuctionDto> findHeadersByPrincipal(long adminId) throws ResourceBusyException;
 
 /**
  * Finds all auction types.

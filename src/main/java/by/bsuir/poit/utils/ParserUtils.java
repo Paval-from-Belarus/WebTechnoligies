@@ -113,7 +113,6 @@ public static AuctionDto parseAuction(HttpServletRequest request) {
 	    builder.eventDate(new java.sql.Date(eventDate.getTime()));
 	    parseRequest(Long.class, request, AUCTION_TYPE_ID)
 		.ifPresent(builder::auctionTypeId);
-	    builder.duration(new Timestamp(120));
       } catch (NumberFormatException e) {
 	    LOGGER.error("Failed to parse auction entity from request values by reason: {}", e.getMessage());
 	    throw new IllegalStateException(e);

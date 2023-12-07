@@ -1,6 +1,7 @@
 package by.bsuir.poit.dto;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,15 +16,13 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LotDto {
-public static final short BLOCKED_STATUS = 1;
-public static final short BEFORE_AUCTION_STATUS = 2;
-public static final short AUCTION_STATUS = 6;
-public static final short SELL_STATUS = 3;
-public static final short SENT_STATUS = 4;
-public static final short DELIVERIED_STATUS = 5;
 //relationship's data
-private long id;
+@Null(groups = Create.class)
+@NotNull(groups = Update.class)
+private Long id;
+@NotNull(groups = Create.class)
 private String title;
+@NotNull(groups = Create.class)
 private short status;
 //foreign keys
 @NotNull

@@ -18,7 +18,7 @@ public class EnglishLot {
 private Long id;
 
 @MapsId
-@OneToOne(fetch = FetchType.LAZY, optional = false)
+@OneToOne(optional = false)
 @JoinColumn(name = "lot_id", nullable = false)
 private Lot lot;
 

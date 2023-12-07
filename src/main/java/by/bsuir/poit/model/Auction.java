@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,31 +23,32 @@ private Long id;
 
 @NotNull
 @Column(name = "start_date", nullable = false)
-private Instant startDate;
+private Date startDate;
 
 @NotNull
 @Column(name = "last_register_date", nullable = false)
-private Instant lastRegisterDate;
+private Date lastRegisterDate;
 
 @NotNull
 @Column(name = "price_step", nullable = false, precision = 10, scale = 2)
-private BigDecimal priceStep;
+private Double priceStep;
 
 @Column(name = "members_limit")
-private Date membersLimit;
+private Integer membersLimit;
 
 @Column(name = "end_date")
 private Date endDate;
+@NotNull
+@ManyToOne(optional = false)
+@JoinColumn(name = "auction_type_id", nullable = false)
+private AuctionType auctionType;
+
 @Builder.Default
 @OneToMany(mappedBy = "auction", fetch = FetchType.LAZY)
 private List<Lot> lots = new ArrayList<>();
 @Builder.Default
 @OneToMany(mappedBy = "auction", fetch = FetchType.LAZY)
 private List<AuctionBet> bets = new ArrayList<>();
-@NotNull
-@ManyToOne(fetch = FetchType.LAZY, optional = false)
-@JoinColumn(name = "auction_type_id", nullable = false)
-private AuctionType auctionType;
 
 @NotNull
 @ManyToOne(fetch = FetchType.LAZY, optional = false)

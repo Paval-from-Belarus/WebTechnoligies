@@ -4,6 +4,7 @@ package by.bsuir.poit.dao;
 import by.bsuir.poit.model.EnglishLot;
 import by.bsuir.poit.model.Lot;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,14 +17,15 @@ import java.util.Optional;
  * @author Paval Shlyk
  * @since 23/10/2023
  */
-public interface LotDao extends JpaRepository<Lot, Long> {
+public interface LotRepository extends JpaRepository<Lot, Long> {
 @Query("select EnglishLot from EnglishLot where lot.id = ?")
-Optional<EnglishLot> findEnglishLotById(long id);
+Optional<EnglishLot> findEnglishWithLotById(long id);
 
 Optional<Lot> findByIdAndStatus(long id, short status);
 
 Optional<Lot> findById(long id);
-
+@EntityGraph(attributePaths = {"deliveryPoint"})
+Optional<Lot> findWithDeliveryPoint(long id);
 List<Lot> findAllByAuctionId(long auctionId);
 
 List<Lot> findAllBySellerClientId(long sellerId);

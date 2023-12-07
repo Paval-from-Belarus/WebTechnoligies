@@ -1,9 +1,7 @@
 package by.bsuir.poit.controller;
 
-import by.bsuir.poit.context.RequestHandlerDefinition;
 import by.bsuir.poit.services.AuctionService;
 import by.bsuir.poit.services.exception.authorization.UserAccessViolationException;
-import by.bsuir.poit.servlets.command.RequestHandler;
 import by.bsuir.poit.utils.ControllerUtils;
 import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.http.HttpServletRequest;

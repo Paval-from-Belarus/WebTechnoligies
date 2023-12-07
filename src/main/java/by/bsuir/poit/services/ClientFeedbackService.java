@@ -41,12 +41,4 @@ Optional<ClientFeedbackDto> findByLotIdAndClientTargetId(long lotId, long client
  * @return the client feedback, if found
  */
 Optional<ClientFeedbackDto> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId);
-
-/**
- * Retrieves a list of client feedback based on the given seller id.
- *
- * @param clientId the id of the seller
- * @return a list of client feedback
- */
-List<ClientFeedbackDto> findAllBySellerId(long clientId);
 }
