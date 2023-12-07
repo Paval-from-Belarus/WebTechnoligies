@@ -1,7 +1,7 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.dto.Client;
-import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.ClientDto;
+import by.bsuir.poit.dto.UserDto;
 import by.bsuir.poit.dto.mappers.ClientMapper;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.ClientDao;
@@ -36,10 +36,10 @@ private final ClientDao clientDao;
 private final ClientMapper clientMapper;
 
 @Override
-public User signIn(String login, String password) {
-      User user;
+public UserDto signIn(String login, String password) {
+      UserDto user;
       try {
-	    user = userDao.findByUserName(login).orElseThrow(() -> newUserNotFoundException(login));
+	    user = userDao.findByName(login).orElseThrow(() -> newUserNotFoundException(login));
 	    String salt = user.getSecuritySalt();
 	    String passwordHash = AuthorizationUtils.encodePassword(password, salt);
 	    if (!user.getPasswordHash().equals(passwordHash)) {
@@ -47,14 +47,14 @@ public User signIn(String login, String password) {
 		  LOGGER.info(msg);
 		  throw new UserAccessViolationException(msg);
 	    }
-	    if (user.getStatus() == User.STATUS_ACTIVE) {
-		  userDao.setUserStatus(user.getId(), User.STATUS_NOT_ACTIVE);
+	    if (user.getStatus() == UserDto.STATUS_ACTIVE) {
+		  userDao.setUserStatus(user.getId(), UserDto.STATUS_NOT_ACTIVE);
 		  final String msg = String.format("User with login=%s is already active", login);
 		  LOGGER.warn(msg);
 		  // TODO: 27/10/2023 send message to change password
 		  throw new AuthorizationException(msg);
 	    }
-	    userDao.setUserStatus(user.getId(), User.STATUS_ACTIVE);
+	    userDao.setUserStatus(user.getId(), UserDto.STATUS_ACTIVE);
       } catch (DataAccessException e) {
 	    LOGGER.error(e);
 	    throw new ResourceBusyException(e);
@@ -65,7 +65,7 @@ public User signIn(String login, String password) {
 @Override
 public void signOut(long userId) {
       try {
-	    userDao.setUserStatus(userId, User.STATUS_NOT_ACTIVE);
+	    userDao.setUserStatus(userId, UserDto.STATUS_NOT_ACTIVE);
       } catch (DataModifyingException e) {
 	    LOGGER.error("Failed to sign-out user {}", e.toString());
 	    throw new ResourceBusyException(e);
@@ -73,7 +73,7 @@ public void signOut(long userId) {
 }
 
 @Override
-public void register(@NotNull User user, @NotNull String password) throws ResourceModifyingException {
+public void register(@NotNull UserDto user, @NotNull String password) throws ResourceModifyingException {
       boolean isRegistered = false;
       String salt = AuthorizationUtils.newSecuritySalt();
       String passwordHash = AuthorizationUtils.encodePassword(password, salt);
@@ -85,8 +85,8 @@ public void register(@NotNull User user, @NotNull String password) throws Resour
 		  isRegistered = true;
 	    }
 	    //update client
-	    if (isRegistered && user.getRole() == User.CLIENT) {
-		  Client client = clientMapper.fromUser(user);
+	    if (isRegistered && user.getRole() == UserDto.CLIENT) {
+		  ClientDto client = clientMapper.fromUser(user);
 		  //todo: implement @Transactional for method
 		  clientDao.save(client);
 	    }
@@ -107,7 +107,7 @@ public void register(@NotNull User user, @NotNull String password) throws Resour
 @Override
 public void verifyByUserAccess(Principal principal, long userId) throws UserAccessViolationException {
       UserDetails details = (UserDetails) principal;
-      if (details.role() != User.ADMIN && details.id() != userId) {
+      if (details.role() != UserDto.ADMIN && details.id() != userId) {
 	    final String msg = String.format("User rights verification failed for principal %s", details);
 	    LOGGER.warn(msg);
 	    throw new UserAccessViolationException(msg);

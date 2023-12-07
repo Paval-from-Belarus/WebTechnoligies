@@ -1,8 +1,8 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.dto.Auction;
-import by.bsuir.poit.dto.AuctionBet;
-import by.bsuir.poit.dto.Lot;
+import by.bsuir.poit.dto.AuctionDto;
+import by.bsuir.poit.dto.AuctionBetDto;
+import by.bsuir.poit.dto.LotDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -40,8 +40,8 @@ public static final String LOT_START_PRICE = "lot_start_price";
  * @param request The HttpServletRequest object.
  * @return The parsed Lot object.
  */
-public static Lot parseLot(HttpServletRequest request) {
-      var builder = Lot.builder();//the setting to initial status on parse stage is not a valid
+public static LotDto parseLot(HttpServletRequest request) {
+      var builder = LotDto.builder();//the setting to initial status on parse stage is not a valid
       try {
 	    if (request.getParameter(LOT_TITLE) != null) {
 		  builder.title(request.getParameter(LOT_TITLE));
@@ -77,8 +77,8 @@ public static final String EVENT_DATE = "event_date";
  * @param request The HttpServletRequest object.
  * @return The parsed AuctionBet object.
  */
-public static AuctionBet parseBet(HttpServletRequest request) {
-      var builder = AuctionBet.builder();
+public static AuctionBetDto parseBet(HttpServletRequest request) {
+      var builder = AuctionBetDto.builder();
       try {
 	    parseRequest(Double.class, request, AUCTION_BET_VALUE)
 		.ifPresent(builder::bet);
@@ -103,8 +103,8 @@ private static final SimpleDateFormat SIMPLE_DATE_FORMAT =
  * @param request The HttpServletRequest object.
  * @return The parsed Auction object.
  */
-public static Auction parseAuction(HttpServletRequest request) {
-      var builder = Auction.builder();
+public static AuctionDto parseAuction(HttpServletRequest request) {
+      var builder = AuctionDto.builder();
       try {
 	    parseRequest(Double.class, request, PRICE_STEP)
 		.ifPresent(builder::priceStep);

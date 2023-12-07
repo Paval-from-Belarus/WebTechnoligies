@@ -33,7 +33,7 @@ private BigDecimal auctionPrice;
 
 @NotNull
 @Column(name = "status", nullable = false)
-private Byte status;
+private Short status;
 
 @NotNull
 @ManyToOne(fetch = FetchType.LAZY, optional = false)

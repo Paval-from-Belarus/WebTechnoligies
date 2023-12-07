@@ -13,6 +13,12 @@ import lombok.*;
 @Entity
 @Table(name = "user", schema = "auction_db")
 public class User {
+public static final short CLIENT = 1;
+public static final short ADMIN = 2;
+public static final short OFFICER = 3;//the grant to all
+
+public static final short STATUS_NOT_ACTIVE = 1;
+public static final short STATUS_ACTIVE = 2;
 @Id
 @Column(name = "user_id", nullable = false)
 private Long id;

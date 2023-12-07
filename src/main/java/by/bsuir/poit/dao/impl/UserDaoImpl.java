@@ -4,7 +4,7 @@ import by.bsuir.poit.dto.mappers.UserMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.UserDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.UserDto;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ private final @NotNull ConnectionPool pool;
 private final @NotNull UserMapper mapper;
 
 @Override
-public Optional<User> findById(@NotNull long id) throws DataAccessException {
-      Optional<User> user;
+public Optional<UserDto> findById(@NotNull long id) throws DataAccessException {
+      Optional<UserDto> user;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from USER where USER_ID= ?")) {
 	    statement.setLong(1, id);
@@ -41,8 +41,8 @@ public Optional<User> findById(@NotNull long id) throws DataAccessException {
 }
 
 @Override
-public Optional<User> findByUserName(String name) {
-      Optional<User> user;
+public Optional<UserDto> findByName(String name) {
+      Optional<UserDto> user;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from USER where NAME= ?")) {
 	    statement.setString(1, name);
@@ -86,7 +86,7 @@ public void setUserStatus(long userId, short status) {
 }
 
 @Override
-public User save(User user) {
+public UserDto save(UserDto user) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into USER " +
 									 "(NAME, PHONE_NUMBER, EMAIL, ROLE, PASSWORD_HASH, SECURITY_SALT, STATUS) " +

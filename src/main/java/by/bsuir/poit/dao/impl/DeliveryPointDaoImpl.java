@@ -3,7 +3,7 @@ package by.bsuir.poit.dao.impl;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.DeliveryPointDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dto.DeliveryPoint;
+import by.bsuir.poit.dto.DeliveryPointDto;
 import by.bsuir.poit.dto.mappers.DeliveryPointMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ private final ConnectionPool pool;
 private final DeliveryPointMapper mapper;
 
 @Override
-public Optional<DeliveryPoint> findById(long id) {
+public Optional<DeliveryPointDto> findById(long id) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from DELIVERY_POINT where DELIVERY_POINT_ID = ?")) {
 	    statement.setLong(1, id);

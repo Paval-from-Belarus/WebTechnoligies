@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "client", schema = "auction_db")
 public class Client {
+public static final int ACTIVE = 1; //for statuses
+public static final int BLOCKED = 2;
 @Id
 @Column(name = "user_id", nullable = false)
 private Long id;

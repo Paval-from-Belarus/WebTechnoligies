@@ -1,6 +1,6 @@
 package by.bsuir.poit.servlets.filters;
 
-import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.UserDto;
 import by.bsuir.poit.context.Autowired;
 import by.bsuir.poit.context.BeanUtils;
 import by.bsuir.poit.services.AuthorizationService;
@@ -37,7 +37,7 @@ public void doFilter(HttpServletRequest request, HttpServletResponse response, F
       String login = request.getParameter(AuthorizationUtils.NAME);
       String password = request.getParameter(AuthorizationUtils.PASSWORD);
       try {
-	    User user = authorizationService.signIn(login, password);//if method raise exception
+	    UserDto user = authorizationService.signIn(login, password);//if method raise exception
 	    request.setAttribute(AuthorizationUtils.USER_ATTRIBUTE, user);
 	    HttpSession session = request.getSession(false);
 	    if (session != null) {

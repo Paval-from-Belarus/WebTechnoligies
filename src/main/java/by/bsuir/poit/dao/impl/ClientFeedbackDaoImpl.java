@@ -3,7 +3,7 @@ package by.bsuir.poit.dao.impl;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.ClientFeedbackDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dto.ClientFeedback;
+import by.bsuir.poit.dto.ClientFeedbackDto;
 import by.bsuir.poit.dto.mappers.ClientFeedbackMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
@@ -30,8 +30,8 @@ private final ConnectionPool pool;
 private final ClientFeedbackMapper mapper;
 
 @Override
-public List<ClientFeedback> findAllBySellerId(long clientId) {
-      List<ClientFeedback> list;
+public List<ClientFeedbackDto> findAllBySellerId(long clientId) {
+      List<ClientFeedbackDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where CLIENT_TARGET_ID = ?")) {
 	    statement.setLong(1, clientId);
@@ -44,8 +44,8 @@ public List<ClientFeedback> findAllBySellerId(long clientId) {
 }
 
 @Override
-public List<ClientFeedback> findAllByCustomerId(long clientId) {
-      List<ClientFeedback> list;
+public List<ClientFeedbackDto> findAllByCustomerId(long clientId) {
+      List<ClientFeedbackDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where CLIENT_AUTHOR_ID = ?")) {
 	    statement.setLong(1, clientId);
@@ -58,8 +58,8 @@ public List<ClientFeedback> findAllByCustomerId(long clientId) {
 }
 
 @Override
-public List<ClientFeedback> findAllByLotId(long lotId) {
-      List<ClientFeedback> list;
+public List<ClientFeedbackDto> findAllByLotId(long lotId) {
+      List<ClientFeedbackDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where LOT_ID = ?")) {
 	    statement.setLong(1, lotId);
@@ -72,8 +72,8 @@ public List<ClientFeedback> findAllByLotId(long lotId) {
 }
 
 @Override
-public Optional<ClientFeedback> findByIdAndAuthorId(long lotId, long authorId) {
-      Optional<ClientFeedback> feedback;
+public Optional<ClientFeedbackDto> findByIdAndAuthorId(long lotId, long authorId) {
+      Optional<ClientFeedbackDto> feedback;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where LOT_ID = ? and CLIENT_AUTHOR_ID = ?")) {
 	    statement.setLong(1, lotId);
@@ -88,8 +88,8 @@ public Optional<ClientFeedback> findByIdAndAuthorId(long lotId, long authorId) {
 }
 
 @Override
-public Optional<ClientFeedback> findByIdAndTargetId(long lotId, long targetId) {
-      Optional<ClientFeedback> feedback;
+public Optional<ClientFeedbackDto> findByIdAndTargetId(long lotId, long targetId) {
+      Optional<ClientFeedbackDto> feedback;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where LOT_ID = ? and CLIENT_TARGET_ID = ?")) {
 	    statement.setLong(1, lotId);
@@ -104,8 +104,8 @@ public Optional<ClientFeedback> findByIdAndTargetId(long lotId, long targetId) {
 
 
 @Override
-public List<ClientFeedback> findAllBySellerIdSortedByRankingDesc(long clientId) {
-      List<ClientFeedback> list;
+public List<ClientFeedbackDto> findAllBySellerIdSortedByRankingDesc(long clientId) {
+      List<ClientFeedbackDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where CLIENT_TARGET_ID = ? ORDER BY RANKING DESC")) {
 	    statement.setLong(1, clientId);
@@ -118,8 +118,8 @@ public List<ClientFeedback> findAllBySellerIdSortedByRankingDesc(long clientId) 
 }
 
 @Override
-public List<ClientFeedback> findAllByCustomerIdSortedByRankingDesc(long clientId) {
-      List<ClientFeedback> list;
+public List<ClientFeedbackDto> findAllByCustomerIdSortedByRankingDesc(long clientId) {
+      List<ClientFeedbackDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT_FEEDBACK where CLIENT_AUTHOR_ID = ? ORDER BY RANKING DESC")) {
 	    statement.setLong(1, clientId);
@@ -132,7 +132,7 @@ public List<ClientFeedback> findAllByCustomerIdSortedByRankingDesc(long clientId
 }
 
 @Override
-public ClientFeedback save(ClientFeedback entity) {
+public ClientFeedbackDto save(ClientFeedbackDto entity) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into CLIENT_FEEDBACK " +
 									 "(RANKING, TEXT, CLIENT_AUTHOR_ID, CLIENT_TARGET_ID) " +

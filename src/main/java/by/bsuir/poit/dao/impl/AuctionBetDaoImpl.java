@@ -3,7 +3,7 @@ package by.bsuir.poit.dao.impl;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.AuctionBetDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dto.AuctionBet;
+import by.bsuir.poit.dto.AuctionBetDto;
 import by.bsuir.poit.dto.mappers.AuctionBetMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
@@ -30,8 +30,8 @@ private final ConnectionPool pool;
 private final AuctionBetMapper mapper;
 
 @Override
-public Optional<AuctionBet> findById(long id) {
-      Optional<AuctionBet> auctionBet;
+public Optional<AuctionBetDto> findById(long id) {
+      Optional<AuctionBetDto> auctionBet;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_BET where AUCTION_BET_ID = ?")) {
 	    statement.setLong(1, id);
@@ -44,8 +44,8 @@ public Optional<AuctionBet> findById(long id) {
 }
 
 @Override
-public List<AuctionBet> findAllByAuctionId(long auctionId) {
-      List<AuctionBet> betList;
+public List<AuctionBetDto> findAllByAuctionId(long auctionId) {
+      List<AuctionBetDto> betList;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_BET where AUCTION_ID = ?")) {
 	    statement.setLong(1, auctionId);
@@ -58,8 +58,8 @@ public List<AuctionBet> findAllByAuctionId(long auctionId) {
 }
 
 @Override
-public List<AuctionBet> findAllByAuctionIdAndClientId(long auctionId, long clientId) {
-      List<AuctionBet> list;
+public List<AuctionBetDto> findAllByAuctionIdAndClientId(long auctionId, long clientId) {
+      List<AuctionBetDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_BET where AUCTION_ID = ? and CLIENT_ID = ?")) {
 	    statement.setLong(1, auctionId);
@@ -73,8 +73,8 @@ public List<AuctionBet> findAllByAuctionIdAndClientId(long auctionId, long clien
 }
 
 @Override
-public List<AuctionBet> findAllByClientId(long clientId) {
-      List<AuctionBet> list;
+public List<AuctionBetDto> findAllByClientId(long clientId) {
+      List<AuctionBetDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_BET where CLIENT_ID = ?")) {
 	    statement.setLong(1, clientId);
@@ -87,7 +87,7 @@ public List<AuctionBet> findAllByClientId(long clientId) {
 }
 
 @Override
-public void save(AuctionBet bet) {
+public void save(AuctionBetDto bet) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION_BET " +
 									 "(BET, TIME, LOT_ID, CLIENT_ID, AUCTION_ID) " +

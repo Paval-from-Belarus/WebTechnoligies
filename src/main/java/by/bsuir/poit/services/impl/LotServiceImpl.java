@@ -1,8 +1,8 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.dto.DeliveryPoint;
-import by.bsuir.poit.dto.EnglishLot;
-import by.bsuir.poit.dto.Lot;
+import by.bsuir.poit.dto.DeliveryPointDto;
+import by.bsuir.poit.dto.EnglishLotDto;
+import by.bsuir.poit.dto.LotDto;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.DeliveryPointDao;
 import by.bsuir.poit.dao.LotDao;
@@ -32,9 +32,9 @@ private final LotDao lotDao;
 private final DeliveryPointDao deliveryPointDao;
 
 @Override
-public List<Lot> findAllBeforeAuctionLots() {
+public List<LotDto> findAllBeforeAuctionLots() {
       try {
-	    return lotDao.findAllByStatusOrderByStartingPriceDesc(Lot.BEFORE_AUCTION_STATUS);
+	    return lotDao.findAllByStatusOrderByStartPriceDesc(LotDto.BEFORE_AUCTION_STATUS);
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to fetch lots by before_auction status");
 	    throw new DataAccessException(e);
@@ -42,7 +42,7 @@ public List<Lot> findAllBeforeAuctionLots() {
 }
 
 @Override
-public List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException {
+public List<LotDto> findAllBySellerId(long clientId) throws ResourceBusyException {
       try {
 	    return lotDao.findAllBySellerId(clientId);
       } catch (DataAccessException e) {
@@ -53,7 +53,7 @@ public List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException {
 }
 
 @Override
-public List<Lot> findAllByStatus(short status) {
+public List<LotDto> findAllByStatus(short status) {
       try {
 	    return lotDao.findAllByStatus(status);
       } catch (DataAccessException e) {
@@ -63,7 +63,7 @@ public List<Lot> findAllByStatus(short status) {
 }
 
 @Override
-public List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException {
+public List<LotDto> findAllByAuction(long auctionId) throws ResourceBusyException {
       try {
 	    return lotDao.findAllByAuctionId(auctionId);
       } catch (DataAccessException e) {
@@ -74,7 +74,7 @@ public List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException {
 }
 
 @Override
-public EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException {
+public EnglishLotDto findEnglishLot(long lotId) throws ResourceNotFoundException {
       try {
 	    return lotDao.findEnglishLotById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
       } catch (DataAccessException e) {
@@ -84,9 +84,9 @@ public EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException {
 }
 
 @Override
-public DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundException {
+public DeliveryPointDto findDeliveryPointByLot(long lotId) throws ResourceNotFoundException {
       try {
-	    Lot lot = lotDao.findById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
+	    LotDto lot = lotDao.findById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
 	    Long deliveryPointId = lot.getDeliveryPointId();
 	    if (deliveryPointId == null) {
 		  throw newDeliveryPointNotFoundException(lotId, "lot holds null for delivery point");
@@ -99,11 +99,11 @@ public DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundE
 }
 
 @Override
-public void save(Principal principal, Lot lot) throws ResourceModifyingException {
+public void save(Principal principal, LotDto lot) throws ResourceModifyingException {
       try {
 	    UserDetails details = (UserDetails) principal;
 	    assert details != null;
-	    lot.setStatus(Lot.BEFORE_AUCTION_STATUS);
+	    lot.setStatus(LotDto.BEFORE_AUCTION_STATUS);
 	    lot.setSellerId(details.id());
 	    lotDao.save(lot);
       } catch (DataAccessException e) {
@@ -157,7 +157,7 @@ public void updateLotDeliveryPoint(long lotId, long deliveryPointId) throws Reso
 public boolean deleteIfPossible(long lotId) throws ResourceModifyingException {
       boolean isDeleted = true;
       try {
-	    lotDao.delete(lotId);
+	    lotDao.deleteById(lotId);
       } catch (DataModifyingException e) {
 	    isDeleted = false;
       } catch (DataAccessException e) {

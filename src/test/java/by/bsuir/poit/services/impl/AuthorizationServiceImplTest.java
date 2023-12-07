@@ -1,6 +1,6 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.UserDto;
 import by.bsuir.poit.dto.mappers.ClientMapper;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.UserDao;
@@ -43,25 +43,25 @@ void signIn() {
       final String invalidPassword = "NOT VALID";
       final String salt = "aboba";
       String passwordHash = AuthorizationUtils.encodePassword(validPassword, salt);
-      User user = User.builder()
+      UserDto user = UserDto.builder()
                       .name("Any name")
 		      .passwordHash(passwordHash)
                       .securitySalt(salt)
-		      .status(User.STATUS_NOT_ACTIVE)
+		      .status(UserDto.STATUS_NOT_ACTIVE)
 		      .build();
-      when(userDao.findByUserName(anyString())).thenReturn(Optional.of(user));
+      when(userDao.findByName(anyString())).thenReturn(Optional.of(user));
       assertDoesNotThrow(() -> authorizationService.signIn(anyString(), validPassword));
       assertThrows(UserAccessViolationException.class, () -> authorizationService.signIn(anyString(), invalidPassword));
-      user.setStatus(User.STATUS_ACTIVE);
+      user.setStatus(UserDto.STATUS_ACTIVE);
       assertThrows(AuthorizationException.class, () -> authorizationService.signIn(anyString(), validPassword));
 }
 
 
 @Test
 void register() {
-      User user = User.builder()
+      UserDto user = UserDto.builder()
 		      .name("name")
-		      .role(User.CLIENT)
+		      .role(UserDto.CLIENT)
 		      .build();
       doReturn(false).when(userDao).existsByName(anyString());
       assertDoesNotThrow(() -> authorizationService.register(user, anyString()));
@@ -78,10 +78,10 @@ void verifyByUserAccess() {
       final long userId = 12;
       final long otherUserId = 42;
       when(details.id()).thenReturn(userId);
-      when(details.role()).thenReturn(User.CLIENT);
+      when(details.role()).thenReturn(UserDto.CLIENT);
       assertDoesNotThrow(() -> authorizationService.verifyByUserAccess(details, userId));
       assertThrows(UserAccessViolationException.class, () -> authorizationService.verifyByUserAccess(details, otherUserId));
-      when(details.role()).thenReturn(User.ADMIN);
+      when(details.role()).thenReturn(UserDto.ADMIN);
       assertDoesNotThrow(() -> authorizationService.verifyByUserAccess(details, userId));
       assertDoesNotThrow(() -> authorizationService.verifyByUserAccess(details, otherUserId));
 }

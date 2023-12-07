@@ -1,6 +1,6 @@
 package by.bsuir.poit.servlets.filters;
 
-import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.UserDto;
 import by.bsuir.poit.servlets.UserDetails;
 import by.bsuir.poit.utils.ControllerUtils;
 import by.bsuir.poit.utils.PageUtils;
@@ -71,10 +71,10 @@ private boolean isRequestToUserPage(String requestUri) {
 
 private String pageByUserRole(Principal principal) {
       UserDetails details = (UserDetails) principal;
-      if (details.id() == User.CLIENT) {
+      if (details.id() == UserDto.CLIENT) {
 	    return ControllerUtils.CLIENT_ENDPOINT;
       }
-      if (details.id() == User.ADMIN) {
+      if (details.id() == UserDto.ADMIN) {
 	    return ControllerUtils.ADMIN_ENDPOINT;
       }
       return PageUtils.ERROR_PAGE;

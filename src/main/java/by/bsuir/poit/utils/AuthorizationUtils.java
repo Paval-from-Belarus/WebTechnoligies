@@ -1,6 +1,6 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.UserDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,9 +46,9 @@ public static String newSecuritySalt() {
 
 private static final SecureRandom random = new SecureRandom();
 
-public static User parseUser(HttpServletRequest request) throws IOException {
+public static UserDto parseUser(HttpServletRequest request) throws IOException {
       request.getParameter(ROLE);
-      return User.builder()
+      return UserDto.builder()
 		 .name(request.getParameter(NAME))
 		 .email(request.getParameter(EMAIL))
 		 .role(Short.parseShort(request.getParameter(ROLE)))

@@ -1,6 +1,6 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.dto.ClientFeedback;
+import by.bsuir.poit.dto.ClientFeedbackDto;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.ClientFeedbackDao;
 import by.bsuir.poit.services.ClientFeedbackService;
@@ -23,22 +23,22 @@ private static final Logger LOGGER = LogManager.getLogger(ClientFeedbackServiceI
 private final ClientFeedbackDao clientFeedbackDao;
 
 @Override
-public List<ClientFeedback> findAllByLotId(long lotId) {
+public List<ClientFeedbackDto> findAllByLotId(long lotId) {
       return clientFeedbackDao.findAllByLotId(lotId);
 }
 
 @Override
-public Optional<ClientFeedback> findByLotIdAndClientTargetId(long lotId, long clientTargetId) {
+public Optional<ClientFeedbackDto> findByLotIdAndClientTargetId(long lotId, long clientTargetId) {
       return clientFeedbackDao.findByIdAndTargetId(lotId, clientTargetId);
 }
 
 @Override
-public Optional<ClientFeedback> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId) {
+public Optional<ClientFeedbackDto> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId) {
       return clientFeedbackDao.findByIdAndAuthorId(lotId, clientAuthorId);
 }
 
 @Override
-public List<ClientFeedback> findAllBySellerId(long clientId) {
+public List<ClientFeedbackDto> findAllBySellerId(long clientId) {
       return clientFeedbackDao.findAllBySellerId(clientId);
 }
 

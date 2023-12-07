@@ -16,6 +16,9 @@ import lombok.*;
 @Entity
 @Table(name = "auction_type", schema = "auction_db")
 public class AuctionType {
+public static final long ENGLISH = 1;
+public static final long BLITZ = 2;
+public static final long BLIND = 3;
 @Id
 @Column(name = "auction_type_id", nullable = false)
 private Long id;

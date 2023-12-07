@@ -70,7 +70,7 @@
     The page type is ${pageType}
 </div>
 <section class="auction-lot-list">
-    <c:forEach var="lot" items="${lotList}">
+    <c:forEach var="lot" items="${lots}">
         <%@include file="/templates/lot.jsp" %>
         <c:if test="${empty lot.getCustomerId() && pageType == 0}">
             <form action="${pageContext.request.contextPath}/api/auction/bet/new" method="post">

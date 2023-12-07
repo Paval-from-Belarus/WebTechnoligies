@@ -3,7 +3,7 @@ package by.bsuir.poit.dao.impl;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.AuctionTypeDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dto.AuctionType;
+import by.bsuir.poit.dto.AuctionTypeDto;
 import by.bsuir.poit.dto.mappers.AuctionTypeMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ private final ConnectionPool pool;
 private final AuctionTypeMapper mapper;
 
 @Override
-public Optional<AuctionType> findById(long typeId) {
-      Optional<AuctionType> auctionType;
+public Optional<AuctionTypeDto> findById(long typeId) {
+      Optional<AuctionTypeDto> auctionType;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_TYPE where AUCTION_TYPE_ID = ?")) {
 	    statement.setLong(1, typeId);
@@ -42,8 +42,8 @@ public Optional<AuctionType> findById(long typeId) {
 }
 
 @Override
-public List<AuctionType> findAll() {
-      List<AuctionType> list;
+public List<AuctionTypeDto> findAll() {
+      List<AuctionTypeDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_TYPE")) {
 	    list = fetchListAndClose(statement, mapper);

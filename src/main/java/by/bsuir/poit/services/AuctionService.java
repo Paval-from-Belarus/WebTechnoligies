@@ -24,15 +24,15 @@ public interface AuctionService {
  * @param date the date to compare with auction event dates
  * @return a list of auctions occurring after the specified date
  */
-List<Auction> findAfterEventDate(Date date);
+List<AuctionDto> findAfterEventDate(Date date);
 
-List<Auction> findByClientId(long clientId);
+List<AuctionDto> findByClientId(long clientId);
 
 /**
  * @param auctionId the id of desirable auction
  * @return auction (or derived instance) for given id. If auction is not present this method will throw
  */
-Auction findById(long auctionId) throws ResourceNotFoundException;
+AuctionDto findById(long auctionId) throws ResourceNotFoundException;
 
 
 /**
@@ -42,7 +42,7 @@ Auction findById(long auctionId) throws ResourceNotFoundException;
  * @return a list of AuctionBet objects representing all the bets for the auction
  * @throws ResourceNotFoundException if the auction is not found
  */
-List<AuctionBet> findAllBets(long auctionId) throws ResourceNotFoundException;
+List<AuctionBetDto> findAllBets(long auctionId) throws ResourceNotFoundException;
 
 /**
  * Finds all bets made by a client for a specific auction.
@@ -52,7 +52,7 @@ List<AuctionBet> findAllBets(long auctionId) throws ResourceNotFoundException;
  * @return A list of AuctionBet objects made by the client for the auction.
  * @throws ResourceNotFoundException If the auction or client is not found.
  */
-List<AuctionBet> findAllBetsByClientId(long auctionId, long clientId) throws ResourceNotFoundException;
+List<AuctionBetDto> findAllBetsByClientId(long auctionId, long clientId) throws ResourceNotFoundException;
 
 /**
  * Finds the type of an auction by its ID.
@@ -61,7 +61,7 @@ List<AuctionBet> findAllBetsByClientId(long auctionId, long clientId) throws Res
  * @return The AuctionType of the auction.
  * @throws ResourceNotFoundException If the auction is not found.
  */
-AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundException;
+AuctionTypeDto findTypeByAuctionId(long auctionId) throws ResourceNotFoundException;
 
 /**
  * Finds the headers of all auctions managed by an admin.
@@ -70,14 +70,14 @@ AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundException
  * @return A list of Auction objects representing the headers of the auctions.
  * @throws ResourceBusyException If the resource is currently busy.
  */
-List<Auction> findHeadersByAdminId(long adminId) throws ResourceBusyException;
+List<AuctionDto> findHeadersByAdminId(long adminId) throws ResourceBusyException;
 
 /**
  * Finds all auction types.
  *
  * @return A list of all AuctionType objects.
  */
-List<AuctionType> findAllTypes();
+List<AuctionTypeDto> findAllTypes();
 
 /**
  * Assigns a lot to an auction.
@@ -97,7 +97,7 @@ void assignLot(Principal principal, long auctionId, long lotId) throws UserAcces
  * @param auction   The Auction object to be saved.
  * @throws ResourceModifyingException If there is an error modifying the resource.
  */
-void saveAuction(Principal principal, Auction auction) throws ResourceModifyingException;
+void saveAuction(Principal principal, AuctionDto auction) throws ResourceModifyingException;
 
 /**
  * Saves a bet.
@@ -106,5 +106,5 @@ void saveAuction(Principal principal, Auction auction) throws ResourceModifyingE
  * @param bet       The AuctionBet object to be saved.
  * @throws ResourceNotFoundException If the bet is not found.
  */
-void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFoundException;
+void saveBet(Principal principal, AuctionBetDto bet) throws ResourceNotFoundException;
 }

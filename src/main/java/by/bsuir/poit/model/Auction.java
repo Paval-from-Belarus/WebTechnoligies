@@ -7,6 +7,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Builder
@@ -35,10 +36,10 @@ private Instant lastRegisterDate;
 private BigDecimal priceStep;
 
 @Column(name = "members_limit")
-private Integer membersLimit;
+private Date membersLimit;
 
 @Column(name = "end_date")
-private Instant endDate;
+private Date endDate;
 @Builder.Default
 @OneToMany(mappedBy = "auction", fetch = FetchType.LAZY)
 private List<Lot> lots = new ArrayList<>();

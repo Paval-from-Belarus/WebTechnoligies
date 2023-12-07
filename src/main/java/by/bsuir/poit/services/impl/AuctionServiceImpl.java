@@ -34,8 +34,8 @@ private final AuctionTypeDao auctionTypeDao;
 private final LotDao lotDao;
 
 @Override
-public List<Auction> findAfterEventDate(Date date) {
-      List<Auction> auctions;
+public List<AuctionDto> findAfterEventDate(Date date) {
+      List<AuctionDto> auctions;
       try {
 	    auctions = auctionDao.findAllAfterEventDate(date);
       } catch (DataAccessException e) {
@@ -47,13 +47,13 @@ public List<Auction> findAfterEventDate(Date date) {
 }
 
 @Override
-public List<Auction> findByClientId(long clientId) {
-      List<Auction> auctions;
+public List<AuctionDto> findByClientId(long clientId) {
+      List<AuctionDto> auctions;
       try {
-	    List<AuctionMember> members = auctionMemberDao.findAllByClientId(clientId);
+	    List<AuctionMemberDto> members = auctionMemberDao.findAllByClientId(clientId);
 	    auctions = new ArrayList<>();
-	    for (AuctionMember member : members) {
-		  Auction auction = auctionDao
+	    for (AuctionMemberDto member : members) {
+		  AuctionDto auction = auctionDao
 					.findById(member.getAuctionId())
 					.orElseThrow(() -> newAuctionNotFoundException(member.getAuctionId()));
 		  auctions.add(auction);
@@ -67,8 +67,8 @@ public List<Auction> findByClientId(long clientId) {
 }
 
 @Override
-public Auction findById(long auctionId) throws ResourceNotFoundException {
-      Auction auction;
+public AuctionDto findById(long auctionId) throws ResourceNotFoundException {
+      AuctionDto auction;
       try {
 	    auction = auctionDao.findById(auctionId).orElseThrow(() -> newAuctionNotFoundException(auctionId));
       } catch (DataAccessException e) {
@@ -79,8 +79,8 @@ public Auction findById(long auctionId) throws ResourceNotFoundException {
 }
 
 @Override
-public List<AuctionBet> findAllBets(long auctionId) throws ResourceNotFoundException {
-      List<AuctionBet> bets;
+public List<AuctionBetDto> findAllBets(long auctionId) throws ResourceNotFoundException {
+      List<AuctionBetDto> bets;
       try {
 	    bets = auctionBetDao.findAllByAuctionId(auctionId);
       } catch (DataAccessException e) {
@@ -91,8 +91,8 @@ public List<AuctionBet> findAllBets(long auctionId) throws ResourceNotFoundExcep
 }
 
 @Override
-public List<AuctionBet> findAllBetsByClientId(long auctionId, long clientId) throws ResourceNotFoundException {
-      List<AuctionBet> bets;
+public List<AuctionBetDto> findAllBetsByClientId(long auctionId, long clientId) throws ResourceNotFoundException {
+      List<AuctionBetDto> bets;
       try {
 	    bets = auctionBetDao.findAllByAuctionIdAndClientId(auctionId, clientId);
       } catch (DataAccessException e) {
@@ -103,10 +103,10 @@ public List<AuctionBet> findAllBetsByClientId(long auctionId, long clientId) thr
 }
 
 @Override
-public AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundException {
-      AuctionType type;
+public AuctionTypeDto findTypeByAuctionId(long auctionId) throws ResourceNotFoundException {
+      AuctionTypeDto type;
       try {
-	    Auction auction = auctionDao.findById(auctionId).orElseThrow(() -> newAuctionNotFoundException(auctionId));
+	    AuctionDto auction = auctionDao.findById(auctionId).orElseThrow(() -> newAuctionNotFoundException(auctionId));
 	    type = auctionTypeDao.findById(auction.getAuctionTypeId()).orElseThrow(() -> newAuctionTypeNotFoundException(auction.getAuctionTypeId()));
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to find auction type by given actionId={}", auctionId);
@@ -116,7 +116,7 @@ public AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundEx
 }
 
 @Override
-public List<Auction> findHeadersByAdminId(long adminId) throws ResourceBusyException {
+public List<AuctionDto> findHeadersByAdminId(long adminId) throws ResourceBusyException {
       try {
 	    return auctionDao.findHeadersAllByAdminIdSortedByEventDateDesc(adminId);
       } catch (DataAccessException e) {
@@ -126,7 +126,7 @@ public List<Auction> findHeadersByAdminId(long adminId) throws ResourceBusyExcep
 }
 
 @Override
-public List<AuctionType> findAllTypes() {
+public List<AuctionTypeDto> findAllTypes() {
       try {
 	    return auctionTypeDao.findAll();
       } catch (DataAccessException e) {
@@ -141,12 +141,12 @@ public void assignLot(Principal principal, long auctionId, long lotId) throws Us
       try {
 	    //current no check
 	    UserDetails details = (UserDetails) principal;
-	    if (details.role() != User.ADMIN) {
+	    if (details.role() != UserDto.ADMIN) {
 		  final String msg = String.format("Assign lot to auction can only admin. Not user with id = %s", details.role());
 		  LOGGER.info(msg);
 		  throw new UserAccessViolationException(msg);
 	    }
-	    lotDao.assignLotWithStatusToAuction(lotId, Lot.AUCTION_STATUS, auctionId);
+	    lotDao.assignLotWithStatusToAuction(lotId, LotDto.AUCTION_STATUS, auctionId);
       } catch (DataAccessException e) {
 	    LOGGER.info("Failed to update auctionId={} and auction status for given auction={}", auctionId, lotId);
 	    throw new ResourceBusyException(e);
@@ -154,7 +154,7 @@ public void assignLot(Principal principal, long auctionId, long lotId) throws Us
 }
 
 @Override
-public void saveAuction(Principal principal, Auction auction) throws ResourceModifyingException {
+public void saveAuction(Principal principal, AuctionDto auction) throws ResourceModifyingException {
       try {
 	    UserDetails details = (UserDetails) principal;
 	    auction.setAdminId(details.id());
@@ -167,7 +167,7 @@ public void saveAuction(Principal principal, Auction auction) throws ResourceMod
 
 @Override
 //@Transactional
-public void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFoundException {
+public void saveBet(Principal principal, AuctionBetDto bet) throws ResourceNotFoundException {
       if (bet.getLotId() == null || bet.getAuctionId() == null) {
 	    final String msg = String.format("Failed to save bet because on of the bet field is null: %s", bet);
 	    LOGGER.warn(msg);
@@ -176,7 +176,7 @@ public void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFound
       UserDetails details = (UserDetails) principal;
       bet.setClientId(details.id());
       try {
-	    Lot lot = lotDao.findById(bet.getLotId()).orElseThrow(() -> newLotNotFoundException(bet.getLotId()));
+	    LotDto lot = lotDao.findById(bet.getLotId()).orElseThrow(() -> newLotNotFoundException(bet.getLotId()));
 	    if (lot.getActualPrice() != null && lot.getActualPrice() > bet.getBet()) {
 		  throw newIllegalBetValue(bet);
 	    }
@@ -188,7 +188,7 @@ public void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFound
       }
 }
 
-private ResourceModifyingException newIllegalBetValue(AuctionBet bet) {
+private ResourceModifyingException newIllegalBetValue(AuctionBetDto bet) {
       final String msg = String.format("The given bet has invalid value %s", bet);
       LOGGER.info(msg);
       throw new ResourceModifyingException(msg);

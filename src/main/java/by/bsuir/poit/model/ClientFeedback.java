@@ -18,7 +18,7 @@ private Long id;
 
 @NotNull
 @Column(name = "ranking", nullable = false)
-private Byte ranking;
+private Double ranking;
 
 @Lob
 @Column(name = "text")

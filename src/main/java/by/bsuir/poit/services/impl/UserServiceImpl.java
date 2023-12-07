@@ -1,7 +1,7 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.dto.Client;
-import by.bsuir.poit.dto.User;
+import by.bsuir.poit.dto.ClientDto;
+import by.bsuir.poit.dto.UserDto;
 import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.UserDao;
@@ -23,12 +23,12 @@ private final ClientDao clientDao;
 private final UserDao userDao;
 
 @Override
-public Client findClientByUserId(long userId) {
+public ClientDto findClientByUserId(long userId) {
       return clientDao.findById(userId).orElseThrow(() -> newClientNotFoundException(userId));
 }
 
 @Override
-public User findUserByUserId(long userId) {
+public UserDto findUserByUserId(long userId) {
       return userDao.findById(userId).orElseThrow(() -> newUserNotFoundException(userId));
 }
 

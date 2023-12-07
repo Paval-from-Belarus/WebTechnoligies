@@ -1,6 +1,6 @@
 package by.bsuir.poit.services;
 
-import by.bsuir.poit.dto.ClientFeedback;
+import by.bsuir.poit.dto.ClientFeedbackDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +22,7 @@ public interface ClientFeedbackService {
  * @return a list of client feedback
  */
 @Deprecated
-List<ClientFeedback> findAllByLotId(long lotId);
+List<ClientFeedbackDto> findAllByLotId(long lotId);
 
 /**
  * Retrieves the client feedback based on the given lot id and client target id.
@@ -31,7 +31,7 @@ List<ClientFeedback> findAllByLotId(long lotId);
  * @param clientTargetId the id of the client target
  * @return the client feedback, if found
  */
-Optional<ClientFeedback> findByLotIdAndClientTargetId(long lotId, long clientTargetId);
+Optional<ClientFeedbackDto> findByLotIdAndClientTargetId(long lotId, long clientTargetId);
 
 /**
  * Retrieves the client feedback based on the given lot id and client author id.
@@ -40,7 +40,7 @@ Optional<ClientFeedback> findByLotIdAndClientTargetId(long lotId, long clientTar
  * @param clientAuthorId the id of the client author
  * @return the client feedback, if found
  */
-Optional<ClientFeedback> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId);
+Optional<ClientFeedbackDto> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId);
 
 /**
  * Retrieves a list of client feedback based on the given seller id.
@@ -48,5 +48,5 @@ Optional<ClientFeedback> findByLotIdAndClientAuthorId(long lotId, long clientAut
  * @param clientId the id of the seller
  * @return a list of client feedback
  */
-List<ClientFeedback> findAllBySellerId(long clientId);
+List<ClientFeedbackDto> findAllBySellerId(long clientId);
 }

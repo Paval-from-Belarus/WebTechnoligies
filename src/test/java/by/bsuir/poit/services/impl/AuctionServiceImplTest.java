@@ -1,9 +1,9 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.dto.Auction;
-import by.bsuir.poit.dto.AuctionBet;
-import by.bsuir.poit.dto.AuctionMember;
-import by.bsuir.poit.dto.AuctionType;
+import by.bsuir.poit.dto.AuctionDto;
+import by.bsuir.poit.dto.AuctionBetDto;
+import by.bsuir.poit.dto.AuctionMemberDto;
+import by.bsuir.poit.dto.AuctionTypeDto;
 import by.bsuir.poit.dao.*;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
@@ -46,7 +46,7 @@ public void initMockDao() {
 
 @Test
 void findAfterEventDate() {
-      List<Auction> list = new ArrayList<>();
+      List<AuctionDto> list = new ArrayList<>();
       Date date = new Date();
       doReturn(list).when(auctionDao).findAllAfterEventDate(date);
       assertEquals(list, auctionService.findAfterEventDate(date));
@@ -58,11 +58,11 @@ void findAfterEventDate() {
 
 @Test
 void findByClientId() {
-      List<AuctionMember> members = List.of(
-	  new AuctionMember(1L, 1L, (short) 2),
-	  new AuctionMember(2L, 2L, (short) 2)
+      List<AuctionMemberDto> members = List.of(
+	  new AuctionMemberDto(1L, 1L, (short) 2),
+	  new AuctionMemberDto(2L, 2L, (short) 2)
       );
-      Auction auction = new Auction();
+      AuctionDto auction = new AuctionDto();
       when(auctionMemberDao.findAllByClientId(anyLong())).thenReturn(members);
       when(auctionDao.findById(anyLong())).thenReturn(Optional.empty());
       assertThrows(ResourceNotFoundException.class, () -> auctionService.findByClientId(anyLong()));
@@ -78,17 +78,17 @@ void findByClientId() {
 void findById() {
       doThrow(DataAccessException.class).when(auctionDao).findById(anyLong());
       assertThrows(ResourceBusyException.class, () -> auctionService.findById(anyLong()));
-      Auction auction = new Auction();
+      AuctionDto auction = new AuctionDto();
       doReturn(Optional.of(auction)).when(auctionDao).findById(anyLong());
       assertEquals(auction, auctionService.findById(anyLong()));
 }
 
 @Test
 void findAllBetsByClientId() {
-      List<AuctionBet> firstUserBets = List.of();
-      List<AuctionBet> secondUserBets = List.of(
-	  AuctionBet.builder().bet(0.3).build(),
-	  AuctionBet.builder().bet(0.7).build());
+      List<AuctionBetDto> firstUserBets = List.of();
+      List<AuctionBetDto> secondUserBets = List.of(
+	  AuctionBetDto.builder().bet(0.3).build(),
+	  AuctionBetDto.builder().bet(0.7).build());
       long auctionId = 42;
       doReturn(firstUserBets).when(auctionBetDao).findAllByAuctionIdAndClientId(auctionId, 1);
       doReturn(secondUserBets).when(auctionBetDao).findAllByAuctionIdAndClientId(auctionId, 2);
@@ -98,10 +98,10 @@ void findAllBetsByClientId() {
 
 @Test
 void findTypeByAuctionId() {
-      AuctionType type = AuctionType.builder()
+      AuctionTypeDto type = AuctionTypeDto.builder()
 			     .id(1).name("First type").description("No description")
 			     .build();
-      Auction auction = Auction.builder()
+      AuctionDto auction = AuctionDto.builder()
 			    .auctionTypeId(1L)
 			    .build();
       when(auctionDao.findById(anyLong())).thenReturn(Optional.of(auction));

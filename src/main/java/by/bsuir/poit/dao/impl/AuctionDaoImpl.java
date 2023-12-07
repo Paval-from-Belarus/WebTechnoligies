@@ -1,12 +1,12 @@
 package by.bsuir.poit.dao.impl;
 
-import by.bsuir.poit.dto.AuctionType;
+import by.bsuir.poit.dto.AuctionTypeDto;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.AuctionDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dto.Auction;
-import by.bsuir.poit.dto.BlindAuction;
-import by.bsuir.poit.dto.BlitzAuction;
+import by.bsuir.poit.dto.AuctionDto;
+import by.bsuir.poit.dto.BlindAuctionDto;
+import by.bsuir.poit.dto.BlitzAuctionDto;
 import by.bsuir.poit.dto.mappers.AuctionMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
@@ -36,19 +36,19 @@ private final ConnectionPool pool;
 private final AuctionMapper mapper;
 
 @Override
-public Optional<Auction> findById(long id) {
-      Optional<Auction> auction;
+public Optional<AuctionDto> findById(long id) {
+      Optional<AuctionDto> auction;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION where AUCTION_ID = ?")) {
 	    statement.setLong(1, id);
 	    auction = fetchEntityAndClose(statement, mapper);
-	    if (auction.isPresent() && auction.get().getAuctionTypeId() == AuctionType.BLITZ) {
-		  BlitzAuction blitzAuction = findBlitzById(id).orElseThrow(() -> newAuctionNotFoundException(id));
+	    if (auction.isPresent() && auction.get().getAuctionTypeId() == AuctionTypeDto.BLITZ) {
+		  BlitzAuctionDto blitzAuction = findBlitzById(id).orElseThrow(() -> newAuctionNotFoundException(id));
 		  mapper.updateBlitzWithParent(blitzAuction, auction.get());
 		  return Optional.of(blitzAuction);
 	    }
-	    if (auction.isPresent() && auction.get().getAuctionTypeId() == AuctionType.BLIND) {
-		  BlindAuction blindAuction = findBlindById(id).orElseThrow(() -> newAuctionNotFoundException(id));
+	    if (auction.isPresent() && auction.get().getAuctionTypeId() == AuctionTypeDto.BLIND) {
+		  BlindAuctionDto blindAuction = findBlindById(id).orElseThrow(() -> newAuctionNotFoundException(id));
 		  mapper.updateBlindWithParent(blindAuction, auction.get());
 		  return Optional.of(blindAuction);
 	    }
@@ -60,8 +60,8 @@ public Optional<Auction> findById(long id) {
 }
 
 @Override
-public List<Auction> findAllAfterEventDate(Date date) {
-      List<Auction> list;
+public List<AuctionDto> findAllAfterEventDate(Date date) {
+      List<AuctionDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION where EVENT_DATE >= ?")) {
 	    statement.setDate(1, toEntityDate(date));
@@ -74,8 +74,8 @@ public List<Auction> findAllAfterEventDate(Date date) {
 }
 
 
-private Optional<BlindAuction> findBlindById(long id) {
-      Optional<BlindAuction> auction;
+private Optional<BlindAuctionDto> findBlindById(long id) {
+      Optional<BlindAuctionDto> auction;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_TYPE_BLIND where AUCTION_ID = ?")) {
 	    statement.setLong(1, id);
@@ -87,8 +87,8 @@ private Optional<BlindAuction> findBlindById(long id) {
       return auction;
 }
 
-private Optional<BlitzAuction> findBlitzById(long id) {
-      Optional<BlitzAuction> auction;
+private Optional<BlitzAuctionDto> findBlitzById(long id) {
+      Optional<BlitzAuctionDto> auction;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_TYPE_BLITZ where AUCTION_ID = ?")) {
 	    statement.setLong(1, id);
@@ -101,8 +101,8 @@ private Optional<BlitzAuction> findBlitzById(long id) {
 }
 
 @Override
-public List<Auction> findAllByAuctionTypeIdAndAfterEventDate(long auctionTypeId, @NotNull Date start) {
-      List<Auction> auctions;
+public List<AuctionDto> findAllByAuctionTypeIdAndAfterEventDate(long auctionTypeId, @NotNull Date start) {
+      List<AuctionDto> auctions;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION where AUCTION_TYPE_ID = ? and EVENT_DATE >= ?")) {
 	    statement.setLong(1, auctionTypeId);
@@ -116,8 +116,8 @@ public List<Auction> findAllByAuctionTypeIdAndAfterEventDate(long auctionTypeId,
 }
 
 @Override
-public List<Auction> findAllByAuctionTypeId(long auctionTypeId) {
-      List<Auction> auctions;
+public List<AuctionDto> findAllByAuctionTypeId(long auctionTypeId) {
+      List<AuctionDto> auctions;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION where AUCTION_TYPE_ID = ?")) {
 	    statement.setLong(1, auctionTypeId);
@@ -130,7 +130,7 @@ public List<Auction> findAllByAuctionTypeId(long auctionTypeId) {
 }
 
 @Override
-public List<Auction> findHeadersAllByAdminIdSortedByEventDateDesc(long adminId) {
+public List<AuctionDto> findHeadersAllByAdminIdSortedByEventDateDesc(long adminId) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION " +
 									 "where ADMIN_USER_ID = ?" +
@@ -147,7 +147,7 @@ public List<Auction> findHeadersAllByAdminIdSortedByEventDateDesc(long adminId) 
 
 @Override
 //@Transactional
-public void save(Auction auction) throws ResourceModifyingException {
+public void save(AuctionDto auction) throws ResourceModifyingException {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION " +
 									 "(EVENT_DATE, LAST_REGISTER_DATE, PRICE_STEP, AUCTION_TYPE_ID, DURATION, MEMBERS_LIMIT, ADMIN_USER_ID) " +
@@ -172,16 +172,16 @@ public void save(Auction auction) throws ResourceModifyingException {
 		  throw new IllegalStateException("The Sql Exception should be thrown before");
 	    }
 	    auction.setId(auctionId.get());
-	    if (auction.getAuctionTypeId() == AuctionType.BLITZ) {
-		  BlitzAuction blitzAuction = BlitzAuction.builder()
+	    if (auction.getAuctionTypeId() == AuctionTypeDto.BLITZ) {
+		  BlitzAuctionDto blitzAuction = BlitzAuctionDto.builder()
 						  .iterationLimit(new Timestamp(120))
 						  .memberExcludeLimit(5)
 						  .build();
 		  blitzAuction = mapper.updateBlitzWithParent(blitzAuction, auction);
 		  saveBlitz(blitzAuction);
 	    }
-	    if (auction.getAuctionTypeId() == AuctionType.BLIND) {
-		  BlindAuction blindAuction = BlindAuction.builder()
+	    if (auction.getAuctionTypeId() == AuctionTypeDto.BLIND) {
+		  BlindAuctionDto blindAuction = BlindAuctionDto.builder()
 						  .betLimit(2)
 						  .timeout(new Timestamp(12))
 						  .build();
@@ -194,7 +194,7 @@ public void save(Auction auction) throws ResourceModifyingException {
       }
 }
 
-private void saveBlitz(BlitzAuction auction) {
+private void saveBlitz(BlitzAuctionDto auction) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION_TYPE_BLITZ " +
 									 "(AUCTION_ID, ITERATION_TIME, MEMBERS_EXCLUDE_LIMIT) " +
@@ -213,7 +213,7 @@ private void saveBlitz(BlitzAuction auction) {
       }
 }
 
-private void saveBlind(BlindAuction auction) {
+private void saveBlind(BlindAuctionDto auction) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION_TYPE_BLIND " +
 									 "(AUCTION_ID, BET_LIMIT, TIMEOUT) " +

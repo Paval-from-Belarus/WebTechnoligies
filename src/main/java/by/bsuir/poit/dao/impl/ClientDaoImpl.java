@@ -4,7 +4,7 @@ import by.bsuir.poit.dto.mappers.ClientMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.ClientDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dto.Client;
+import by.bsuir.poit.dto.ClientDto;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ private final ConnectionPool pool;
 private final ClientMapper clientMapper;
 
 @Override
-public Optional<Client> findById(long clientId) throws DataAccessException {
-      Optional<Client> client;
+public Optional<ClientDto> findById(long clientId) throws DataAccessException {
+      Optional<ClientDto> client;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from CLIENT where USER_ID = ?")) {
 	    statement.setLong(1, clientId);
@@ -42,7 +42,7 @@ public Optional<Client> findById(long clientId) throws DataAccessException {
 }
 
 @Override
-public void save(Client client) {
+public void save(ClientDto client) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into CLIENT " +
 									 "(USER_ID, NAME, ACCOUNT, RANKING) " +

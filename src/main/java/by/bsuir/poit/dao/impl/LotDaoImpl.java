@@ -3,8 +3,8 @@ package by.bsuir.poit.dao.impl;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.LotDao;
 import by.bsuir.poit.dao.connections.ConnectionPool;
-import by.bsuir.poit.dto.EnglishLot;
-import by.bsuir.poit.dto.Lot;
+import by.bsuir.poit.dto.EnglishLotDto;
+import by.bsuir.poit.dto.LotDto;
 import by.bsuir.poit.dto.mappers.LotMapper;
 import by.bsuir.poit.dao.exception.DataAccessException;
 import by.bsuir.poit.dao.exception.DataModifyingException;
@@ -29,8 +29,8 @@ private final ConnectionPool pool;
 private final LotMapper mapper;
 
 @Override
-public Optional<EnglishLot> findEnglishLotById(long id) {
-      Optional<EnglishLot> englishLot;
+public Optional<EnglishLotDto> findEnglishLotById(long id) {
+      Optional<EnglishLotDto> englishLot;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from AUCTION_TYPE_ENGLISH_LOT where LOT_ID = ?")) {
 	    statement.setLong(1, id);
@@ -43,7 +43,7 @@ public Optional<EnglishLot> findEnglishLotById(long id) {
 }
 
 @Override
-public Optional<Lot> findByIdAndStatus(long id, short status) {
+public Optional<LotDto> findByIdAndStatus(long id, short status) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from LOT where  LOT_ID = ? and STATUS = ?")) {
 	    statement.setLong(1, id);
@@ -58,8 +58,8 @@ public Optional<Lot> findByIdAndStatus(long id, short status) {
 }
 
 @Override
-public Optional<Lot> findById(long id) {
-      Optional<Lot> lot;
+public Optional<LotDto> findById(long id) {
+      Optional<LotDto> lot;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from LOT where LOT_ID = ?")) {
 	    statement.setLong(1, id);
@@ -72,8 +72,8 @@ public Optional<Lot> findById(long id) {
 }
 
 @Override
-public List<Lot> findAllByAuctionId(long auctionId) {
-      List<Lot> lots;
+public List<LotDto> findAllByAuctionId(long auctionId) {
+      List<LotDto> lots;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from LOT where AUCTION_ID = ?")) {
 	    statement.setLong(1, auctionId);
@@ -86,8 +86,8 @@ public List<Lot> findAllByAuctionId(long auctionId) {
 }
 
 @Override
-public List<Lot> findAllBySellerId(long sellerId) {
-      List<Lot> lots;
+public List<LotDto> findAllBySellerId(long sellerId) {
+      List<LotDto> lots;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from LOT where CLIENT_SELLER_ID = ?")) {
 	    statement.setLong(1, sellerId);
@@ -100,8 +100,8 @@ public List<Lot> findAllBySellerId(long sellerId) {
 }
 
 @Override
-public List<Lot> findAllByStatus(short status) {
-      List<Lot> lots;
+public List<LotDto> findAllByStatus(short status) {
+      List<LotDto> lots;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from LOT where status = ?")) {
 	    statement.setShort(1, status);
@@ -114,8 +114,8 @@ public List<Lot> findAllByStatus(short status) {
 }
 
 @Override
-public List<Lot> findAllByStatusOrderByStartingPriceDesc(short status) {
-      List<Lot> lots;
+public List<LotDto> findAllByStatusOrderByStartPriceDesc(short status) {
+      List<LotDto> lots;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from LOT where STATUS = ?" +
 									 "ORDER BY START_PRICE DESC ")) {
@@ -130,8 +130,8 @@ public List<Lot> findAllByStatusOrderByStartingPriceDesc(short status) {
 }
 
 @Override
-public List<Lot> findAllByCustomerId(long customerId) {
-      List<Lot> lots;
+public List<LotDto> findAllByCustomerId(long customerId) {
+      List<LotDto> lots;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from LOT where CLIENT_CUSTOMER_ID = ?")) {
 	    statement.setLong(1, customerId);
@@ -144,7 +144,7 @@ public List<Lot> findAllByCustomerId(long customerId) {
 }
 
 @Override
-public Lot save(Lot lot) throws DataModifyingException {
+public LotDto save(LotDto lot) throws DataModifyingException {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into LOT " +
 									 "(TITLE, START_PRICE, ACTUAL_PRICE, AUCTION_TYPE_ID, STATUS, CLIENT_SELLER_ID, CLIENT_CUSTOMER_ID, DELIVERY_POINT_ID, AUCTION_ID) " +
@@ -221,7 +221,7 @@ public void assignLotWithStatusToAuction(long lotId, short status, long auctionI
 }
 
 @Override
-public void delete(long lotId) throws DataAccessException, DataModifyingException {
+public void deleteById(long lotId) throws DataAccessException, DataModifyingException {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("delete from LOT where LOT_ID = ? and AUCTION_ID IS NULL")) {
 	    statement.setLong(1, lotId);

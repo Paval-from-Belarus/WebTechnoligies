@@ -1,6 +1,6 @@
 package by.bsuir.poit.dao.impl;
 
-import by.bsuir.poit.dto.AuctionMember;
+import by.bsuir.poit.dto.AuctionMemberDto;
 import by.bsuir.poit.dto.mappers.AuctionMemberMapper;
 import by.bsuir.poit.context.Repository;
 import by.bsuir.poit.dao.AuctionMemberDao;
@@ -27,8 +27,8 @@ private final ConnectionPool pool;
 private final AuctionMemberMapper mapper;
 
 @Override
-public List<AuctionMember> findAllByAuctionId(long auctionId) {
-      List<AuctionMember> list;
+public List<AuctionMemberDto> findAllByAuctionId(long auctionId) {
+      List<AuctionMemberDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from auction_member where auction_id = ?")) {
 	    statement.setLong(1, auctionId);
@@ -41,8 +41,8 @@ public List<AuctionMember> findAllByAuctionId(long auctionId) {
 }
 
 @Override
-public List<AuctionMember> findAllByClientId(long clientId) {
-      List<AuctionMember> list;
+public List<AuctionMemberDto> findAllByClientId(long clientId) {
+      List<AuctionMemberDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from auction_member where client_id = ?")) {
 	    statement.setLong(1, clientId);
@@ -55,8 +55,8 @@ public List<AuctionMember> findAllByClientId(long clientId) {
 }
 
 @Override
-public List<AuctionMember> findAllByAuctionIdAndStatus(long auctionId, short status) {
-      List<AuctionMember> list;
+public List<AuctionMemberDto> findAllByAuctionIdAndStatus(long auctionId, short status) {
+      List<AuctionMemberDto> list;
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("select * from auction_member where auction_id = ? and status = ?")) {
 	    statement.setLong(1, auctionId);
@@ -70,7 +70,7 @@ public List<AuctionMember> findAllByAuctionIdAndStatus(long auctionId, short sta
 }
 
 @Override
-public void save(AuctionMember member) {
+public void save(AuctionMemberDto member) {
       try (Connection connection = pool.getConnection();
 	   PreparedStatement statement = connection.prepareStatement("insert into AUCTION_MEMBER " +
 									 "(CLIENT_ID, AUCTION_ID, STATUS) " +
