@@ -1,4 +1,4 @@
-package by.bsuir.poit.servlets.filters;
+package by.bsuir.poit.servlets.interceptors;
 
 import by.bsuir.poit.servlets.UserDetails;
 import by.bsuir.poit.servlets.UserPrincipalHttpServletRequest;
@@ -8,35 +8,34 @@ import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
- * Build principal by session attributes supplied from {@link AuthorizationFilter}
+ * Build principal by session attributes supplied from {@link AuthorizationInterceptor}
  *
  * @author Paval Shlyk
  * @since 07/11/2023
  */
-@WebFilter(filterName = "principal-builder")
-public class PrincipalFilter extends HttpFilter {
+@Component
+public class PrincipalFilter extends OncePerRequestFilter {
 private static final Logger LOGGER = LogManager.getLogger(PrincipalFilter.class);
 
 @Override
-protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
       HttpSession session = request.getSession(false);
       if (session == null) {
 	    chain.doFilter(request, response);
-	    return;
       }
       try {
 	    Optional<Principal> principal = buildPrincipalByCookies(request, response);
@@ -45,9 +44,11 @@ protected void doFilter(HttpServletRequest request, HttpServletResponse response
 	    } else {
 		  chain.doFilter(request, response);
 	    }
+	    return;
       } catch (DuplicatedCookieException e) {
 	    PageUtils.redirectTo(response, PageUtils.ERROR_PAGE);
       }
+      chain.doFilter(request, response);
 }
 
 private Optional<Principal> buildPrincipalByCookies(HttpServletRequest request, HttpServletResponse response) throws IllegalStateException {
@@ -68,27 +69,6 @@ private Optional<Principal> buildPrincipalByCookies(HttpServletRequest request, 
 	    LOGGER.warn(e);
 	    return Optional.empty();
       }
-
-//      StringBuilder strCookies = new StringBuilder();
-//      for (Cookie cookie : request.getCookies()) {
-//	    strCookies.append("Name=").append(cookie.getName()).append(",")
-//		.append("Value=").append(cookie.getValue()).append("\n");
-//      }
-//      LOGGER.trace("The request holds following cookies: {};", strCookies);
-//      for (Cookie cookie : request.getCookies()) {
-//	    if (cookies.containsKey(cookie.getName())) {
-//		  LOGGER.warn("Client side holds duplicated cookies. They will be deleted");
-//		  AuthorizationUtils.removePrincipalCookies(request.getCookies(), response);
-//		  throw new DuplicatedCookieException("Duplicated cookies on server side");
-//	    }
-//	    if (AuthorizationUtils.isPrincipalCookie(cookie)) {
-//		  cookies.put(cookie.getName(), cookie.getValue());
-//	    }
-//      }
-//      if (cookies.size() != AuthorizationUtils.PRINCIPAL_COOKIE_COUNT) {
-
-//	    return Optional.empty();
-//      }
       Optional<Principal> principal = Optional.empty();
       try {
 	    UserDetails userDetails = UserDetails.builder()
@@ -102,6 +82,5 @@ private Optional<Principal> buildPrincipalByCookies(HttpServletRequest request, 
       }
       return principal;
 }
-
 
 }

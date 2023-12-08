@@ -1,23 +1,16 @@
-package by.bsuir.poit.servlets.filters;
+package by.bsuir.poit.servlets.interceptors;
 
-import by.bsuir.poit.context.BeanUtils;
 import by.bsuir.poit.dto.UserDto;
 import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.utils.AuthorizationUtils;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * This filter accomplishes pre-authorization work.
@@ -27,15 +20,14 @@ import java.io.IOException;
  * @since 23/10/2023
  */
 @Component
-@WebFilter(filterName = "authenticator")
-public class AuthorizationFilter extends HttpFilter {
-private static final Logger LOGGER = LogManager.getLogger(AuthorizationFilter.class);
+@RequiredArgsConstructor
+public class AuthorizationInterceptor implements HandlerInterceptor {
+private static final Logger LOGGER = LogManager.getLogger(AuthorizationInterceptor.class);
 public static final int MAX_INACTIVE_INTERVAL = 60 * 10;
-@Autowired
-private AuthorizationService authorizationService;
+private final AuthorizationService authorizationService;
 
 @Override
-public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
       String login = request.getParameter(AuthorizationUtils.NAME);
       String password = request.getParameter(AuthorizationUtils.PASSWORD);
       try {
@@ -53,9 +45,8 @@ public void doFilter(HttpServletRequest request, HttpServletResponse response, F
       } catch (Exception e) {
 	    LOGGER.warn(e);
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-	    return;
+	    return false;
       }
-      chain.doFilter(request, response);
+      return true;
 }
-
 }

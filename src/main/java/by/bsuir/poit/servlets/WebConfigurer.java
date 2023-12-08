@@ -1,7 +1,9 @@
 package by.bsuir.poit.servlets;
 
 import by.bsuir.poit.controller.LotModificationHandler;
-import by.bsuir.poit.servlets.interceptors.CommonParametersResolverInterceptor;
+import by.bsuir.poit.servlets.interceptors.AuthorizationInterceptor;
+import by.bsuir.poit.servlets.interceptors.CommonParametersInterceptor;
+import by.bsuir.poit.servlets.interceptors.RedirectInterceptor;
 import by.bsuir.poit.utils.ParserUtils;
 import jakarta.validation.constraints.NotNull;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +24,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfigurer implements WebMvcConfigurer {
 private static final Logger LOGGER = LogManager.getLogger(WebConfigurer.class);
 @Autowired
-private CommonParametersResolverInterceptor parametersResolverInterceptor;
+private CommonParametersInterceptor parametersInterceptor;
+@Autowired
+private AuthorizationInterceptor authorizationInterceptor;
+@Autowired
+private RedirectInterceptor redirectInterceptor;
 
 @Override
 public void addFormatters(@NotNull FormatterRegistry registry) {
@@ -31,7 +37,9 @@ public void addFormatters(@NotNull FormatterRegistry registry) {
 
 @Override
 public void addInterceptors(InterceptorRegistry registry) {
-      registry.addInterceptor(parametersResolverInterceptor).addPathPatterns("/*");
+      registry.addInterceptor(redirectInterceptor).addPathPatterns("/*");
+      registry.addInterceptor(authorizationInterceptor).addPathPatterns("/api/auth");
+      registry.addInterceptor(parametersInterceptor).addPathPatterns("/*");
 }
 
 

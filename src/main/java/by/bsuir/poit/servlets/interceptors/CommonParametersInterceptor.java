@@ -1,6 +1,7 @@
 package by.bsuir.poit.servlets.interceptors;
 
 import jakarta.servlet.http.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -14,7 +15,8 @@ import java.util.Map;
  * @since 21/11/2023
  */
 @Component
-public class CommonParametersResolverInterceptor implements HandlerInterceptor {
+@RequiredArgsConstructor
+public class CommonParametersInterceptor implements HandlerInterceptor {
 public static final String LANGUAGE = "lang";
 public static final String NEXT_LANGUAGE = "nextLang";
 public static final String DEFAULT_LANGUAGE = "en";

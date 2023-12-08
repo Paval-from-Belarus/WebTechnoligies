@@ -7,8 +7,10 @@ import by.bsuir.poit.utils.PageUtils;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.security.Principal;
@@ -22,7 +24,8 @@ import java.util.regex.Pattern;
  * @author Paval Shlyk
  * @since 07/11/2023
  */
-@WebFilter(filterName = "access")
+@Component
+@RequiredArgsConstructor
 public class AccessInterceptor implements HandlerInterceptor {
 private static final Logger LOGGER = LogManager.getLogger(AccessInterceptor.class);
 private final List<String> UNAUTHORIZED_ACCESS_PAGES = List.of(
