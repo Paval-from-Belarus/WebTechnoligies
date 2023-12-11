@@ -1,13 +1,14 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.ClientFeedback;
-import by.bsuir.poit.context.Service;
-import by.bsuir.poit.dao.ClientFeedbackDao;
+import by.bsuir.poit.dto.ClientFeedbackDto;
+import by.bsuir.poit.dao.ClientFeedbackRepository;
+import by.bsuir.poit.dto.mappers.ClientFeedbackMapper;
 import by.bsuir.poit.services.ClientFeedbackService;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,26 +21,26 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientFeedbackServiceImpl implements ClientFeedbackService {
 private static final Logger LOGGER = LogManager.getLogger(ClientFeedbackServiceImpl.class);
-private final ClientFeedbackDao clientFeedbackDao;
+private final ClientFeedbackRepository clientFeedbackRepository;
+private final ClientFeedbackMapper clientFeedbackMapper;
 
 @Override
-public List<ClientFeedback> findAllByLotId(long lotId) {
-      return clientFeedbackDao.findAllByLotId(lotId);
+public List<ClientFeedbackDto> findAllByLotId(long lotId) {
+      return clientFeedbackRepository.findAllByLotId(lotId).stream()
+		 .map(clientFeedbackMapper::toDto)
+		 .toList();
 }
 
 @Override
-public Optional<ClientFeedback> findByLotIdAndClientTargetId(long lotId, long clientTargetId) {
-      return clientFeedbackDao.findByIdAndTargetId(lotId, clientTargetId);
+public Optional<ClientFeedbackDto> findByLotIdAndClientTargetId(long lotId, long clientTargetId) {
+      return clientFeedbackRepository.findByIdAndTargetClientId(lotId, clientTargetId)
+		 .map(clientFeedbackMapper::toDto);
 }
 
 @Override
-public Optional<ClientFeedback> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId) {
-      return clientFeedbackDao.findByIdAndAuthorId(lotId, clientAuthorId);
-}
-
-@Override
-public List<ClientFeedback> findAllBySellerId(long clientId) {
-      return clientFeedbackDao.findAllBySellerId(clientId);
+public Optional<ClientFeedbackDto> findByLotIdAndClientAuthorId(long lotId, long clientAuthorId) {
+      return clientFeedbackRepository.findByIdAndAuthorClientId(lotId, clientAuthorId)
+		 .map(clientFeedbackMapper::toDto);
 }
 
 private ResourceNotFoundException newFeedbackNotFoundException(String formatted, Object... args) {

@@ -1,6 +1,6 @@
 package by.bsuir.poit.services;
 
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.dto.UserDto;
 import by.bsuir.poit.services.exception.authorization.UserAccessViolationException;
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
@@ -20,7 +20,7 @@ public interface AuthorizationService {
  * @param password
  * @throws ResourceNotFoundException
  */
-User signIn(String login, String password) throws UserNotFoundException, UserAccessViolationException;
+UserDto signIn(String login, String password) throws UserNotFoundException, UserAccessViolationException;
 
 /**
  * Signs out a user with the specified user ID.
@@ -36,7 +36,7 @@ void signOut(long userId);
  * @param password the password for the user
  */
 
-void register(User user, String password);
+void register(UserDto user, String password);
 
 /**
  * Verifies access of principal to modify any information about user specified by {@code userId}

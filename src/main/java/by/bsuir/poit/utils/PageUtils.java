@@ -1,7 +1,7 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.bean.Lot;
-import by.bsuir.poit.bean.User;
+import by.bsuir.poit.model.Lot;
+import by.bsuir.poit.model.User;
 import by.bsuir.poit.servlets.UserPageType;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -32,7 +32,7 @@ public static final String USER_PAGE = "/user";
 public static final String AUCTION_ASSIGNMENT_PAGE = "/assignment";
 public static final String AUCTION = "/auction";
 //should be injected
-public static final String APPLICATION_NAME = "/jdbc-servlets";
+public static final String APPLICATION_NAME = "";
 public static final String ERROR_REASON = "errorReasons";
 public static final String ERROR_CODE = "errorCode";
 public static final String LOT_STATUSES = "lotStatuses";

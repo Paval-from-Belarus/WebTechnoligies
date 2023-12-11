@@ -1,8 +1,8 @@
 package by.bsuir.poit.utils;
 
-import by.bsuir.poit.bean.Auction;
-import by.bsuir.poit.bean.AuctionBet;
-import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.dto.AuctionDto;
+import by.bsuir.poit.dto.AuctionBetDto;
+import by.bsuir.poit.dto.LotDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,6 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -42,8 +40,8 @@ public static final String LOT_START_PRICE = "lot_start_price";
  * @param request The HttpServletRequest object.
  * @return The parsed Lot object.
  */
-public static Lot parseLot(HttpServletRequest request) {
-      var builder = Lot.builder();//the setting to initial status on parse stage is not a valid
+public static LotDto parseLot(HttpServletRequest request) {
+      var builder = LotDto.builder();//the setting to initial status on parse stage is not a valid
       try {
 	    if (request.getParameter(LOT_TITLE) != null) {
 		  builder.title(request.getParameter(LOT_TITLE));
@@ -79,8 +77,8 @@ public static final String EVENT_DATE = "event_date";
  * @param request The HttpServletRequest object.
  * @return The parsed AuctionBet object.
  */
-public static AuctionBet parseBet(HttpServletRequest request) {
-      var builder = AuctionBet.builder();
+public static AuctionBetDto parseBet(HttpServletRequest request) {
+      var builder = AuctionBetDto.builder();
       try {
 	    parseRequest(Double.class, request, AUCTION_BET_VALUE)
 		.ifPresent(builder::bet);
@@ -105,8 +103,8 @@ private static final SimpleDateFormat SIMPLE_DATE_FORMAT =
  * @param request The HttpServletRequest object.
  * @return The parsed Auction object.
  */
-public static Auction parseAuction(HttpServletRequest request) {
-      var builder = Auction.builder();
+public static AuctionDto parseAuction(HttpServletRequest request) {
+      var builder = AuctionDto.builder();
       try {
 	    parseRequest(Double.class, request, PRICE_STEP)
 		.ifPresent(builder::priceStep);
@@ -115,7 +113,6 @@ public static Auction parseAuction(HttpServletRequest request) {
 	    builder.eventDate(new java.sql.Date(eventDate.getTime()));
 	    parseRequest(Long.class, request, AUCTION_TYPE_ID)
 		.ifPresent(builder::auctionTypeId);
-	    builder.duration(new Timestamp(120));
       } catch (NumberFormatException e) {
 	    LOGGER.error("Failed to parse auction entity from request values by reason: {}", e.getMessage());
 	    throw new IllegalStateException(e);

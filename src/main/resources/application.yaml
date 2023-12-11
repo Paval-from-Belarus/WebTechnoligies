@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    hikari:
+      password:
+      username: SA
+      maximum-pool-size: 10
+      transaction-isolation: ISOLATION_REPEATABLE_READ
+    url: jdbc:mariadb://petos.project.su:3306/auction_db
+    username: application
+    password: 123
+    driver-class-name: org.mariadb.jdbc.Driver
+  sql:
+    init:
+      mode: embedded

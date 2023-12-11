@@ -1,8 +1,8 @@
 package by.bsuir.poit.services;
 
-import by.bsuir.poit.bean.DeliveryPoint;
-import by.bsuir.poit.bean.EnglishLot;
-import by.bsuir.poit.bean.Lot;
+import by.bsuir.poit.dto.DeliveryPointDto;
+import by.bsuir.poit.dto.EnglishLotDto;
+import by.bsuir.poit.dto.LotDto;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
@@ -22,7 +22,7 @@ public interface LotService {
  * @return List of lots
  */
 
-List<Lot> findAllBeforeAuctionLots();
+List<LotDto> findAllBeforeAuctionLots();
 
 /**
  * Returns a list of all lots owned by a particular seller.
@@ -31,7 +31,7 @@ List<Lot> findAllBeforeAuctionLots();
  * @return List of lots
  * @throws ResourceBusyException if the resource is currently being modified by another user
  */
-List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException;
+List<LotDto> findAllBySellerId(long clientId) throws ResourceBusyException;
 
 /**
  * Returns a list of all lots with a particular status.
@@ -39,7 +39,7 @@ List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException;
  * @param status Status of the lots to be returned
  * @return List of lots
  */
-List<Lot> findAllByStatus(short status);
+List<LotDto> findAllByStatus(short status);
 
 /**
  * Returns a list of all lots associated with a particular auction.
@@ -48,7 +48,7 @@ List<Lot> findAllByStatus(short status);
  * @return List of lots
  * @throws ResourceBusyException if the resource is currently being modified by another user
  */
-List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException;
+List<LotDto> findAllByAuction(long auctionId) throws ResourceBusyException;
 
 /**
  * Returns the EnglishLot object associated with a particular lot ID.
@@ -57,7 +57,7 @@ List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException;
  * @return EnglishLot object
  * @throws ResourceNotFoundException if the resource is not found
  */
-EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException;
+LotDto findEnglishLot(long lotId) throws ResourceNotFoundException;
 
 /**
  * Returns the DeliveryPoint object associated with a particular lot ID.
@@ -66,7 +66,7 @@ EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException;
  * @return DeliveryPoint object
  * @throws ResourceNotFoundException if the resource is not found
  */
-DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundException;
+DeliveryPointDto findDeliveryPointByLot(long lotId) throws ResourceNotFoundException;
 
 /**
  * Saves a new lot to the system.
@@ -75,7 +75,7 @@ DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundExceptio
  * @param lot       Lot object to be saved
  * @throws ResourceModifyingException if the resource is currently being modified by another user
  */
-void save(@NotNull Principal principal, Lot lot) throws ResourceModifyingException;
+void save(@NotNull Principal principal, LotDto lot) throws ResourceModifyingException;
 
 /**
  * Updates the auction associated with a particular lot.

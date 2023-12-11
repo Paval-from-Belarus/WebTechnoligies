@@ -1,24 +1,27 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.DeliveryPoint;
-import by.bsuir.poit.bean.EnglishLot;
-import by.bsuir.poit.bean.Lot;
-import by.bsuir.poit.context.Service;
-import by.bsuir.poit.dao.DeliveryPointDao;
-import by.bsuir.poit.dao.LotDao;
-import by.bsuir.poit.dao.exception.DataAccessException;
-import by.bsuir.poit.dao.exception.DataModifyingException;
+import by.bsuir.poit.dao.DeliveryPointRepository;
+import by.bsuir.poit.dao.LotRepository;
+import by.bsuir.poit.dto.DeliveryPointDto;
+import by.bsuir.poit.dto.LotDto;
+import by.bsuir.poit.dto.mappers.DeliveryPointMapper;
+import by.bsuir.poit.dto.mappers.LotMapper;
+import by.bsuir.poit.model.EnglishLot;
+import by.bsuir.poit.model.Lot;
+import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.LotService;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
-import by.bsuir.poit.servlets.UserDetails;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Paval Shlyk
@@ -28,23 +31,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LotServiceImpl implements LotService {
 private static final Logger LOGGER = LogManager.getLogger(LotServiceImpl.class);
-private final LotDao lotDao;
-private final DeliveryPointDao deliveryPointDao;
+private final LotRepository lotDao;
+private final DeliveryPointRepository deliveryPointRepository;
+private final AuthorizationService authorizationService;
+private final LotMapper lotMapper;
+private final DeliveryPointMapper deliveryPointMapper;
 
 @Override
-public List<Lot> findAllBeforeAuctionLots() {
+public List<LotDto> findAllBeforeAuctionLots() {
       try {
-	    return lotDao.findAllByStatusOrderByStartingPriceDesc(Lot.BEFORE_AUCTION_STATUS);
+	    List<Lot> lots = lotDao.findAllByStatusOrderByStartPriceDesc(Lot.BEFORE_AUCTION_STATUS);
+	    return lots.stream()
+		       .map(lotMapper::toDto)
+		       .toList();
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to fetch lots by before_auction status");
-	    throw new DataAccessException(e);
+	    throw new ResourceBusyException(e);
       }
 }
 
 @Override
-public List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException {
+public List<LotDto> findAllBySellerId(long clientId) throws ResourceBusyException {
       try {
-	    return lotDao.findAllBySellerId(clientId);
+	    return lotDao.findAllBySellerClientId(clientId).stream()
+		       .map(lotMapper::toDto)
+		       .toList();
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to fetch lot by seller id {}", clientId);
 	    throw new ResourceBusyException(e);
@@ -53,9 +64,11 @@ public List<Lot> findAllBySellerId(long clientId) throws ResourceBusyException {
 }
 
 @Override
-public List<Lot> findAllByStatus(short status) {
+public List<LotDto> findAllByStatus(short status) {
       try {
-	    return lotDao.findAllByStatus(status);
+	    return lotDao.findAllByStatus(status).stream()
+		       .map(lotMapper::toDto)
+		       .toList();
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to fetch lot by status={}", status);
 	    throw new ResourceBusyException(e);
@@ -63,9 +76,11 @@ public List<Lot> findAllByStatus(short status) {
 }
 
 @Override
-public List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException {
+public List<LotDto> findAllByAuction(long auctionId) throws ResourceBusyException {
       try {
-	    return lotDao.findAllByAuctionId(auctionId);
+	    return lotDao.findAllByAuctionId(auctionId).stream()
+		       .map(lotMapper::toDto)
+		       .collect(Collectors.toList());
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to fetch lot by auction id {}", auctionId);
 	    throw new ResourceBusyException(e);
@@ -74,38 +89,41 @@ public List<Lot> findAllByAuction(long auctionId) throws ResourceBusyException {
 }
 
 @Override
-public EnglishLot findEnglishLot(long lotId) throws ResourceNotFoundException {
+public LotDto findEnglishLot(long lotId) throws ResourceNotFoundException {
+      LotDto dto;
       try {
-	    return lotDao.findEnglishLotById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
+	    EnglishLot englishLot = lotDao.findEnglishWithLotById(lotId)
+					.orElseThrow(() -> newLotNotFoundException(lotId));
+	    dto = lotMapper.toEnglishLotDto(englishLot);
       } catch (DataAccessException e) {
 	    LOGGER.error(e);
 	    throw new ResourceNotFoundException(e);
       }
+      return dto;
 }
 
 @Override
-public DeliveryPoint findDeliveryPointByLot(long lotId) throws ResourceNotFoundException {
+public DeliveryPointDto findDeliveryPointByLot(long lotId) throws ResourceNotFoundException {
       try {
-	    Lot lot = lotDao.findById(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
-	    Long deliveryPointId = lot.getDeliveryPointId();
-	    if (deliveryPointId == null) {
+	    Lot lot = lotDao.findWithDeliveryPoint(lotId).orElseThrow(() -> newLotNotFoundException(lotId));
+	    if (lot.getDeliveryPoint() == null) {
 		  throw newDeliveryPointNotFoundException(lotId, "lot holds null for delivery point");
 	    }
-	    return deliveryPointDao.findById(deliveryPointId).orElseThrow(() -> newDeliveryPointNotFoundException(lotId, "dao failed to find delivery point"));
+	    return deliveryPointMapper.toDto(lot.getDeliveryPoint());
       } catch (DataAccessException e) {
 	    LOGGER.error(e);
-	    throw new ResourceNotFoundException(e);
+	    throw new ResourceBusyException(e);
       }
 }
 
 @Override
-public void save(Principal principal, Lot lot) throws ResourceModifyingException {
+public void save(Principal principal, LotDto lot) throws ResourceModifyingException {
       try {
-	    UserDetails details = (UserDetails) principal;
-	    assert details != null;
-	    lot.setStatus(Lot.BEFORE_AUCTION_STATUS);
-	    lot.setSellerId(details.id());
-	    lotDao.save(lot);
+	    long userId = authorizationService.getUserIdByPrincipal(principal);
+	    Lot entity = lotMapper.toEntity(lot);
+	    entity.setStatus(Lot.BEFORE_AUCTION_STATUS);
+	    lot.setSellerId(userId);
+	    lotDao.save(entity);
       } catch (DataAccessException e) {
 	    LOGGER.error(e);
 	    throw new ResourceModifyingException(e);
@@ -157,12 +175,10 @@ public void updateLotDeliveryPoint(long lotId, long deliveryPointId) throws Reso
 public boolean deleteIfPossible(long lotId) throws ResourceModifyingException {
       boolean isDeleted = true;
       try {
-	    lotDao.delete(lotId);
-      } catch (DataModifyingException e) {
-	    isDeleted = false;
+	    lotDao.deleteById(lotId);
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to try delete lot by id={}", lotId);
-	    throw new ResourceBusyException(e);
+	    isDeleted = false;
       }
       return isDeleted;
 }

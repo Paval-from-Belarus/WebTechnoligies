@@ -1,15 +1,17 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.Client;
-import by.bsuir.poit.bean.User;
-import by.bsuir.poit.context.Service;
-import by.bsuir.poit.dao.ClientDao;
-import by.bsuir.poit.dao.UserDao;
+import by.bsuir.poit.dao.ClientRepository;
+import by.bsuir.poit.dao.UserRepository;
+import by.bsuir.poit.dto.ClientDto;
+import by.bsuir.poit.dto.UserDto;
+import by.bsuir.poit.dto.mappers.ClientMapper;
+import by.bsuir.poit.dto.mappers.UserMapper;
 import by.bsuir.poit.services.UserService;
 import by.bsuir.poit.services.exception.authorization.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Paval Shlyk
@@ -19,17 +21,22 @@ import org.apache.logging.log4j.Logger;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
-private final ClientDao clientDao;
-private final UserDao userDao;
-
+private final ClientRepository clientRepository;
+private final UserRepository userDao;
+private final UserMapper userMapper;
+private final ClientMapper clientMapper;
 @Override
-public Client findClientByUserId(long userId) {
-      return clientDao.findById(userId).orElseThrow(() -> newClientNotFoundException(userId));
+public ClientDto findClientByUserId(long userId) {
+      return clientRepository.findById(userId)
+                 .map(clientMapper::toDto)
+                 .orElseThrow(() -> newClientNotFoundException(userId));
 }
 
 @Override
-public User findUserByUserId(long userId) {
-      return userDao.findById(userId).orElseThrow(() -> newUserNotFoundException(userId));
+public UserDto findUserByUserId(long userId) {
+      return userDao.findById(userId)
+                 .map(userMapper::toDto)
+                 .orElseThrow(() -> newUserNotFoundException(userId));
 }
 
 private static UserNotFoundException newUserNotFoundException(long userId) {

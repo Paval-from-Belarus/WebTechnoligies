@@ -1,23 +1,26 @@
 package by.bsuir.poit.services.impl;
 
-import by.bsuir.poit.bean.*;
-import by.bsuir.poit.context.Service;
 import by.bsuir.poit.dao.*;
-import by.bsuir.poit.dao.exception.DataAccessException;
+import by.bsuir.poit.dto.*;
+import by.bsuir.poit.dto.mappers.AuctionBetMapper;
+import by.bsuir.poit.dto.mappers.AuctionMapper;
+import by.bsuir.poit.dto.mappers.AuctionTypeMapper;
+import by.bsuir.poit.model.*;
 import by.bsuir.poit.services.AuctionService;
+import by.bsuir.poit.services.AuthorizationService;
 import by.bsuir.poit.services.exception.authorization.UserAccessViolationException;
 import by.bsuir.poit.services.exception.resources.ResourceBusyException;
 import by.bsuir.poit.services.exception.resources.ResourceModifyingException;
 import by.bsuir.poit.services.exception.resources.ResourceNotFoundException;
-import by.bsuir.poit.servlets.UserDetails;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Paval Shlyk
@@ -27,37 +30,44 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuctionServiceImpl implements AuctionService {
 private static final Logger LOGGER = LogManager.getLogger(AuctionServiceImpl.class);
-private final AuctionDao auctionDao;
-private final AuctionMemberDao auctionMemberDao;
-private final AuctionBetDao auctionBetDao;
-private final AuctionTypeDao auctionTypeDao;
-private final LotDao lotDao;
+private final AuctionRepository auctionRepository;
+private final AuctionMemberRepository auctionMemberRepository;
+private final AuctionBetRepository auctionBetRepository;
+private final AuctionTypeRepository auctionTypeDao;
+private final LotRepository lotRepository;
+private final AuctionMapper auctionMapper;
+private final AuctionBetMapper auctionBetMapper;
+private final AuctionTypeMapper auctionTypeMapper;
+private final AuthorizationService authorizationService;
+private final UserRepository userDao;
+private final ClientRepository clientRepository;
 
 @Override
-public List<Auction> findAfterEventDate(Date date) {
-      List<Auction> auctions;
+public List<AuctionDto> findAfterEventDate(Date date) {
+      List<AuctionDto> list;
       try {
-	    auctions = auctionDao.findAllAfterEventDate(date);
+	    List<Auction> auctions = auctionRepository.findAllAfterEventDate(date);
+	    list = auctions.stream()
+		       .map(auctionMapper::toDto)
+		       .toList();
       } catch (DataAccessException e) {
 	    final String msg = String.format("Failed to find auctions after event date=%s", date.toString());
 	    LOGGER.error(msg);
 	    throw new ResourceBusyException(msg);
       }
-      return auctions;
+      return list;
 }
 
 @Override
-public List<Auction> findByClientId(long clientId) {
-      List<Auction> auctions;
+@Transactional //to prevent lazy exception
+public List<AuctionDto> findByClientId(long clientId) {
+      List<AuctionDto> auctions;
       try {
-	    List<AuctionMember> members = auctionMemberDao.findAllByClientId(clientId);
-	    auctions = new ArrayList<>();
-	    for (AuctionMember member : members) {
-		  Auction auction = auctionDao
-					.findById(member.getAuctionId())
-					.orElseThrow(() -> newAuctionNotFoundException(member.getAuctionId()));
-		  auctions.add(auction);
-	    }
+	    List<AuctionMember> members = auctionMemberRepository.findAllByClientId(clientId);
+	    auctions = members.stream()
+			   .map(AuctionMember::getAuction)
+			   .map(auctionMapper::toDto)
+			   .toList();
       } catch (DataAccessException e) {
 	    final String msg = String.format("Failed to find auctions by given clientId=%d", clientId);
 	    LOGGER.error(msg);
@@ -67,10 +77,12 @@ public List<Auction> findByClientId(long clientId) {
 }
 
 @Override
-public Auction findById(long auctionId) throws ResourceNotFoundException {
-      Auction auction;
+public AuctionDto findById(long auctionId) throws ResourceNotFoundException {
+      AuctionDto auction;
       try {
-	    auction = auctionDao.findById(auctionId).orElseThrow(() -> newAuctionNotFoundException(auctionId));
+	    auction = auctionRepository.findById(auctionId)
+			  .map(auctionMapper::toDto)
+			  .orElseThrow(() -> newAuctionNotFoundException(auctionId));
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed find auction by id={}", auctionId);
 	    throw new ResourceBusyException(e);
@@ -79,10 +91,15 @@ public Auction findById(long auctionId) throws ResourceNotFoundException {
 }
 
 @Override
-public List<AuctionBet> findAllBets(long auctionId) throws ResourceNotFoundException {
-      List<AuctionBet> bets;
+@Transactional
+public List<AuctionBetDto> findAllBets(long auctionId) throws ResourceNotFoundException {
+      List<AuctionBetDto> bets;
       try {
-	    bets = auctionBetDao.findAllByAuctionId(auctionId);
+	    Auction auction = auctionRepository.findById(auctionId)
+				  .orElseThrow(() -> newAuctionNotFoundException(auctionId));
+	    bets = auction.getBets().stream()
+		       .map(auctionBetMapper::toDto)
+		       .toList();
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed find bets by given auctionId={}", auctionId);
 	    throw new ResourceBusyException(e);
@@ -91,10 +108,13 @@ public List<AuctionBet> findAllBets(long auctionId) throws ResourceNotFoundExcep
 }
 
 @Override
-public List<AuctionBet> findAllBetsByClientId(long auctionId, long clientId) throws ResourceNotFoundException {
-      List<AuctionBet> bets;
+public List<AuctionBetDto> findAllBetsByClientId(long auctionId, long clientId) throws ResourceNotFoundException {
+      List<AuctionBetDto> bets;
       try {
-	    bets = auctionBetDao.findAllByAuctionIdAndClientId(auctionId, clientId);
+	    List<AuctionBet> auctionBets = auctionBetRepository.findAllByAuctionIdAndClientId(auctionId, clientId);
+	    bets = auctionBets.stream()
+		       .map(auctionBetMapper::toDto)
+		       .toList();
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to find bets by clientId={} and auctionId={}", clientId, auctionId);
 	    throw new ResourceBusyException(e);
@@ -103,11 +123,13 @@ public List<AuctionBet> findAllBetsByClientId(long auctionId, long clientId) thr
 }
 
 @Override
-public AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundException {
-      AuctionType type;
+//not transactional because auction type fetching is eager
+public AuctionTypeDto findTypeByAuctionId(long auctionId) throws ResourceNotFoundException {
+      AuctionTypeDto type;
       try {
-	    Auction auction = auctionDao.findById(auctionId).orElseThrow(() -> newAuctionNotFoundException(auctionId));
-	    type = auctionTypeDao.findById(auction.getAuctionTypeId()).orElseThrow(() -> newAuctionTypeNotFoundException(auction.getAuctionTypeId()));
+	    Auction auction = auctionRepository.findById(auctionId)
+				  .orElseThrow(() -> newAuctionNotFoundException(auctionId));
+	    type = auctionTypeMapper.toDto(auction.getAuctionType());
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to find auction type by given actionId={}", auctionId);
 	    throw new ResourceBusyException(e);
@@ -116,19 +138,26 @@ public AuctionType findTypeByAuctionId(long auctionId) throws ResourceNotFoundEx
 }
 
 @Override
-public List<Auction> findHeadersByAdminId(long adminId) throws ResourceBusyException {
+public List<AuctionDto> findHeadersByPrincipal(long adminId) throws ResourceBusyException {
+      List<AuctionDto> dto;
       try {
-	    return auctionDao.findHeadersAllByAdminIdSortedByEventDateDesc(adminId);
+	    List<Auction> auctions = auctionRepository.findHeadersAllByAdminIdOrderByEndDateDesc(adminId);
+	    dto = auctions.stream()
+		      .map(auctionMapper::toDto)
+		      .toList();
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to fetch all auction by adminId={}", adminId);
 	    throw new ResourceBusyException(e);
       }
+      return dto;
 }
 
 @Override
-public List<AuctionType> findAllTypes() {
+public List<AuctionTypeDto> findAllTypes() {
       try {
-	    return auctionTypeDao.findAll();
+	    return auctionTypeDao.findAll().stream()
+		       .map(auctionTypeMapper::toDto)
+		       .toList();
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to find all auction type");
 	    throw new ResourceBusyException(e);
@@ -136,17 +165,10 @@ public List<AuctionType> findAllTypes() {
 }
 
 @Override
-//@Transactional
 public void assignLot(Principal principal, long auctionId, long lotId) throws UserAccessViolationException, ResourceModifyingException {
       try {
-	    //current no check
-	    UserDetails details = (UserDetails) principal;
-	    if (details.role() != User.ADMIN) {
-		  final String msg = String.format("Assign lot to auction can only admin. Not user with id = %s", details.role());
-		  LOGGER.info(msg);
-		  throw new UserAccessViolationException(msg);
-	    }
-	    lotDao.assignLotWithStatusToAuction(lotId, Lot.AUCTION_STATUS, auctionId);
+	    authorizationService.verifyByUserRole(principal, User.ADMIN);
+	    lotRepository.setAuctionId(lotId, auctionId);
       } catch (DataAccessException e) {
 	    LOGGER.info("Failed to update auctionId={} and auction status for given auction={}", auctionId, lotId);
 	    throw new ResourceBusyException(e);
@@ -154,41 +176,44 @@ public void assignLot(Principal principal, long auctionId, long lotId) throws Us
 }
 
 @Override
-public void saveAuction(Principal principal, Auction auction) throws ResourceModifyingException {
+@Transactional
+public void saveAuction(Principal principal, AuctionDto dto) throws ResourceModifyingException {
+      authorizationService.verifyByUserRole(principal, User.ADMIN);
       try {
-	    UserDetails details = (UserDetails) principal;
-	    auction.setAdminId(details.id());
-	    auctionDao.save(auction);
+	    long adminId = authorizationService.getUserIdByPrincipal(principal);
+	    Auction auction = auctionMapper.toEntity(dto);
+	    auction.setAdmin(userDao.getReferenceById(adminId));
+	    auction.setAuctionType(auctionTypeDao.getReferenceById(dto.getAuctionTypeId()));
+	    auctionRepository.save(auction);
       } catch (DataAccessException e) {
-	    LOGGER.error("Failed to save auction {}", auction);
+	    LOGGER.error("Failed to save auction {}", dto);
 	    throw new ResourceModifyingException(e);
       }
 }
-
+//the whole method should be replaced by stored routine in a database
 @Override
-//@Transactional
-public void saveBet(Principal principal, AuctionBet bet) throws ResourceNotFoundException {
-      if (bet.getLotId() == null || bet.getAuctionId() == null) {
-	    final String msg = String.format("Failed to save bet because on of the bet field is null: %s", bet);
-	    LOGGER.warn(msg);
-	    throw new ResourceModifyingException(msg);
-      }
-      UserDetails details = (UserDetails) principal;
-      bet.setClientId(details.id());
+@Transactional
+public void saveBet(Principal principal, AuctionBetDto bet) throws ResourceNotFoundException {
+      authorizationService.verifyByUserRole(principal, User.CLIENT);//only client can do such things -> or do such check on db sice
+      long clientId = authorizationService.getUserIdByPrincipal(principal);
       try {
-	    Lot lot = lotDao.findById(bet.getLotId()).orElseThrow(() -> newLotNotFoundException(bet.getLotId()));
-	    if (lot.getActualPrice() != null && lot.getActualPrice() > bet.getBet()) {
+	    Lot lot = lotRepository.findById(bet.getLotId()).orElseThrow(() -> newLotNotFoundException(bet.getLotId()));
+	    if (lot.getAuctionPrice() != null && lot.getAuctionPrice() > bet.getBet()) {
 		  throw newIllegalBetValue(bet);
 	    }
-	    auctionBetDao.save(bet);
-	    lotDao.setActualPrice(lot.getId(), bet.getBet());
+	    AuctionBet entity = auctionBetMapper.toEntity(bet);
+	    entity.setAuction(auctionRepository.getReferenceById(bet.getAuctionId()));
+	    entity.setLot(lotRepository.getReferenceById(bet.getLotId()));
+	    entity.setClient(clientRepository.getReferenceById(clientId));
+	    auctionBetRepository.save(entity);
+	    lotRepository.setActualPrice(lot.getId(), bet.getBet());
       } catch (DataAccessException e) {
 	    LOGGER.error("Failed to save auction bet {}", bet);
 	    throw new ResourceModifyingException(e);
       }
 }
 
-private ResourceModifyingException newIllegalBetValue(AuctionBet bet) {
+private ResourceModifyingException newIllegalBetValue(AuctionBetDto bet) {
       final String msg = String.format("The given bet has invalid value %s", bet);
       LOGGER.info(msg);
       throw new ResourceModifyingException(msg);
